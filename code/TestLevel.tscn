@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Turret.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Enemy.tscn" type="PackedScene" id=2]
+
+[node name="TestLevel" type="Node"]
+
+[node name="Turret" parent="." instance=ExtResource( 1 )]
+position = Vector2( 328.919, 325.821 )
+
+[node name="Enemy" parent="." instance=ExtResource( 2 )]
+position = Vector2( 306.67, 107.572 )
+
+[node name="Enemy2" parent="." instance=ExtResource( 2 )]
+position = Vector2( 121.264, 233.648 )
+
+[node name="Enemy3" parent="." instance=ExtResource( 2 )]
+position = Vector2( 476.184, 223.053 )
