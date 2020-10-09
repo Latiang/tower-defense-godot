@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://MobPath.gd" type="Script" id=1]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 97.3268, 74.5033, 0, 0, 0, 0, 476.399, 73.005, 0, 0, 0, 0, 477.897, 377.161, 0, 0, 0, 0, 779.057, 363.677, 0, 0, 0, 0, 904.914, 506.016 )
+}
+
+[node name="MobPath" type="Path2D"]
+curve = SubResource( 1 )
+script = ExtResource( 1 )

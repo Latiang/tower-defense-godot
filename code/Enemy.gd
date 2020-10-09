@@ -1,19 +1,24 @@
-extends Area2D
+extends PathFollow2D
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+export (float) var SPEED = 100
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
+# Called every frame.
+func _physics_process(delta):
+	offset += SPEED * delta # Move along the parent Path2D
+	
+	if unit_offset >= 1:
+		path_finished()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+# Reached end of path. Remove
+func path_finished():
+	queue_free()
 
-func _on_Enemy_body_entered(body):
+# Collision with bullet. Remove
+func _on_Area2D_body_entered(body):
 	queue_free()
