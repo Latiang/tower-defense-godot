@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://MobPath.gd" type="Script" id=1]
+[ext_resource path="res://SpawningBehaviour.gd" type="Script" id=2]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
@@ -10,3 +11,11 @@ _data = {
 [node name="MobPath" type="Path2D"]
 curve = SubResource( 1 )
 script = ExtResource( 1 )
+
+[node name="SpawningBehaviour" type="Node2D" parent="."]
+script = ExtResource( 2 )
+
+[node name="SpawnTimer" type="Timer" parent="SpawningBehaviour"]
+wait_time = 0.1
+one_shot = true
+[connection signal="timeout" from="SpawningBehaviour/SpawnTimer" to="." method="_on_SpawnTick_timeout"]

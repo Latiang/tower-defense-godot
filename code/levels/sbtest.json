@@ -1,0 +1,8 @@
+{
+    "behaviour": [
+        [5,"ENEMY",1], 
+        [5,"ENEMY",2],
+        [1,"NONE",5],
+        [2,"ENEMY", 5]
+    ]
+}

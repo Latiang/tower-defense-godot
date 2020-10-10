@@ -16,5 +16,5 @@ func spawn_bullet(position, direction):
 	bullet.position = position
 	bullet.rotation = direction.angle()
 	bullet.z_index = 10
-	bullet.velocity = -direction*bullet.bullet_speed
+	bullet.velocity = -direction*bullet.speed
 	add_child(bullet)
