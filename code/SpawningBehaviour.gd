@@ -38,7 +38,7 @@ func handle_spawn_event():
 	spawn_event_counter += 1
 	if spawn_event_counter >= spawning_array.size():
 		# End of wave
-		print("Wave complete")
+		print("Wave complete (%s)" % get_parent().BehaviourFile)
 	else: # Prepare for next mob
 		if spawn_object.time > 0:
 			$SpawnTimer.start(spawn_object.time)
