@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Turret.tscn" type="PackedScene" id=1]
 [ext_resource path="res://MobPath.tscn" type="PackedScene" id=2]
 [ext_resource path="res://TestLevel.gd" type="Script" id=3]
+[ext_resource path="res://Sensor.tscn" type="PackedScene" id=4]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
@@ -21,3 +22,8 @@ BehaviourFile = "sbtest"
 [node name="MobPath2" parent="." instance=ExtResource( 2 )]
 curve = SubResource( 1 )
 BehaviourFile = "sbtest2"
+
+[node name="Sensor1" parent="." instance=ExtResource( 4 )]
+position = Vector2( 486.431, 475.74 )
+rotation = 3.10843
+identifier = 5

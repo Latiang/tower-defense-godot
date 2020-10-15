@@ -3,7 +3,7 @@ extends Node
 # Output functions
 signal fire()
 signal rotate(angle)
-signal sensor_detect(out_dict)
+signal sensor_detect(out_dict, id)
 
 var locked = false
 
@@ -25,6 +25,7 @@ func _process(delta):
 		# $CodeInterpreter.run()
 		if Input.is_action_pressed("mouse_left_click"):
 			emit_signal("fire")
+			$CodeInterpreter.run()
 
 # Lock the object from executing code for a certain amount of time
 func lock_for_time(time):

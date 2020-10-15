@@ -15,7 +15,7 @@ func run():
 	# run() function is executed again
 	# Some outside functions give a return value in a dictionary, t.ex a sensor raycast
 	var result = {}
-	get_parent().emit_signal("sensor_detect", result)
+	get_parent().emit_signal("sensor_detect", result, 1)
 	print(result[0])
 
 # The code interpreting should stop if:
