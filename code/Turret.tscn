@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/turret.png" type="Texture" id=1]
 [ext_resource path="res://assets/turret-firing.png" type="Texture" id=2]
 [ext_resource path="res://Turret.gd" type="Script" id=3]
 [ext_resource path="res://Bullet.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Gun.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ProgrammableBehaviour.tscn" type="PackedScene" id=6]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -37,3 +38,7 @@ frames = SubResource( 1 )
 shape = SubResource( 2 )
 
 [node name="Gun" parent="." instance=ExtResource( 5 )]
+
+[node name="ProgrammableBehaviour" parent="." instance=ExtResource( 6 )]
+[connection signal="fire" from="ProgrammableBehaviour" to="." method="_on_ProgrammableBehaviour_fire"]
+[connection signal="rotate" from="ProgrammableBehaviour" to="." method="_on_ProgrammableBehaviour_rotate"]

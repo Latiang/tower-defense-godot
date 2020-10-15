@@ -7,12 +7,20 @@ export (PackedScene) var Bullet
 func _ready():
 	pass
 
-
 # Run every frame. Shoot bullet if mouse pressed
 func _process(delta):
-	$AnimatedSprite.rotation = position.angle_to_point(get_viewport().get_mouse_position()) - PI/2
-	if Input.is_action_pressed("mouse_left_click"):
-		fire((position-get_viewport().get_mouse_position()).normalized())
+	pass
 
-func fire(dir : Vector2):
+func fire():
+	var dir = Vector2(cos($AnimatedSprite.rotation + PI/2), sin($AnimatedSprite.rotation + PI/2))
 	$Gun.spawn_bullet(position, dir)
+
+func rotate(angle):
+	$AnimatedSprite.rotation = angle
+
+func _on_ProgrammableBehaviour_fire():
+	fire()
+	$ProgrammableBehaviour.lock_for_time(1)
+
+func _on_ProgrammableBehaviour_rotate(angle):
+	rotate(angle)
