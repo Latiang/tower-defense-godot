@@ -26,4 +26,3 @@ BehaviourFile = "sbtest2"
 [node name="Sensor1" parent="." instance=ExtResource( 4 )]
 position = Vector2( 486.431, 475.74 )
 rotation = 3.10843
-identifier = 5
