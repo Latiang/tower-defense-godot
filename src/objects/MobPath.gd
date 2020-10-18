@@ -11,7 +11,7 @@ func start_spawning_time():
 
 # Spawn an enemy
 func spawn():
-	var mob = preload("res://Enemy.tscn").instance()
+	var mob = preload("res://objects/Enemy.tscn").instance()
 	add_child(mob)
 
 func _on_SpawnTick_timeout():

@@ -22,11 +22,10 @@ func _process(delta):
 	emit_signal("rotate", angle)
 	# Time locked functonality, such as code execution
 	if (!locked):
-		pass
-		#$CodeInterpreter.run()
-		#if Input.is_action_pressed("mouse_left_click"):
-			#emit_signal("fire")
-			#$CodeInterpreter.run()
+		$CodeInterpreter.run()
+		if Input.is_action_pressed("mouse_left_click"):
+			emit_signal("fire")
+			$CodeInterpreter.run()
 
 # Lock the object from executing code for a certain amount of time
 func lock_for_time(time):

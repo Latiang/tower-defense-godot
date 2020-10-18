@@ -11,7 +11,6 @@ func _ready():
 #func _process(delta):
 #	pass
 
-
 func _on_StartButton_pressed():
 	$CodeWindow/Panel.visible = false
 	wave_started = true
@@ -22,4 +21,3 @@ func _on_StartButton_pressed():
 func _on_CodeWindow_save_and_close(new_code_source):
 	$Turret/ProgrammableBehaviour/CodeInterpreter.code_source = new_code_source
 	$CodeWindow/Panel.visible = false
-	print("Closed")
