@@ -1,6 +1,6 @@
 extends Node
 
-var code_str
+var code_source = "Very nice"
 
 func _ready():
 	pass

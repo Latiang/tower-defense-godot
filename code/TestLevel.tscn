@@ -1,9 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Turret.tscn" type="PackedScene" id=1]
 [ext_resource path="res://MobPath.tscn" type="PackedScene" id=2]
 [ext_resource path="res://TestLevel.gd" type="Script" id=3]
 [ext_resource path="res://Sensor.tscn" type="PackedScene" id=4]
+[ext_resource path="res://CodeWindow.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/GUITheme.tres" type="Theme" id=6]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
@@ -12,6 +14,8 @@ _data = {
 
 [node name="TestLevel" type="Node"]
 script = ExtResource( 3 )
+
+[node name="CodeWindow" parent="." instance=ExtResource( 5 )]
 
 [node name="Turret" parent="." instance=ExtResource( 1 )]
 position = Vector2( 328.919, 325.821 )
@@ -26,3 +30,30 @@ BehaviourFile = "sbtest2"
 [node name="Sensor1" parent="." instance=ExtResource( 4 )]
 position = Vector2( 486.431, 475.74 )
 rotation = 3.10843
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -160.0
+margin_top = -48.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 0
+custom_constants/margin_bottom = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StartButton" type="Button" parent="MarginContainer"]
+margin_right = 150.0
+margin_bottom = 38.0
+rect_min_size = Vector2( 150, 35 )
+theme = ExtResource( 6 )
+text = "Start wave "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="save_and_close" from="CodeWindow" to="." method="_on_CodeWindow_save_and_close"]
+[connection signal="open_code_window" from="Turret" to="CodeWindow" method="_on_Turret_open_code_window"]
+[connection signal="pressed" from="MarginContainer/StartButton" to="." method="_on_StartButton_pressed"]
