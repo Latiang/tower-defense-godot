@@ -24,7 +24,9 @@ animations = [ {
 radius = 20.6462
 height = 0.0265656
 
-[node name="Turret" type="Area2D"]
+[node name="Turret" type="Area2D" groups=[
+"Turret",
+]]
 scale = Vector2( 2, 2 )
 z_index = 21
 z_as_relative = false

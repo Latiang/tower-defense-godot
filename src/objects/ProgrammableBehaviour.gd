@@ -5,7 +5,7 @@ signal fire()
 signal rotate(angle)
 signal sensor_detect(out_dict, id)
 
-var locked = false
+var locked = true
 
 var printnow = false
 

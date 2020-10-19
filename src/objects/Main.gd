@@ -3,7 +3,7 @@ extends Node
 var current_level = false
 
 func _ready():
-	load_level("TestLevel")
+	load_level("TestLevel1")
 
 # Handle input for debugging purposes
 var level_toggle = false
@@ -15,7 +15,7 @@ func _input(event):
 		if level_toggle:
 			load_level("TestLevel2")
 		else:
-			load_level("TestLevel")
+			load_level("TestLevel1")
 
 # Load a level by name. Connects the required signals and so on
 func load_level(name):
