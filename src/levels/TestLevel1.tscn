@@ -15,7 +15,6 @@ _data = {
 [node name="Sensor1" parent="." index="0" instance=ExtResource( 2 )]
 position = Vector2( 486.431, 475.74 )
 rotation = 3.10843
-scale = Vector2( 1, 1 )
 
 [node name="Turret" parent="." index="1" instance=ExtResource( 4 )]
 position = Vector2( 328.919, 325.821 )
