@@ -2,5 +2,7 @@
 
 [ext_resource path="res://objects/BaseLevel.gd" type="Script" id=1]
 
-[node name="BaseLevel" type="Node"]
+[node name="BaseLevel" type="CanvasLayer"]
+layer = -1
+follow_viewport_enable = true
 script = ExtResource( 1 )

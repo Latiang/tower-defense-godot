@@ -1,8 +1,11 @@
-extends Node
+extends CanvasLayer
 
 var wave_started = false
 
 signal open_code_window(turret)
+
+var screen_width = 1280
+var screen_height = 720
 
 # Level start.
 func _ready():
@@ -11,6 +14,18 @@ func _ready():
 # Close the level and unload everything
 func close():
 	queue_free()
+
+func _process(delta):
+	update_scaling()
+
+func update_scaling():
+	pass
+	#var new_width = get_viewport().size.x
+	#var new_height = get_viewport().size.y
+	#if (new_width != screen_width):
+		#scale.x = float(new_width) / 1280
+	#if (new_height != screen_height):
+		#scale.y = float(new_height) / 720
 
 # Start the waves for this level
 func start_wave():
