@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/GUITheme.tres" type="Theme" id=1]
+[ext_resource path="res://objects/CodeWindow.tscn" type="PackedScene" id=2]
+[ext_resource path="res://objects/GUI.gd" type="Script" id=3]
+
+[node name="GUI" type="CanvasLayer"]
+script = ExtResource( 3 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -160.0
+margin_top = -48.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 0
+custom_constants/margin_bottom = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StartButton" type="Button" parent="MarginContainer"]
+margin_right = 150.0
+margin_bottom = 38.0
+rect_min_size = Vector2( 150, 35 )
+theme = ExtResource( 1 )
+text = "Start wave "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CodeWindow" parent="." instance=ExtResource( 2 )]
+[connection signal="pressed" from="MarginContainer/StartButton" to="." method="_on_StartButton_pressed"]

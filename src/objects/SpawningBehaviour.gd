@@ -47,7 +47,7 @@ func handle_spawn_event():
 			
 # Load the spawning_array from a json file, specified in the parent MobPath
 func load_behaviour_from_file(name):
-	print("Loading %s" % name)
+	print("Loading spawning behaviour: %s" % name)
 	if name == "":
 		return
 	var file = File.new()

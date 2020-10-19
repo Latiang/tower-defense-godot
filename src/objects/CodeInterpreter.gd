@@ -17,6 +17,7 @@ func run():
 	var result = {}
 	get_parent().emit_signal("sensor_detect", result, 1)
 	print(result[0])
+	#print(code_source)
 
 # The code interpreting should stop if:
 # 1. A signal function is emitted

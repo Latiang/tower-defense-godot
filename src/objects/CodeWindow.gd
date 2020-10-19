@@ -1,31 +1,36 @@
-extends CanvasLayer
-
-signal save_and_close(new_code_source)
+extends Panel
 
 export var keyword_color = Color("d32929")
 export var keywords = "if while for def switch"
 export var string_color = Color("dddd30")
 export var comments_color = Color("27b441")
 
-func _ready():
-	register_keywords()
+# Reference to the turret currently having code edited
+var current_turret
 
-func register_keywords():
+func _ready():
+	setup_code_syntax_highlighting()
+
+# Register keywords and other syntax highlighting for the CodeEditor
+func setup_code_syntax_highlighting():
 	var keywords_list = keywords.split(" ")
 	for keyword in keywords_list:
-		$Panel/VBoxContainer/MarginContainer/CodeEditor.add_keyword_color(keyword, keyword_color)
+		$VBoxContainer/MarginContainer/CodeEditor.add_keyword_color(keyword, keyword_color)
 	# String highlighting
-	$Panel/VBoxContainer/MarginContainer/CodeEditor.add_color_region("\"", "\"", string_color)
-	$Panel/VBoxContainer/MarginContainer/CodeEditor.add_color_region("'", "'", string_color)
+	$VBoxContainer/MarginContainer/CodeEditor.add_color_region("\"", "\"", string_color)
+	$VBoxContainer/MarginContainer/CodeEditor.add_color_region("'", "'", string_color)
 	# Comment highlighting
-	$Panel/VBoxContainer/MarginContainer/CodeEditor.add_color_region("#", "", comments_color, true)
-	$Panel/VBoxContainer/MarginContainer/CodeEditor.add_color_region("//", "", comments_color, true)
+	$VBoxContainer/MarginContainer/CodeEditor.add_color_region("#", "", comments_color, true)
+	$VBoxContainer/MarginContainer/CodeEditor.add_color_region("//", "", comments_color, true)
 
-
+# Save button pressed, save the edited code in the turret object
 func _on_SaveButton_pressed():
-	emit_signal("save_and_close", $Panel/VBoxContainer/MarginContainer/CodeEditor.text)
+	visible = false
+	current_turret.update_source($VBoxContainer/MarginContainer/CodeEditor.text)
 
-func _on_Turret_open_code_window(pos):
-	$Panel.visible = true
-	$Panel.rect_position = pos
-	$Panel/VBoxContainer/MarginContainer/CodeEditor.text = $"../Turret/ProgrammableBehaviour/CodeInterpreter".code_source
+# Open a code window for this turret, caused by pressing a turret
+func open_code_window(turret):
+	visible = true
+	rect_position = turret.position
+	$VBoxContainer/MarginContainer/CodeEditor.text = turret.get_code_source()
+	current_turret = turret

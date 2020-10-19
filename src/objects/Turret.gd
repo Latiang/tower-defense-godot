@@ -2,7 +2,7 @@ extends Area2D
 
 export (PackedScene) var Bullet
 
-signal open_code_window(pos)
+signal turret_pressed(turret)
 
 export var can_rotate = true
 export var integrated_sensor = true
@@ -48,4 +48,10 @@ func _on_ProgrammableBehaviour_sensor_detect(out_dict, id: int = -1):
 # Pressing on turret opens code window
 func _on_Turret_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT and !get_parent().wave_started:
-		emit_signal("open_code_window", position)
+		emit_signal("turret_pressed", self)
+		
+func update_source(new_source):
+	$ProgrammableBehaviour/CodeInterpreter.code_source = new_source
+
+func get_code_source():
+	return $ProgrammableBehaviour/CodeInterpreter.code_source

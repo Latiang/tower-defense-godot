@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://levels/TestLevel2.gd" type="Script" id=4]
+[ext_resource path="res://objects/Sensor.tscn" type="PackedScene" id=6]
+[ext_resource path="res://objects/MobPath.tscn" type="PackedScene" id=7]
+[ext_resource path="res://objects/Turret.tscn" type="PackedScene" id=8]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 807, 39, 0, 0, 0, 0, 476.399, 73.005, 0, 0, 0, 0, 477.897, 377.161, 0, 0, 0, 0, 745, 397, 0, 0, 0, 0, 910.902, 510.05 )
+}
+
+[node name="TestLevel2" type="Node"]
+script = ExtResource( 4 )
+
+[node name="Turret" parent="." instance=ExtResource( 8 )]
+position = Vector2( 886.919, 334.821 )
+
+[node name="MobPath1" parent="." instance=ExtResource( 7 )]
+curve = SubResource( 1 )
+BehaviourFile = "sbtest"
+
+[node name="Sensor1" parent="." instance=ExtResource( 6 )]
+position = Vector2( 770.431, 567.74 )
+rotation = 3.10843
+
+[node name="Turret2" parent="." instance=ExtResource( 8 )]
+position = Vector2( 238.936, 325.701 )
+[connection signal="turret_pressed" from="Turret" to="." method="_on_Turret_turret_pressed"]
+[connection signal="turret_pressed" from="Turret2" to="." method="_on_Turret2_turret_pressed"]

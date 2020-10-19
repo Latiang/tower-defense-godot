@@ -7,14 +7,6 @@
 [ext_resource path="res://assets/textures/turret.png" type="Texture" id=5]
 [ext_resource path="res://objects/Gun.tscn" type="PackedScene" id=6]
 
-
-
-
-
-
-
-
-
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
 "frames": [ ExtResource( 5 ) ],
