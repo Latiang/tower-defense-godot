@@ -3,9 +3,6 @@
 [ext_resource path="res://assets/textures/sensor.png" type="Texture" id=1]
 [ext_resource path="res://objects/Sensor.gd" type="Script" id=2]
 
-
-
-
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
 "frames": [ ExtResource( 1 ) ],
@@ -27,3 +24,9 @@ cast_to = Vector2( 0, 1000 )
 collision_mask = 1024
 collide_with_areas = true
 collide_with_bodies = false
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PoolVector2Array( 0, 8, 0, 1000 )
+width = 5.0
+default_color = Color( 0.627451, 0.152941, 0.152941, 1 )
+antialiased = true

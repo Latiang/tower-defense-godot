@@ -12,16 +12,17 @@ _data = {
 
 [node name="BaseLevel" instance=ExtResource( 1 )]
 
-[node name="Turret" parent="." index="0" instance=ExtResource( 4 )]
-position = Vector2( 328.919, 325.821 )
-
-[node name="MobPath1" parent="." index="1" instance=ExtResource( 3 )]
-BehaviourFile = "sbtest"
-
-[node name="MobPath2" parent="." index="2" instance=ExtResource( 3 )]
-curve = SubResource( 1 )
-BehaviourFile = "sbtest2"
-
-[node name="Sensor1" parent="." index="3" instance=ExtResource( 2 )]
+[node name="Sensor1" parent="." index="0" instance=ExtResource( 2 )]
 position = Vector2( 486.431, 475.74 )
 rotation = 3.10843
+scale = Vector2( 1, 1 )
+
+[node name="Turret" parent="." index="1" instance=ExtResource( 4 )]
+position = Vector2( 328.919, 325.821 )
+
+[node name="MobPath1" parent="." index="2" instance=ExtResource( 3 )]
+BehaviourFile = "sbtest"
+
+[node name="MobPath2" parent="." index="3" instance=ExtResource( 3 )]
+curve = SubResource( 1 )
+BehaviourFile = "sbtest2"
