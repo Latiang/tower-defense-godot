@@ -15,7 +15,9 @@ animations = [ {
 radius = 17.3055
 height = 0.152893
 
-[node name="Enemy" type="PathFollow2D"]
+[node name="Enemy" type="PathFollow2D" groups=[
+"Enemy",
+]]
 rotate = false
 loop = false
 script = ExtResource( 1 )

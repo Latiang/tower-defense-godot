@@ -8,3 +8,4 @@ script = ExtResource( 3 )
 
 [node name="GUI" parent="." instance=ExtResource( 1 )]
 [connection signal="start_wave" from="GUI" to="." method="_on_GUI_start_wave"]
+[connection signal="update_time_scale" from="GUI" to="." method="_on_GUI_update_time_scale"]

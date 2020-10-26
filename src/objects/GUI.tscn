@@ -28,7 +28,7 @@ margin_top = -100.0
 margin_right = 0.0
 margin_bottom = 200.0
 
-[node name="Panel" type="PanelContainer" parent="."]
+[node name="LevelButtonsPanel" type="PanelContainer" parent="."]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -41,7 +41,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="LevelButtonsPanel"]
 margin_right = 360.0
 margin_bottom = 70.0
 custom_constants/margin_right = 10
@@ -49,7 +49,7 @@ custom_constants/margin_top = 10
 custom_constants/margin_left = 10
 custom_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="LevelButtonsPanel/MarginContainer"]
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 350.0
@@ -62,7 +62,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Speed2Button" type="Button" parent="Panel/MarginContainer/HBoxContainer"]
+[node name="Speed3Button" type="Button" parent="LevelButtonsPanel/MarginContainer/HBoxContainer"]
 margin_right = 70.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 70, 50 )
@@ -74,7 +74,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Speed2Button2" type="Button" parent="Panel/MarginContainer/HBoxContainer"]
+[node name="Speed2Button" type="Button" parent="LevelButtonsPanel/MarginContainer/HBoxContainer"]
 margin_left = 85.0
 margin_right = 155.0
 margin_bottom = 50.0
@@ -87,7 +87,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Speed1Button" type="Button" parent="Panel/MarginContainer/HBoxContainer"]
+[node name="Speed1Button" type="Button" parent="LevelButtonsPanel/MarginContainer/HBoxContainer"]
 margin_left = 170.0
 margin_right = 240.0
 margin_bottom = 50.0
@@ -100,13 +100,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VSeparator" type="VSeparator" parent="Panel/MarginContainer/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="LevelButtonsPanel/MarginContainer/HBoxContainer"]
 margin_left = 255.0
 margin_right = 255.0
 margin_bottom = 50.0
 custom_constants/separation = 0
 
-[node name="StartButton" type="Button" parent="Panel/MarginContainer/HBoxContainer"]
+[node name="StartButton" type="Button" parent="LevelButtonsPanel/MarginContainer/HBoxContainer"]
 margin_left = 270.0
 margin_right = 340.0
 margin_bottom = 50.0
@@ -117,7 +117,7 @@ text = ""
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/Speed2Button" to="." method="_on_StartButton_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/Speed2Button2" to="." method="_on_StartButton_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/Speed1Button" to="." method="_on_StartButton_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/HBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
+[connection signal="pressed" from="LevelButtonsPanel/MarginContainer/HBoxContainer/Speed3Button" to="." method="_on_Speed3Button_pressed"]
+[connection signal="pressed" from="LevelButtonsPanel/MarginContainer/HBoxContainer/Speed2Button" to="." method="_on_Speed2Button_pressed"]
+[connection signal="pressed" from="LevelButtonsPanel/MarginContainer/HBoxContainer/Speed1Button" to="." method="_on_Speed1Button_pressed"]
+[connection signal="pressed" from="LevelButtonsPanel/MarginContainer/HBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]

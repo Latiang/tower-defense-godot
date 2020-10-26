@@ -38,3 +38,7 @@ func _on_GUI_start_wave():
 # Open a code window for a specific turret, send to GUI
 func _on_Level_open_code_window(turret_id):
 	$GUI/CodeWindow.open_code_window(turret_id)
+
+
+func _on_GUI_update_time_scale(new_time_scale):
+	current_level.set_time_scale(new_time_scale)

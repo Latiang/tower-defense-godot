@@ -10,6 +10,8 @@ export var integrated_sensor = true
 export var can_move = false
 export var reload_time = 0.3 #seconds
 
+var time_scale = 1
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
@@ -20,7 +22,7 @@ func _process(delta):
 
 func fire():
 	var dir = Vector2(cos(rotation + PI/2), sin(rotation + PI/2))
-	$Gun.spawn_bullet(position, dir)
+	$Gun.spawn_bullet(position, dir, time_scale)
 
 func rotate(angle):
 	if (can_rotate):
@@ -35,7 +37,7 @@ func sensor_detect(out_dict):
 
 func _on_ProgrammableBehaviour_fire():
 	fire()
-	$ProgrammableBehaviour.lock_for_time(reload_time)
+	$ProgrammableBehaviour.lock_for_time(reload_time / time_scale)
 
 func _on_ProgrammableBehaviour_rotate(angle):
 	rotate(angle)
@@ -56,3 +58,8 @@ func update_source(new_source):
 
 func get_code_source():
 	return $ProgrammableBehaviour/CodeInterpreter.code_source
+
+func update_time_scale(new_time_scale):
+	$ProgrammableBehaviour/LockTimer.start($ProgrammableBehaviour/LockTimer.time_left * (float(time_scale) / new_time_scale))
+	time_scale = new_time_scale
+	$Gun.update_bullet_speeds(new_time_scale)

@@ -16,3 +16,8 @@ func spawn():
 
 func _on_SpawnTick_timeout():
 	$SpawningBehaviour.handle_spawn_event()
+
+func update_time_scale(new_time_scale):
+	for child in self.get_children():
+		if child.is_in_group("Enemy"):
+			child.speed_multiplier = new_time_scale

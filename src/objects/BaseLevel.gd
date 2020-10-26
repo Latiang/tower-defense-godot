@@ -7,6 +7,8 @@ signal open_code_window(turret)
 var screen_width = 1280
 var screen_height = 720
 
+var time_scale = 1
+
 # Level start.
 func _ready():
 	connect_turret_signals()
@@ -17,6 +19,12 @@ func close():
 
 func _process(delta):
 	update_scaling()
+
+func set_time_scale(new_time_scale):
+	time_scale = new_time_scale
+	for child in self.get_children():
+		if child.is_in_group("Turret") || child.is_in_group("MobPath"):
+			child.update_time_scale(new_time_scale)
 
 func update_scaling():
 	pass

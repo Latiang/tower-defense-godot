@@ -3,6 +3,7 @@ extends PathFollow2D
 
 export (float) var SPEED = 100
 
+var speed_multiplier = 1
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -10,7 +11,7 @@ func _ready():
 
 # Called every frame.
 func _physics_process(delta):
-	offset += SPEED * delta # Move along the parent Path2D
+	offset += SPEED * delta * speed_multiplier # Move along the parent Path2D
 	
 	if unit_offset >= 1:
 		path_finished()
