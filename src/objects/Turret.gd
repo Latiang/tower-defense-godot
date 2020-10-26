@@ -60,8 +60,9 @@ func get_code_source():
 	return $ProgrammableBehaviour/CodeInterpreter.code_source
 
 func update_time_scale(new_time_scale):
-	if !$ProgrammableBehaviour.locked:
-		$ProgrammableBehaviour/LockTimer.start($ProgrammableBehaviour/LockTimer.time_left * (float(time_scale) / new_time_scale))
+	if $ProgrammableBehaviour.locked:
+		var new_time = $ProgrammableBehaviour/LockTimer.time_left * (float(time_scale) / new_time_scale)
+		$ProgrammableBehaviour/LockTimer.start(new_time)
 	time_scale = new_time_scale
 	$Gun.update_bullet_speeds(new_time_scale)
 

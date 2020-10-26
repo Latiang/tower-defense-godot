@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://assets/GUITheme.tres" type="Theme" id=1]
 [ext_resource path="res://objects/CodeWindow.tscn" type="PackedScene" id=2]
 [ext_resource path="res://objects/GUI.gd" type="Script" id=3]
 [ext_resource path="res://assets/fonts/fa-solid-900.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://assets/fonts/Inter-SemiBold-slnt=0.ttf" type="DynamicFontData" id=5]
 
 [sub_resource type="DynamicFont" id=2]
 size = 40
@@ -14,6 +15,16 @@ font_data = ExtResource( 4 )
 size = 25
 use_filter = true
 font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 35
+use_filter = true
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 35
+use_filter = true
+font_data = ExtResource( 5 )
 
 [node name="GUI" type="CanvasLayer"]
 script = ExtResource( 3 )
@@ -28,7 +39,7 @@ margin_top = -100.0
 margin_right = 0.0
 margin_bottom = 200.0
 
-[node name="LevelButtonsPanel" type="PanelContainer" parent="."]
+[node name="LevelControlsPanel" type="PanelContainer" parent="."]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -41,7 +52,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MarginContainer" type="MarginContainer" parent="LevelButtonsPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="LevelControlsPanel"]
 margin_right = 360.0
 margin_bottom = 70.0
 custom_constants/margin_right = 10
@@ -49,7 +60,7 @@ custom_constants/margin_top = 10
 custom_constants/margin_left = 10
 custom_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="LevelButtonsPanel/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="LevelControlsPanel/MarginContainer"]
 margin_left = 10.0
 margin_top = 10.0
 margin_right = 350.0
@@ -62,19 +73,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Speed3Button" type="Button" parent="LevelButtonsPanel/MarginContainer/HBoxContainer"]
+[node name="Speed3Button" type="Button" parent="LevelControlsPanel/MarginContainer/HBoxContainer"]
 margin_right = 70.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 70, 50 )
 theme = ExtResource( 1 )
 custom_fonts/font = SubResource( 2 )
 disabled = true
-text = ""
+text = ""
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Speed2Button" type="Button" parent="LevelButtonsPanel/MarginContainer/HBoxContainer"]
+[node name="Speed2Button" type="Button" parent="LevelControlsPanel/MarginContainer/HBoxContainer"]
 margin_left = 85.0
 margin_right = 155.0
 margin_bottom = 50.0
@@ -82,12 +93,12 @@ rect_min_size = Vector2( 70, 50 )
 theme = ExtResource( 1 )
 custom_fonts/font = SubResource( 2 )
 disabled = true
-text = ""
+text = ""
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Speed1Button" type="Button" parent="LevelButtonsPanel/MarginContainer/HBoxContainer"]
+[node name="Speed1Button" type="Button" parent="LevelControlsPanel/MarginContainer/HBoxContainer"]
 margin_left = 170.0
 margin_right = 240.0
 margin_bottom = 50.0
@@ -95,18 +106,18 @@ rect_min_size = Vector2( 70, 50 )
 theme = ExtResource( 1 )
 custom_fonts/font = SubResource( 2 )
 disabled = true
-text = ""
+text = ""
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VSeparator" type="VSeparator" parent="LevelButtonsPanel/MarginContainer/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="LevelControlsPanel/MarginContainer/HBoxContainer"]
 margin_left = 255.0
 margin_right = 255.0
 margin_bottom = 50.0
 custom_constants/separation = 0
 
-[node name="StartButton" type="Button" parent="LevelButtonsPanel/MarginContainer/HBoxContainer"]
+[node name="StartButton" type="Button" parent="LevelControlsPanel/MarginContainer/HBoxContainer"]
 margin_left = 270.0
 margin_right = 340.0
 margin_bottom = 50.0
@@ -117,7 +128,61 @@ text = ""
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="pressed" from="LevelButtonsPanel/MarginContainer/HBoxContainer/Speed3Button" to="." method="_on_Speed3Button_pressed"]
-[connection signal="pressed" from="LevelButtonsPanel/MarginContainer/HBoxContainer/Speed2Button" to="." method="_on_Speed2Button_pressed"]
-[connection signal="pressed" from="LevelButtonsPanel/MarginContainer/HBoxContainer/Speed1Button" to="." method="_on_Speed1Button_pressed"]
-[connection signal="pressed" from="LevelButtonsPanel/MarginContainer/HBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
+
+[node name="PauseButton" type="Button" parent="LevelControlsPanel/MarginContainer/HBoxContainer"]
+visible = false
+margin_left = 270.0
+margin_right = 340.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 70, 50 )
+theme = ExtResource( 1 )
+custom_fonts/font = SubResource( 1 )
+text = ""
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HealthPanel" type="PanelContainer" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -150.0
+margin_bottom = 70.0
+rect_min_size = Vector2( 150, 70 )
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="HealthPanel"]
+margin_right = 150.0
+margin_bottom = 70.0
+rect_min_size = Vector2( 0, 70 )
+custom_constants/margin_right = 20
+custom_constants/margin_left = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HealthPanel/MarginContainer"]
+margin_left = 20.0
+margin_right = 130.0
+margin_bottom = 70.0
+rect_min_size = Vector2( 0, 70 )
+
+[node name="HeartLabel" type="Label" parent="HealthPanel/MarginContainer/HBoxContainer"]
+margin_top = 17.0
+margin_right = 35.0
+margin_bottom = 53.0
+custom_fonts/font = SubResource( 4 )
+text = ""
+
+[node name="HealthLabel" type="Label" parent="HealthPanel/MarginContainer/HBoxContainer"]
+margin_left = 39.0
+margin_right = 102.0
+margin_bottom = 70.0
+rect_min_size = Vector2( 0, 70 )
+custom_fonts/font = SubResource( 3 )
+text = "100"
+valign = 1
+[connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/Speed3Button" to="." method="_on_Speed3Button_pressed"]
+[connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/Speed2Button" to="." method="_on_Speed2Button_pressed"]
+[connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/Speed1Button" to="." method="_on_Speed1Button_pressed"]
+[connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
+[connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/PauseButton" to="." method="_on_PauseButton2_pressed"]

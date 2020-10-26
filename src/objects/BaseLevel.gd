@@ -25,9 +25,10 @@ func _process(delta):
 
 func set_time_scale(new_time_scale):
 	time_scale = new_time_scale
-	for child in self.get_children():
-		if child.is_in_group("Turret") || child.is_in_group("MobPath"):
-			child.update_time_scale(new_time_scale)
+	if wave_started:
+		for child in self.get_children():
+			if child.is_in_group("Turret") || child.is_in_group("MobPath"):
+				child.update_time_scale(new_time_scale)
 
 func update_scaling():
 	pass

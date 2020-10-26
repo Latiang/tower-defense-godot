@@ -1,7 +1,9 @@
 extends PathFollow2D
 
+signal base_damage(amount)
 
-export (float) var SPEED = 100
+export (float) var speed= 100
+export (int) var damage = 1
 
 var speed_multiplier = 1
 
@@ -11,13 +13,14 @@ func _ready():
 
 # Called every frame.
 func _physics_process(delta):
-	offset += SPEED * delta * speed_multiplier # Move along the parent Path2D
+	offset += speed * delta * speed_multiplier # Move along the parent Path2D
 	
 	if unit_offset >= 1:
 		path_finished()
 
 # Reached end of path. Remove
 func path_finished():
+	emit_signal("base_damage", damage)
 	queue_free()
 
 # Collision with bullet. Remove

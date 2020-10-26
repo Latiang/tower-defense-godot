@@ -2,6 +2,8 @@ extends Node
 
 var current_level = false
 
+var health = 100
+
 func _ready():
 	load_level("TestLevel1")
 
@@ -19,6 +21,7 @@ func _input(event):
 
 # Load a level by name. Connects the required signals and so on
 func load_level(name):
+	health = 100
 	$GUI.reset()
 	print("Loading level: %s" % name)
 	if current_level:
@@ -41,6 +44,11 @@ func _on_Level_open_code_window(turret_id):
 
 func _on_Level_level_complete():
 	print("Win condition for level reached")
+	$GUI.reset()
 
 func _on_GUI_update_time_scale(new_time_scale):
 	current_level.set_time_scale(new_time_scale)
+	
+func _on_Level_base_damage(damage):
+	health -= damage
+	$GUI.update_health(health)
