@@ -6,7 +6,6 @@ signal rotate(angle)
 signal sensor_detect(out_dict, id)
 
 var locked = true
-
 var printnow = false
 
 # Input variables
