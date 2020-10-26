@@ -146,9 +146,11 @@ func run():
 	var statements = _statements_from_lines(lines)
 	for statement in statements:
 		if statement.assignment:
-			print(statement.lhs,"=", statement.rhs)
+			pass
+			#print(statement.lhs,"=", statement.rhs)
 		else:
-			print(statement.rhs)
+			pass
+			#print(statement.rhs)
 	# Step 1: Find lines with actual code on it.
 	
 	
@@ -161,7 +163,8 @@ func run():
 	# Some outside functions give a return value in a dictionary, t.ex a sensor raycast
 	var result = {}
 	get_parent().emit_signal("sensor_detect", result, 1)
-	print(result[0])
+	if result[0]:
+		print("Sensor distance: %f" % result[0])
 
 # The code interpreting should stop if:
 # 1. A signal function is emitted

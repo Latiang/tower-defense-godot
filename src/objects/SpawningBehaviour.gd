@@ -1,5 +1,6 @@
 extends Node2D
 
+signal spawning_complete()
 
 # Mob types supported
 enum MobType {
@@ -38,6 +39,7 @@ func handle_spawn_event():
 	spawn_event_counter += 1
 	if spawn_event_counter >= spawning_array.size():
 		# End of wave
+		emit_signal("spawning_complete")
 		print("Wave complete (%s)" % get_parent().BehaviourFile)
 	else: # Prepare for next mob
 		if spawn_object.time > 0:

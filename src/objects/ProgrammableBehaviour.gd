@@ -34,3 +34,7 @@ func lock_for_time(time):
 # Disable lock
 func _on_LockTimer_timeout():
 	locked = false
+	
+func lock():
+	$LockTimer.stop()
+	locked = true

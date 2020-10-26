@@ -20,4 +20,5 @@ script = ExtResource( 2 )
 [node name="SpawnTimer" type="Timer" parent="SpawningBehaviour"]
 wait_time = 0.1
 one_shot = true
+[connection signal="spawning_complete" from="SpawningBehaviour" to="." method="_on_SpawningBehaviour_spawning_complete"]
 [connection signal="timeout" from="SpawningBehaviour/SpawnTimer" to="." method="_on_SpawnTick_timeout"]
