@@ -4,6 +4,7 @@ var current_level = false
 
 func _ready():
 	load_level("TestLevel1")
+	print($GUI/CodeWindow/VBoxContainer/Panel.rect_size)
 
 # Handle input for debugging purposes
 var level_toggle = false
@@ -19,6 +20,7 @@ func _input(event):
 
 # Load a level by name. Connects the required signals and so on
 func load_level(name):
+	$GUI.reset()
 	print("Loading level: %s" % name)
 	if current_level:
 		current_level.close()
@@ -26,7 +28,7 @@ func load_level(name):
 	add_child(current_level)
 	# Connect the signals needed
 	current_level.connect("open_code_window", self, "_on_Level_open_code_window")
-	$GUI.reset()
+	$GUI/CodeWindow.open_code_window(0)
 
 # Start a level wave (start button pressed)
 func _on_GUI_start_wave():
@@ -34,5 +36,5 @@ func _on_GUI_start_wave():
 		current_level.start_wave()
 
 # Open a code window for a specific turret, send to GUI
-func _on_Level_open_code_window(turret):
-	$GUI/CodeWindow.open_code_window(turret)
+func _on_Level_open_code_window(turret_id):
+	$GUI/CodeWindow.open_code_window(turret_id)

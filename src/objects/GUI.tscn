@@ -7,23 +7,11 @@
 [node name="GUI" type="CanvasLayer"]
 script = ExtResource( 3 )
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -160.0
-margin_top = -60.0
-custom_constants/margin_right = 10
-custom_constants/margin_top = 0
-custom_constants/margin_bottom = 10
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="StartButton" type="Button" parent="MarginContainer"]
-margin_right = 150.0
-margin_bottom = 50.0
+[node name="StartButton" type="Button" parent="."]
+margin_left = 1760.0
+margin_top = 1024.0
+margin_right = 1910.0
+margin_bottom = 1074.0
 rect_min_size = Vector2( 150, 50 )
 theme = ExtResource( 1 )
 text = "Start wave "
@@ -32,4 +20,12 @@ __meta__ = {
 }
 
 [node name="CodeWindow" parent="." instance=ExtResource( 2 )]
-[connection signal="pressed" from="MarginContainer/StartButton" to="." method="_on_StartButton_pressed"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -300.0
+margin_top = -100.0
+margin_right = 0.0
+margin_bottom = 200.0
+[connection signal="pressed" from="StartButton" to="." method="_on_StartButton_pressed"]

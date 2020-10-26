@@ -10,7 +10,7 @@
 [ext_resource path="res://assets/textures/blue-tile.png" type="Texture" id=8]
 [ext_resource path="res://assets/textures/green-tile.png" type="Texture" id=9]
 
-[sub_resource type="TileSet" id=4]
+[sub_resource type="TileSet" id=1]
 0/name = "green-tile.png 0"
 0/texture = ExtResource( 9 )
 0/tex_offset = Vector2( 0, 0 )
@@ -95,7 +95,7 @@ _data = {
 [node name="BaseLevel" instance=ExtResource( 7 )]
 
 [node name="TileMap" type="TileMap" parent="." index="0"]
-tile_set = SubResource( 4 )
+tile_set = SubResource( 1 )
 cell_size = Vector2( 32, 32 )
 cell_custom_transform = Transform2D( 32, 0, 0, 32, 0, 0 )
 format = 1

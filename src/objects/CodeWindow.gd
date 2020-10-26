@@ -6,10 +6,14 @@ export var string_color = Color("dddd30")
 export var comments_color = Color("27b441")
 
 # Reference to the turret currently having code edited
-var current_turret
+var turrets = []
+var current_turret_index = -1;
+
+var turret_buttons = []
 
 func _ready():
 	setup_code_syntax_highlighting()
+	turrets.resize(10)
 
 # Register keywords and other syntax highlighting for the CodeEditor
 func setup_code_syntax_highlighting():
@@ -24,13 +28,40 @@ func setup_code_syntax_highlighting():
 	$VBoxContainer/MarginContainer/CodeEditor.add_color_region("//", "", comments_color, true)
 
 # Save button pressed, save the edited code in the turret object
-func _on_SaveButton_pressed():
-	visible = false
-	current_turret.update_source($VBoxContainer/MarginContainer/CodeEditor.text)
+func save_code_to_turret():
+	if (current_turret_index >= 0):
+		turrets[current_turret_index].update_source($VBoxContainer/MarginContainer/CodeEditor.text)
 
 # Open a code window for this turret, caused by pressing a turret
-func open_code_window(turret):
-	visible = true
-	rect_position = turret.position
-	$VBoxContainer/MarginContainer/CodeEditor.text = turret.get_code_source()
-	current_turret = turret
+func open_code_window(id):
+	save_code_to_turret()
+	$VBoxContainer/MarginContainer/CodeEditor.text = turrets[id].get_code_source()
+	current_turret_index = id
+	set_button_highlighting(id)
+
+func add_turret_button(turret):
+	turrets[turret.id] = turret
+	# Add button
+	if (turret.id != 0):
+		var newButton = $VBoxContainer/Panel/HBoxContainer/TurretButton1.duplicate()
+		newButton.text = "%d" % (turret.id + 1)
+		newButton.disabled = false
+		$VBoxContainer/Panel/HBoxContainer.add_child(newButton)
+		turret_buttons.append(newButton)
+
+# Remove excess turret buttons
+func reset():
+	for turret_button in turret_buttons:
+		turret_button.queue_free()
+	turret_buttons = []
+
+func _on_TurretButton1_turret_button_pressed(button):
+	open_code_window(int(button.text)-1)
+	
+func set_button_highlighting(id):
+	if int($VBoxContainer/Panel/HBoxContainer/TurretButton1.text) == (id+1):
+		$VBoxContainer/Panel/HBoxContainer/TurretButton1.disabled = true
+	else:
+		$VBoxContainer/Panel/HBoxContainer/TurretButton1.disabled = false
+	for turret_button in turret_buttons:
+		turret_button.disabled = (int(turret_button.text) == (id+1))

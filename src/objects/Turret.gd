@@ -4,6 +4,7 @@ export (PackedScene) var Bullet
 
 signal turret_pressed(turret)
 
+export var id = 0;
 export var can_rotate = true
 export var integrated_sensor = true
 export var can_move = false

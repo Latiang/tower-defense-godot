@@ -38,10 +38,12 @@ func start_wave():
 			child.start_spawning_time()
 
 func _on_Turret_turret_pressed(turret):
-	emit_signal("open_code_window", turret)
+	emit_signal("open_code_window", turret.id)
 
 # Connect the turret pressed signal to open_code_window
 func connect_turret_signals():
 	for child in self.get_children():
 		if child.is_in_group("Turret"):
 			child.connect("turret_pressed", self, "_on_Turret_turret_pressed")
+			# Add reference to this turret in the GUI
+			get_parent().get_node("GUI").get_node("CodeWindow").add_turret_button(child)
