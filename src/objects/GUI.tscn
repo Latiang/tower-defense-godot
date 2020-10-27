@@ -1,27 +1,29 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://assets/GUITheme.tres" type="Theme" id=1]
 [ext_resource path="res://objects/CodeWindow.tscn" type="PackedScene" id=2]
 [ext_resource path="res://objects/GUI.gd" type="Script" id=3]
 [ext_resource path="res://assets/fonts/fa-solid-900.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://assets/fonts/Inter-SemiBold-slnt=0.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://objects/PopupDialogOk.tscn" type="PackedScene" id=6]
+[ext_resource path="res://objects/PopupDialogTwoChoices.tscn" type="PackedScene" id=7]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=1]
 size = 40
 use_filter = true
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=2]
 size = 25
 use_filter = true
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=3]
 size = 35
 use_filter = true
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=4]
 size = 35
 use_filter = true
 font_data = ExtResource( 5 )
@@ -78,7 +80,7 @@ margin_right = 70.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 70, 50 )
 theme = ExtResource( 1 )
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 disabled = true
 text = ""
 __meta__ = {
@@ -91,7 +93,7 @@ margin_right = 155.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 70, 50 )
 theme = ExtResource( 1 )
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 disabled = true
 text = ""
 __meta__ = {
@@ -104,7 +106,7 @@ margin_right = 240.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 70, 50 )
 theme = ExtResource( 1 )
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 disabled = true
 text = ""
 __meta__ = {
@@ -123,7 +125,7 @@ margin_right = 340.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 70, 50 )
 theme = ExtResource( 1 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = ""
 __meta__ = {
 "_edit_use_anchors_": false
@@ -136,7 +138,7 @@ margin_right = 340.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 70, 50 )
 theme = ExtResource( 1 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = ""
 __meta__ = {
 "_edit_use_anchors_": false
@@ -170,7 +172,7 @@ rect_min_size = Vector2( 0, 70 )
 margin_top = 17.0
 margin_right = 35.0
 margin_bottom = 53.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 3 )
 text = ""
 
 [node name="HealthLabel" type="Label" parent="HealthPanel/MarginContainer/HBoxContainer"]
@@ -178,9 +180,34 @@ margin_left = 39.0
 margin_right = 102.0
 margin_bottom = 70.0
 rect_min_size = Vector2( 0, 70 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 4 )
 text = "100"
 valign = 1
+
+[node name="PopupGreyCover" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.305882 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LostPopup" parent="." instance=ExtResource( 6 )]
+visible = false
+text = "Oh no! You have lost"
+button_text = "Restart"
+
+[node name="WonPopup" parent="." instance=ExtResource( 6 )]
+visible = false
+text = "Congratulations! Level complete"
+button_text = "Next Level"
+
+[node name="DebugPopup" parent="." instance=ExtResource( 7 )]
+visible = false
+text = "Error"
+button1_text = "Close"
+button2_text = "Play Anyway"
 [connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/Speed3Button" to="." method="_on_Speed3Button_pressed"]
 [connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/Speed2Button" to="." method="_on_Speed2Button_pressed"]
 [connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/Speed1Button" to="." method="_on_Speed1Button_pressed"]

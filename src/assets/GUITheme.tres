@@ -24,7 +24,7 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 shadow_size = 3
 
-[sub_resource type="StyleBoxFlat" id=5]
+[sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0.321569, 0.364706, 0.431373, 1 )
 corner_radius_top_left = 1
 corner_radius_top_right = 1
@@ -32,12 +32,12 @@ corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 expand_margin_left = 1.0
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=5]
 size = 20
 font_data = ExtResource( 1 )
 
 [resource]
-default_font = SubResource( 4 )
+default_font = SubResource( 5 )
 Button/colors/font_color = Color( 0.878431, 0.878431, 0.878431, 1 )
 Button/colors/font_color_disabled = Color( 0.878431, 0.878431, 0.878431, 1 )
 Button/colors/font_color_hover = Color( 0.94, 0.94, 0.94, 1 )
@@ -52,4 +52,4 @@ Button/styles/pressed = SubResource( 1 )
 Panel/styles/panel = SubResource( 3 )
 PanelContainer/styles/panel = SubResource( 3 )
 VSeparator/constants/separation = 4
-VSeparator/styles/separator = SubResource( 5 )
+VSeparator/styles/separator = SubResource( 4 )
