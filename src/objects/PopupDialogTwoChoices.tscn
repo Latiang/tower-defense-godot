@@ -82,6 +82,5 @@ margin_left = 195.0
 margin_right = 335.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 140, 35 )
-text = " "
 [connection signal="pressed" from="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Button1" to="." method="_on_Button1_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Button2" to="." method="_on_Button2_pressed"]

@@ -1,8 +1,9 @@
 extends Node
 
 var current_level = false
+var current_level_name = ""
 
-var health = 100
+var health = 10
 
 func _ready():
 	load_level("TestLevel1")
@@ -20,13 +21,16 @@ func _input(event):
 			load_level("TestLevel1")
 
 # Load a level by name. Connects the required signals and so on
-func load_level(name):
-	health = 100
+func load_level(level_name):
+	health = 10
+	current_level_name = level_name
+	print(current_level_name)
 	$GUI.reset()
-	print("Loading level: %s" % name)
+	$GUI.update_health(health)
+	print("Loading level: %s" % level_name)
 	if current_level:
 		current_level.close()
-	current_level = load("res://levels/%s.tscn" % name).instance()
+	current_level = load("res://levels/%s.tscn" % level_name).instance()
 	add_child(current_level)
 	# Connect the signals needed
 	current_level.connect("open_code_window", self, "_on_Level_open_code_window")
@@ -43,8 +47,7 @@ func _on_Level_open_code_window(turret_id):
 	$GUI/CodeWindow.open_code_window(turret_id)
 
 func _on_Level_level_complete():
-	print("Win condition for level reached")
-	$GUI.reset()
+	$GUI.level_won()
 
 func _on_GUI_update_time_scale(new_time_scale):
 	current_level.set_time_scale(new_time_scale)
@@ -52,3 +55,12 @@ func _on_GUI_update_time_scale(new_time_scale):
 func _on_Level_base_damage(damage):
 	health -= damage
 	$GUI.update_health(health)
+	if (health <= 0): # Level lost
+		current_level.set_time_scale(0.0001)
+		$GUI.level_lost()
+
+func _on_GUI_restart_level():
+	load_level(current_level_name)
+	
+func _on_GUI_next_level():
+	pass
