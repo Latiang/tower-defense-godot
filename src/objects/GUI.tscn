@@ -9,7 +9,7 @@
 [ext_resource path="res://objects/PopupDialogTwoChoices.tscn" type="PackedScene" id=7]
 
 [sub_resource type="DynamicFont" id=1]
-size = 40
+size = 35
 use_filter = true
 font_data = ExtResource( 4 )
 

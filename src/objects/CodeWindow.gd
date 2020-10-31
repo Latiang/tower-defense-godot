@@ -33,8 +33,10 @@ func save_code_to_turret():
 		turrets[current_turret_index].update_source($VBoxContainer/MarginContainer/CodeEditor.text)
 
 # Open a code window for this turret, caused by pressing a turret
-func open_code_window(id):
-	save_code_to_turret()
+func open_code_window(id, save_current_open=true):
+	if save_current_open:
+		save_code_to_turret()
+	#print("Code source: ",turrets[id].get_code_source())
 	$VBoxContainer/MarginContainer/CodeEditor.text = turrets[id].get_code_source()
 	current_turret_index = id
 	set_button_highlighting(id)

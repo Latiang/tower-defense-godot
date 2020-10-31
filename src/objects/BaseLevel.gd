@@ -82,3 +82,10 @@ func check_for_win():
 				no_enemies_left = (no_enemies_left && len(child.get_children()) == 1)
 		if no_enemies_left:
 			end_wave()
+
+func count_turrets():
+	var count = 0
+	for child in self.get_children():
+		if child.is_in_group("Turret"):
+			count += 1
+	return count
