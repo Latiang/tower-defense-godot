@@ -1,5 +1,6 @@
 
 var raw_json = {}
+var level_count = 0
 var file = File.new()
 
 enum LEVEL_STATUS {LOCKED, UNLOCKED, STARTED, COMPLETED}
@@ -19,6 +20,7 @@ func load_from_file(save_name = "save1"):
 		file.open(filename, File.READ)
 		var text = file.get_as_text()
 		raw_json = parse_json(text)
+		level_count = len(raw_json["levels"])
 		file.close()
 	else:
 		print("[Save State] No save file found, using initial save")
@@ -52,3 +54,6 @@ func load_level_data(level, level_id):
 # Used for the main menu
 func get_level_states():
 	return raw_json["levels"]
+	
+func get_level_data(level_id):
+	return raw_json["levels"][level_id]

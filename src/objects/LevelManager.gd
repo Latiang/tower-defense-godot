@@ -6,14 +6,13 @@ var current_level_index = 0
 export var health = 10
 
 var save_state = load("res://objects/SaveStateClass.gd").new()
-var level_list = ["TestLevel1", "TestLevel2"]
 
 func _ready():
-	$AutoSaveTimer.start()
+	pass
 	#load_level(0)
 
 func _on_AutoSaveTimer_timeout():
-	if current_level:
+	if current_level && !current_level.wave_started:
 		$GUI/CodeWindow.save_code_to_turret()
 		save_state.save_level_data(current_level, current_level_index, 2)
 		save_state.save_to_file()
@@ -31,7 +30,7 @@ func _input(event):
 func load_level(level_index):
 	health = 10
 	current_level_index = level_index
-	var level_name = level_list[level_index]
+	var level_name = save_state.get_level_data(level_index)["file"]
 	$GUI.reset()
 	$GUI.update_health(health)
 	print("[Level] Loading level: %s" % level_name)
@@ -45,6 +44,7 @@ func load_level(level_index):
 	# Load turret code and such from file
 	save_state.load_level_data(current_level, current_level_index)
 	$GUI/CodeWindow.open_code_window(0, false)
+	$AutoSaveTimer.start()
 
 # Start a level wave (start button pressed)
 func _on_GUI_start_wave():
@@ -57,6 +57,9 @@ func _on_Level_open_code_window(turret_id):
 
 func _on_Level_level_complete():
 	$GUI.level_won()
+	$AutoSaveTimer.stop()
+	save_state.save_level_data(current_level, current_level_index, 3)
+	save_state.save_to_file()
 
 func _on_GUI_update_time_scale(new_time_scale):
 	current_level.set_time_scale(new_time_scale)
@@ -72,7 +75,11 @@ func _on_GUI_restart_level():
 	load_level(current_level_index)
 	
 func _on_GUI_next_level():
-	load_level((current_level_index + 1) % len(level_list))
+	if current_level_index + 1 < save_state.level_count:
+		load_level(current_level_index + 1)
+	else: # Return to main menu if no more levels are left
+		get_parent().show_MainMenu()
+		
 	
 func debug_tick_interpreter_once():
 	current_level.tick_once

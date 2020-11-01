@@ -1,4 +1,4 @@
 {"levels":[
-{"description":"test","file":"TestLevel1","status":1,"turret_code":[""]},
-{"description":"test2","file":"TestLevel2","status":0,"turret_code":["", ""]}
+{"description":"test","file":"TestLevel1","status":1,"turret_code":["Code for level 1 turret 1"]},
+{"description":"test2","file":"TestLevel2","status":0,"turret_code":["Code for level 2 turret 1", "Code for level 2 turret 2"]}
 ]}
