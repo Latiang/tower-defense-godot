@@ -17,7 +17,6 @@ func populate_level_buttons(save_state):
 		new_level_panel.level_number = i
 		new_level_panel.level_name = level_info["description"]
 		new_level_panel.update_children_properties()
-		print(level_info["status"])
 		if level_info["status"] == 0:
 			new_level_panel.lock()
 		elif level_info["status"] == 1 || level_info["status"] == 2:
