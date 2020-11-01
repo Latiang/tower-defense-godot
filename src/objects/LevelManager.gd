@@ -10,13 +10,14 @@ var level_list = ["TestLevel1", "TestLevel2"]
 
 func _ready():
 	$AutoSaveTimer.start()
-	load_level(0)
+	#load_level(0)
 
 func _on_AutoSaveTimer_timeout():
-	$GUI/CodeWindow.save_code_to_turret()
-	save_state.save_level_data(current_level, current_level_index, 2)
-	save_state.save_to_file()
-	print("Autosaving level")
+	if current_level:
+		$GUI/CodeWindow.save_code_to_turret()
+		save_state.save_level_data(current_level, current_level_index, 2)
+		save_state.save_to_file()
+		print("Autosaving level")
 
 # Handle input for debugging purposes
 var level_toggle = false

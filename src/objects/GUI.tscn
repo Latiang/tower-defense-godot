@@ -39,7 +39,7 @@ anchor_bottom = 0.5
 margin_left = -300.0
 margin_top = -100.0
 margin_right = 0.0
-margin_bottom = 200.0
+margin_bottom = 370.0
 
 [node name="LevelControlsPanel" type="PanelContainer" parent="."]
 anchor_left = 1.0

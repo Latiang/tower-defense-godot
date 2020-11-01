@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://objects/GUI.tscn" type="PackedScene" id=1]
 [ext_resource path="res://objects/LevelManager.gd" type="Script" id=2]
 [ext_resource path="res://objects/Main.gd" type="Script" id=3]
+[ext_resource path="res://objects/MainMenu.tscn" type="PackedScene" id=4]
 
 [node name="Main" type="Node"]
 script = ExtResource( 3 )
@@ -14,8 +15,11 @@ script = ExtResource( 2 )
 
 [node name="AutoSaveTimer" type="Timer" parent="LevelManager"]
 wait_time = 10.0
+
+[node name="MainMenu" parent="." instance=ExtResource( 4 )]
 [connection signal="next_level" from="LevelManager/GUI" to="LevelManager" method="_on_GUI_next_level"]
 [connection signal="restart_level" from="LevelManager/GUI" to="LevelManager" method="_on_GUI_restart_level"]
 [connection signal="start_wave" from="LevelManager/GUI" to="LevelManager" method="_on_GUI_start_wave"]
 [connection signal="update_time_scale" from="LevelManager/GUI" to="LevelManager" method="_on_GUI_update_time_scale"]
 [connection signal="timeout" from="LevelManager/AutoSaveTimer" to="LevelManager" method="_on_AutoSaveTimer_timeout"]
+[connection signal="start_level" from="MainMenu" to="." method="_on_MainMenu_start_level"]

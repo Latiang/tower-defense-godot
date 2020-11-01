@@ -25,4 +25,7 @@ func path_finished():
 
 # Collision with bullet. Remove
 func _on_Area2D_body_entered(body):
+	# Remove bullet
+	body.queue_free()
+	# Remove enemy
 	queue_free()

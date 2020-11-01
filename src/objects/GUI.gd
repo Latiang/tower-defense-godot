@@ -16,6 +16,16 @@ var wave_started = false
 func _ready():
 	pass # Replace with function body.
 
+func hide():
+	$CodeWindow.hide()
+	$LevelControlsPanel.hide()
+	$HealthPanel.hide()
+
+func show():
+	$CodeWindow.show()
+	$LevelControlsPanel.show()
+	$HealthPanel.show()
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass

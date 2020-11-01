@@ -1,7 +1,7 @@
 tool
 extends PanelContainer
 
-signal pressed()
+signal pressed(level_number)
 
 export var level_number = 1
 export var level_name = ""
@@ -11,16 +11,16 @@ var locked = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	lock()
+	pass
 
 func update_children_properties():
-	$HBoxContainer/LevelNumberLabel.text = level_number
-	$HBoxContainer/LevelNameLabel.text = level_number
+	$HBoxContainer/MarginContainer/LevelNumberLabel.text = "Level %d" % level_number
+	$HBoxContainer/MarginContainer2/LevelNameLabel.text = level_name
 
 
 func _on_LevelSelectNode_gui_input(event):
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT and !locked:
-		emit_signal("pressed")
+		emit_signal("pressed", level_number-1)
 
 func unlock():
 	$HBoxContainer/MarginContainer3/LevelIcon.text = ""
