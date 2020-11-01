@@ -164,8 +164,8 @@ func run():
 	var result = {}
 	get_parent().emit_signal("sensor_detect", result, 1)
 	if result[0]:
-		print("Sensor distance: %f" % result[0])
-
+		print("[Interpreter] Sensor distance: %f" % result[0])
+	
 # The code interpreting should stop if:
 # 1. A signal function is emitted
 # 2. The total runtime exceeds some limit, maybe 5 ms?

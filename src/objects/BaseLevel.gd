@@ -89,3 +89,8 @@ func count_turrets():
 		if child.is_in_group("Turret"):
 			count += 1
 	return count
+
+func debug_tick_interpreter_once():
+	for child in self.get_children():
+		if child.is_in_group("Turret"):
+			child.get_node("ProgrammableBehaviour").get_node("CodeInterpreter").run()

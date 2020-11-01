@@ -17,7 +17,7 @@ func _on_AutoSaveTimer_timeout():
 		$GUI/CodeWindow.save_code_to_turret()
 		save_state.save_level_data(current_level, current_level_index, 2)
 		save_state.save_to_file()
-		print("Autosaving level")
+		print("[Level] Autosaving level")
 
 # Handle input for debugging purposes
 var level_toggle = false
@@ -34,7 +34,7 @@ func load_level(level_index):
 	var level_name = level_list[level_index]
 	$GUI.reset()
 	$GUI.update_health(health)
-	print("Loading level: %s" % level_name)
+	print("[Level] Loading level: %s" % level_name)
 	if current_level:
 		current_level.close()
 	current_level = load("res://levels/%s.tscn" % level_name).instance()
@@ -73,3 +73,6 @@ func _on_GUI_restart_level():
 	
 func _on_GUI_next_level():
 	load_level((current_level_index + 1) % len(level_list))
+	
+func debug_tick_interpreter_once():
+	current_level.tick_once

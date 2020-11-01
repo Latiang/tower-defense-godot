@@ -40,7 +40,7 @@ func handle_spawn_event():
 	if spawn_event_counter >= spawning_array.size():
 		# End of wave
 		emit_signal("spawning_complete")
-		print("Wave complete (%s)" % get_parent().BehaviourFile)
+		print("[Level] Wave complete (%s)" % get_parent().BehaviourFile)
 	else: # Prepare for next mob
 		if spawn_object.time > 0:
 			$SpawnTimer.start(spawn_object.time / get_parent().time_scale)
@@ -49,13 +49,13 @@ func handle_spawn_event():
 			
 # Load the spawning_array from a json file, specified in the parent MobPath
 func load_behaviour_from_file(name):
-	print("Loading spawning behaviour: %s" % name)
+	print("[Level] Loading spawning behaviour: %s" % name)
 	if name == "":
 		return
 	var file = File.new()
 	var filename = "res://levels/" + get_parent().BehaviourFile + ".json"
 	if file.open(filename, file.READ) != OK:
-		print("Error: Spawning behaviour file ", filename, "does not appear to exist")
+		print("[Level] Error: Spawning behaviour file ", filename, "does not appear to exist")
 		return
 	var result_json = JSON.parse(file.get_as_text())
 	var result = {}
@@ -63,9 +63,9 @@ func load_behaviour_from_file(name):
 		var data = result_json.result
 		parse_loaded_behaviour_data(data["behaviour"])
 	else:  # If parse has errors
-		print("JSON Parse Error: ", result_json.error)
-		print("Error Line: ", result_json.error_line)
-		print("Error String: ", result_json.error_string)
+		print("[Level] JSON Parse Error: ", result_json.error)
+		print("[Level] Error Line: ", result_json.error_line)
+		print("[Level] Error String: ", result_json.error_string)
 
 # Parse the loaded json file into the spawning_array		
 func parse_loaded_behaviour_data(json_list):
@@ -75,5 +75,5 @@ func parse_loaded_behaviour_data(json_list):
 				var object = SpawnObject.new(behaviour[2], mob_type_string_mapping[behaviour[1]])
 				spawning_array.append(object)
 		else: #Non-existent mob
-			print("JSON %s contains Mob %s which does not exist" % [get_parent().BehaviourFile, behaviour[1]])
+			print("[Level] JSON %s contains Mob %s which does not exist" % [get_parent().BehaviourFile, behaviour[1]])
 			return

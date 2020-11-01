@@ -28,4 +28,4 @@ func _on_ExitButton_pressed():
 	
 func _on_level_button_pressed(level_number):
 	emit_signal("start_level", level_number)
-	print("Level %d requested" % level_number)
+	print("[Main Menu] Level %d selected" % level_number)

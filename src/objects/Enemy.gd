@@ -2,7 +2,7 @@ extends PathFollow2D
 
 signal base_damage(amount)
 
-export (float) var speed= 100
+export (float) var speed = 100
 export (int) var damage = 1
 
 var speed_multiplier = 1

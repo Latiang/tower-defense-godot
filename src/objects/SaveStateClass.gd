@@ -15,18 +15,17 @@ func reset_save():
 func load_from_file(save_name = "save1"):
 	var filename = "saves/%s.json" % save_name
 	if file.file_exists(filename):
-		print("Loading save from file")
+		print("[Save State] Loading save '%s' from file" % save_name)
 		file.open(filename, File.READ)
 		var text = file.get_as_text()
-		print(text)
 		raw_json = parse_json(text)
 		file.close()
 	else:
-		print("No save file found, using initial save")
+		print("[Save State] No save file found, using initial save")
 	
 func save_to_file(save_name = "save1"):
 	var filename = "saves/%s.json" % save_name
-	print("Saving save to file")
+	print("[Save State] Saving save to file")
 	file.open(filename, File.WRITE)
 	file.store_line(to_json(raw_json))
 	file.close()
