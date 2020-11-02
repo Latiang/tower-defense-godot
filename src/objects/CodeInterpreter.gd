@@ -271,8 +271,8 @@ func run():
 	# expressions that link to new expressions
 	var lines = _lines_from_source()
 	var statements = _statements_from_lines(lines)
-	for statement in statements:
-		print(statement.string())
+	#for statement in statements:
+		#print(statement.string())
 
 	
 	# Interpret the code

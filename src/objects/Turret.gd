@@ -7,19 +7,31 @@ signal turret_pressed(turret)
 export var id = 0;
 export var can_rotate = true
 export var integrated_sensor = true
-export var can_move = false
+export var can_move = true
+export var move_speed = 100
 export var reload_time = 0.3 #seconds
 
 var time_scale = 1
+var distance_to_move = 0
+var direction_right : bool = false
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
-	
-# Run every frame. Shoot bullet if mouse pressed
-func _process(delta):
-	pass
+	print($MovablePath.position)
 
+func _process(delta):
+	if can_move and distance_to_move > 0 and $MovablePath/PathFollow2D.unit_offset < 1:
+		position = position - $MovablePath/PathFollow2D.position # Ugly fix
+		var offset = move_speed * delta * time_scale
+		offset = distance_to_move if ((distance_to_move - offset) < 0) else offset
+		distance_to_move -= offset
+		$MovablePath/PathFollow2D.offset += offset if direction_right else -offset
+		position = position + $MovablePath/PathFollow2D.position
+
+func move(distance):
+	if (can_move):
+		distance_to_move = abs(distance)
+		direction_right = (distance > 0)
+			
 func fire():
 	var dir = Vector2(cos(rotation + PI/2), sin(rotation + PI/2))
 	$Gun.spawn_bullet(position, dir, time_scale)
@@ -41,6 +53,10 @@ func _on_ProgrammableBehaviour_fire():
 
 func _on_ProgrammableBehaviour_rotate(angle):
 	rotate(angle)
+	
+func _on_ProgrammableBehaviour_move(distance):
+	move(distance)
+	$ProgrammableBehaviour.lock_for_time(float(distance) / (time_scale * move_speed))
 
 func _on_ProgrammableBehaviour_sensor_detect(out_dict, id: int = -1):
 	if (id == -1): # Self sensor

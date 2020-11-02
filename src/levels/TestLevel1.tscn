@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://assets/textures/darkgrey-tile.png" type="Texture" id=1]
 [ext_resource path="res://objects/Sensor.tscn" type="PackedScene" id=2]
@@ -82,6 +82,11 @@
 4/shapes = [  ]
 4/z_index = 0
 
+[sub_resource type="Curve2D" id=4]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, -0.249268, -142.006, 0, 0, 0, 0, 1.75073, 150.994, 0, 0, 0, 0, -158.249, 148.994 )
+}
+
 [sub_resource type="Curve2D" id=2]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, -43.4837, 69.0905, 0, 0, 0, 0, 455.42, 70.8723, 0, 0, 0, 0, 458.983, 370.214, 0, 0, 0, 0, 779.057, 363.677, 0, 0, 0, 0, 1560.13, 357.742 )
@@ -107,6 +112,13 @@ rotation = 3.14159
 
 [node name="Turret" parent="." index="2" instance=ExtResource( 4 )]
 position = Vector2( 1516.96, 527.801 )
+can_move = true
+
+[node name="MovablePath" parent="Turret" index="5"]
+curve = SubResource( 4 )
+
+[node name="PathFollow2D" parent="Turret/MovablePath" index="0"]
+position = Vector2( -0.249268, -142.006 )
 
 [node name="MobPath1" parent="." index="3" instance=ExtResource( 3 )]
 curve = SubResource( 2 )
@@ -116,3 +128,5 @@ BehaviourFile = "sbtest"
 position = Vector2( 4.48981, 148.165 )
 curve = SubResource( 3 )
 BehaviourFile = "sbtest2"
+
+[editable path="Turret"]
