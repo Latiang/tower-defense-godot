@@ -6,6 +6,13 @@ var health = 100
 
 func _ready():
 	load_level("TestLevel1")
+	print("Running interpreter once for debug")
+	tick_once()
+
+func tick_once():
+	for child in self.current_level.get_children():
+			if child.is_in_group("Turret"):
+				child.get_node("ProgrammableBehaviour").get_node("CodeInterpreter").run()
 
 # Handle input for debugging purposes
 var level_toggle = false

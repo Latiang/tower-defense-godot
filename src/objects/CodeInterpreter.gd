@@ -2,15 +2,17 @@ extends Node
 
 
 
-var code_source = """Very #good comment
-	  			9 = 3
-				8 == 5
-	 
-	\t
- a = 4
-   hej din apa
-   p = np?
-nice"""
+var code_source = """
+while a >    5
+	print("hye")
+	lalala = 7
+	if apa
+		while apa
+			eat food
+a = 5
+while b > 5
+	print a
+"""
 
 class CodeLine:
 	extends Reference
@@ -47,28 +49,114 @@ class NextStatement:
 		
 
 class Statement:
-	"""Corresponds to one line of code. Contains a reference to the next line"""
-	var next_statement
-	var assignment
-	var lhs
-	var rhs
+	"""Base class for code elements"""
 	
-	func _init(rhs, next_statement, lhs = null):
-		self.lhs = lhs
-		if lhs:
-			self.assignment = true
-		else:
-			self.assignment = false
-		self.rhs = rhs
-		self.next_statement = next_statement
+	func _init():
+		pass
+		
+	func run(scope):
+		pass
+		
+	func string(start_string = ""):
+		pass
 		
 
 class Evaluatable:
-	var text
+	"""Represents an expression with a determinable value"""
+	extends Statement
+	var expression
 	
 	func _init(text):
-		self.text = text
+		self.expression = text
+		
+	func run(scope):
+		pass
+		
+	func string(start_string = ""):
+		return start_string + expression
+		
+class Assignment:
+	"""Represents an assignment"""
+	extends Statement
+	var lhs
+	var rhs
+	
+	func _init(lhs, rhs):
+		self.lhs = lhs
+		self.rhs = Evaluatable.new(rhs)
+		
+	func run(scope):
+		scope[self.lhs] = rhs.run(scope)
+		
+	func string(start_string = ""):
+		return start_string + lhs + " = " + rhs.string()
+		
+class Loop:
+	"""Represents a loopdiloop"""
+	extends Statement
+	var condition
+	var end_action
+	var code
+	
+	func _init(condition, code, end_action = null):
+		self.condition = Evaluatable.new(condition)
+		if end_action != null:
+			self.end_action = Evaluatable.new(end_action)
+		else:
+			self.end_action = null
+		self.code = code
+	
+	func run(scope):
+		while condition.run(scope):
+			for line in code:
+				line.run(scope)
+			if end_action != null:
+				end_action.run(scope)
+				
+	func string(start_string = ""):
+		var text = start_string + "while " + condition.string() + "\n"
+		for line in code:
+			text = text + line.string(start_string + "\t") + "\n"
+		return text
+				
+				
+class Conditional:
+	"""Represents a conditional statement"""
+	extends Statement
+	var condition
+	var code
+	var expected_if_state
+	
+	func _init(condition, code, expected_if_state=null):
+		self.expected_if_state = expected_if_state
+		self.code = code
+		self.condition = Evaluatable.new(condition)
+		
+	func run(scope):
+		if condition.run(scope) and (expected_if_state == null 
+				or expected_if_state == scope["_if_state"]):
+			for line in code:
+				line.run(scope)
+			scope["_if_state"] = 1
+		elif expected_if_state != null:
+			scope["_if_state"] = 0
 
+	func string(start_string = ""):
+		var text = start_string
+		
+		if expected_if_state != null:
+			if condition.string() == "1":
+				text += "else\n"
+			else:
+				text += "elif " + condition.string() + "\n" 
+		else:
+			text += "if " + condition.string() + "\n"
+		
+		for line in code:
+			text = text + line.string(start_string + "\t") + "\n"
+		return text
+
+		
 func _count_leading_spaces(line):
 	var count = 0
 	for character in line:
@@ -79,7 +167,10 @@ func _count_leading_spaces(line):
 	return count
 
 func _lines_from_source():
-	var lines_text = code_source.split("\n");
+	
+	var lines_text = code_source.split("\t");
+	lines_text = lines_text.join("    ")
+	lines_text = lines_text.split("\n")
 	# Generate code from source, preferably 
 	# expressions that link to new expressions
 	var lines = []
@@ -102,36 +193,72 @@ func _statements_from_lines(lines):
 	var statements = []
 	# Statements need to cover loops as well in order to properly work
 	# ToDo
-	for index in range(len(lines)):
+	var index = 0
+	while index < len(lines):
 		var indent = lines[index].indent_size
 		var line = lines[index].text
 		var splits = line.split("=")
-		if line.begins_with("while"):
-			pass
-		elif line.begins_with("for"):
-			pass
-		elif line.begins_with("if"):
-			line = line.substr(2)
-			var next_index = index + 1
+		if line.begins_with("while "):
+			var condition = line.substr(6)
+			var next_index = len(lines)
 			for i in range(index + 1, len(lines)):
 				if lines[i].indent_size <= indent:
 					next_index = i
 					break
-		elif line.begins_with("else"):
+			var code = lines.slice(index + 1, next_index - 1)
+			code = _statements_from_lines(code)
+			index = next_index - 1
+			statements.append(Loop.new(condition, code))
+		elif line.begins_with("for "):
 			pass
-		elif line.begins_with("elif"):
-			pass
+		elif line.begins_with("if "):
+			var condition = line.substr(3)
+			var next_index = len(lines)
+			for i in range(index + 1, len(lines)):
+				if lines[i].indent_size <= indent:
+					next_index = i
+					break
+			var code = lines.slice(index + 1, next_index - 1)
+			code = _statements_from_lines(code)
+			index = next_index - 1
+			statements.append(Conditional.new(condition, code))
+		elif line.begins_with("else") and len(line) == 4:
+			if typeof(statements[-1]) != typeof(Conditional):
+				print("error")
+			var condition = "1"
+			var next_index = len(lines)
+			for i in range(index + 1, len(lines)):
+				if lines[i].indent_size <= indent:
+					next_index = i
+					break
+			var code = lines.slice(index + 1, next_index - 1)
+			code = _statements_from_lines(code)
+			index = next_index - 1
+			statements.append(Conditional.new(condition, code, 0))
+		elif line.begins_with("elif "):
+			if typeof(statements[-1]) != typeof(Conditional):
+				print("error")
+			var condition = line.substr(5)
+			var next_index = len(lines)
+			for i in range(index + 1, len(lines)):
+				if lines[i].indent_size <= indent:
+					next_index = i
+					break
+			var code = lines.slice(index + 1, next_index - 1)
+			code = _statements_from_lines(code)
+			index = next_index - 1
+			statements.append(Conditional.new(condition, code, 0))
 		elif len(splits) % 2 == 0: #Even number implies odd number of =, means assignment
 			var lhs = splits[0]
 			var rhs = ""
 			for split_index in range(1, len(splits)):
 				rhs += splits[split_index] + "="
 			rhs = rhs.substr(0, len(rhs) - 1)
-			var next_statement = NextStatement.new(index + 1)
-			statements.append(Statement.new(rhs, next_statement, lhs))
+			statements.append(Assignment.new(lhs, rhs))
 		else:	#Raw expression
 			var next_statement = NextStatement.new(index + 1)
-			statements.append(Statement.new(line, next_statement))
+			statements.append(Evaluatable.new(line))
+		index += 1
 	return statements
 
 
@@ -145,14 +272,8 @@ func run():
 	var lines = _lines_from_source()
 	var statements = _statements_from_lines(lines)
 	for statement in statements:
-		if statement.assignment:
-			pass
-			#print(statement.lhs,"=", statement.rhs)
-		else:
-			pass
-			#print(statement.rhs)
-	# Step 1: Find lines with actual code on it.
-	
+		print(statement.string())
+
 	
 	# Interpret the code
 	# Certain functions will have outside effects, which is done by:
