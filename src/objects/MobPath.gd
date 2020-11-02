@@ -14,7 +14,7 @@ func start_spawning_time():
 
 # Spawn an enemy
 func spawn():
-	var mob = preload("res://objects/Enemy.tscn").instance()
+	var mob = preload("res://objects/GruntEnemy.tscn").instance()
 	mob.speed_multiplier = time_scale
 	mob.connect("base_damage", get_parent().get_parent(), "_on_Level_base_damage")
 	add_child(mob)

@@ -2,7 +2,7 @@ extends PathFollow2D
 
 signal base_damage(amount)
 
-export (float) var speed= 100
+export (float) var speed = 100
 export (int) var damage = 1
 
 var speed_multiplier = 1
@@ -25,4 +25,7 @@ func path_finished():
 
 # Collision with bullet. Remove
 func _on_Area2D_body_entered(body):
+	# Remove bullet
+	body.queue_free()
+	# Remove enemy
 	queue_free()

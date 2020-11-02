@@ -26,7 +26,7 @@ collide_with_areas = true
 collide_with_bodies = false
 
 [node name="Line2D" type="Line2D" parent="."]
-points = PoolVector2Array( 0, 8, 0, 1000 )
+points = PoolVector2Array( 0, 8, 0, 76.6309, 0, 1000 )
 width = 5.0
-default_color = Color( 0.627451, 0.152941, 0.152941, 1 )
+default_color = Color( 0.627451, 0.152941, 0.152941, 0.705882 )
 antialiased = true

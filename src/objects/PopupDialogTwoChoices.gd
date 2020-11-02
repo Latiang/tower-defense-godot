@@ -24,8 +24,10 @@ func _on_Button1_pressed():
 	if close_on_press:
 		visible = false
 
-
 func _on_Button2_pressed():
 	emit_signal("button2_pressed")
 	if close_on_press:
 		visible = false
+
+func setText(text):
+	$MarginContainer/VBoxContainer/MarginContainer2/Label.text = text
