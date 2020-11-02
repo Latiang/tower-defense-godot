@@ -9,6 +9,8 @@ export var can_rotate = true
 export var integrated_sensor = true
 export var can_move = true
 export var move_speed = 100
+export var unlimited_ammo = true
+export var ammo_count = 50
 export var reload_time = 0.3 #seconds
 
 var time_scale = 1
@@ -33,8 +35,10 @@ func move(distance):
 		direction_right = (distance > 0)
 			
 func fire():
-	var dir = Vector2(cos(rotation + PI/2), sin(rotation + PI/2))
-	$Gun.spawn_bullet(position, dir, time_scale)
+	if unlimited_ammo or ammo_count > 0:
+		var dir = Vector2(cos(rotation + PI/2), sin(rotation + PI/2))
+		$Gun.spawn_bullet(position, dir, time_scale)
+		ammo_count -= 1
 
 func rotate(angle):
 	if (can_rotate):
