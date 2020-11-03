@@ -82,17 +82,17 @@
 4/shapes = [  ]
 4/z_index = 0
 
-[sub_resource type="Curve2D" id=4]
+[sub_resource type="Curve2D" id=2]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, -0.249268, -142.006, 0, 0, 0, 0, 1.75073, 150.994, 0, 0, 0, 0, -158.249, 148.994 )
 }
 
-[sub_resource type="Curve2D" id=2]
+[sub_resource type="Curve2D" id=3]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, -43.4837, 69.0905, 0, 0, 0, 0, 455.42, 70.8723, 0, 0, 0, 0, 458.983, 370.214, 0, 0, 0, 0, 779.057, 363.677, 0, 0, 0, 0, 1560.13, 357.742 )
 }
 
-[sub_resource type="Curve2D" id=3]
+[sub_resource type="Curve2D" id=4]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 27.7558, 550.785, 0, 0, 0, 0, 1556.51, 547.422 )
 }
@@ -111,22 +111,22 @@ position = Vector2( 455.677, 791.535 )
 rotation = 3.14159
 
 [node name="Turret" parent="." index="2" instance=ExtResource( 4 )]
-position = Vector2( 1516.96, 527.801 )
+position = Vector2( 1400, 527.801 )
 can_move = true
 
 [node name="MovablePath" parent="Turret" index="5"]
-curve = SubResource( 4 )
+curve = SubResource( 2 )
 
 [node name="PathFollow2D" parent="Turret/MovablePath" index="0"]
 position = Vector2( -0.249268, -142.006 )
 
 [node name="MobPath1" parent="." index="3" instance=ExtResource( 3 )]
-curve = SubResource( 2 )
+curve = SubResource( 3 )
 BehaviourFile = "sbtest"
 
 [node name="MobPath2" parent="." index="4" instance=ExtResource( 3 )]
 position = Vector2( 4.48981, 148.165 )
-curve = SubResource( 3 )
+curve = SubResource( 4 )
 BehaviourFile = "sbtest2"
 
 [editable path="Turret"]

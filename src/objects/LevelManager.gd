@@ -3,7 +3,8 @@ extends Node
 var current_level = false
 var current_level_index = 0
 
-export var health = 10
+export var max_health = 10
+var health = max_health
 
 var save_state = load("res://objects/SaveStateClass.gd").new()
 
@@ -28,7 +29,7 @@ func _input(event):
 
 # Load a level by name. Connects the required signals and so on
 func load_level(level_index):
-	health = 10
+	health = max_health
 	current_level_index = level_index
 	var level_name = save_state.get_level_data(level_index)["file"]
 	$GUI.reset()
@@ -56,10 +57,11 @@ func _on_Level_open_code_window(turret_id):
 	$GUI/CodeWindow.open_code_window(turret_id)
 
 func _on_Level_level_complete():
-	$GUI.level_won()
-	$AutoSaveTimer.stop()
-	save_state.save_level_data(current_level, current_level_index, 3)
-	save_state.save_to_file()
+	if health > 0:
+		$GUI.level_won()
+		$AutoSaveTimer.stop()
+		save_state.save_level_data(current_level, current_level_index, 3)
+		save_state.save_to_file()
 
 func _on_GUI_update_time_scale(new_time_scale):
 	current_level.set_time_scale(new_time_scale)

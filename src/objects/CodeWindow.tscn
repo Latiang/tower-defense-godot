@@ -1,19 +1,25 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://objects/CodeWindow.gd" type="Script" id=1]
 [ext_resource path="res://assets/GUITheme.tres" type="Theme" id=2]
 [ext_resource path="res://assets/fonts/Monaco.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://objects/TurretButton1.gd" type="Script" id=4]
 [ext_resource path="res://assets/fonts/Inter-SemiBold-slnt=0.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://assets/fonts/fa-solid-900.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://assets/textures/bullet.svg" type="Texture" id=7]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.172549, 0.203922, 0.247059, 1 )
+corner_radius_top_left = 6
+corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 shadow_size = 3
 
 [sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 0.215686, 0.243137, 0.286275, 1 )
+corner_radius_top_left = 6
+corner_radius_top_right = 6
 anti_aliasing = false
 
 [sub_resource type="DynamicFont" id=3]
@@ -43,60 +49,28 @@ bg_color = Color( 0.172549, 0.203922, 0.247059, 1 )
 size = 20
 font_data = ExtResource( 5 )
 
-[sub_resource type="DynamicFont" id=14]
-size = 20
-use_filter = true
-font_data = ExtResource( 3 )
-
-[sub_resource type="Theme" id=15]
-default_font = SubResource( 14 )
-TextEdit/colors/background_color = Color( 0, 0, 0, 0 )
-TextEdit/colors/bookmark_color = Color( 0.08, 0.49, 0.98, 1 )
-TextEdit/colors/brace_mismatch_color = Color( 1, 0.2, 0.2, 1 )
-TextEdit/colors/breakpoint_color = Color( 0.8, 0.8, 0.4, 0.2 )
-TextEdit/colors/caret_background_color = Color( 0, 0, 0, 1 )
-TextEdit/colors/caret_color = Color( 0.88, 0.88, 0.88, 1 )
-TextEdit/colors/code_folding_color = Color( 0.8, 0.8, 0.8, 0.8 )
-TextEdit/colors/completion_background_color = Color( 0.17, 0.16, 0.2, 1 )
-TextEdit/colors/completion_existing_color = Color( 0.87, 0.87, 0.87, 0.13 )
-TextEdit/colors/completion_font_color = Color( 0.67, 0.67, 0.67, 1 )
-TextEdit/colors/completion_scroll_color = Color( 1, 1, 1, 1 )
-TextEdit/colors/completion_selected_color = Color( 0.26, 0.26, 0.27, 1 )
-TextEdit/colors/current_line_color = Color( 0.25, 0.25, 0.26, 0.8 )
-TextEdit/colors/executing_line_color = Color( 0.2, 0.8, 0.2, 0.4 )
-TextEdit/colors/font_color = Color( 0.88, 0.88, 0.88, 1 )
-TextEdit/colors/font_color_readonly = Color( 0.88, 0.88, 0.88, 0.5 )
-TextEdit/colors/font_color_selected = Color( 0, 0, 0, 1 )
-TextEdit/colors/function_color = Color( 0.4, 0.64, 0.81, 1 )
-TextEdit/colors/line_number_color = Color( 0.67, 0.67, 0.67, 0.4 )
-TextEdit/colors/mark_color = Color( 1, 0.4, 0.4, 0.4 )
-TextEdit/colors/member_variable_color = Color( 0.9, 0.31, 0.35, 1 )
-TextEdit/colors/number_color = Color( 0.92, 0.58, 0.2, 1 )
-TextEdit/colors/safe_line_number_color = Color( 0.67, 0.78, 0.67, 0.6 )
-TextEdit/colors/selection_color = Color( 0.49, 0.49, 0.49, 1 )
-TextEdit/colors/symbol_color = Color( 0.94, 0.94, 0.94, 1 )
-TextEdit/colors/word_highlighted_color = Color( 0.8, 0.9, 0.9, 0.15 )
-TextEdit/constants/completion_lines = 7
-TextEdit/constants/completion_max_width = 50
-TextEdit/constants/completion_scroll_width = 3
-TextEdit/constants/line_spacing = 4
-TextEdit/fonts/font = null
-TextEdit/icons/fold = null
-TextEdit/icons/folded = null
-TextEdit/icons/space = null
-TextEdit/icons/tab = null
-TextEdit/styles/completion = null
-TextEdit/styles/focus = null
-TextEdit/styles/normal = null
-TextEdit/styles/read_only = null
-
 [sub_resource type="StyleBoxFlat" id=16]
 bg_color = Color( 0.215686, 0.243137, 0.286275, 1 )
 
+[sub_resource type="DynamicFont" id=19]
+size = 24
+font_data = ExtResource( 3 )
+
+[sub_resource type="StyleBoxFlat" id=17]
+bg_color = Color( 0.215686, 0.243137, 0.286275, 1 )
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+anti_aliasing = false
+
+[sub_resource type="DynamicFont" id=18]
+size = 30
+use_filter = true
+font_data = ExtResource( 6 )
+
 [node name="CodeWindow" type="Panel"]
 margin_right = 300.0
-margin_bottom = 470.0
-rect_min_size = Vector2( 300, 470 )
+margin_bottom = 550.0
+rect_min_size = Vector2( 360, 550 )
 theme = ExtResource( 2 )
 custom_styles/panel = SubResource( 1 )
 script = ExtResource( 1 )
@@ -105,8 +79,8 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-margin_right = 300.0
-margin_bottom = 450.0
+margin_right = 360.0
+margin_bottom = 550.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 0
@@ -115,20 +89,20 @@ __meta__ = {
 }
 
 [node name="LabelPanel" type="PanelContainer" parent="VBoxContainer"]
-margin_right = 300.0
+margin_right = 360.0
 margin_bottom = 45.0
 rect_min_size = Vector2( 0, 45 )
 custom_styles/panel = SubResource( 2 )
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/LabelPanel"]
-margin_right = 300.0
+margin_right = 360.0
 margin_bottom = 45.0
 custom_constants/margin_left = 16
 
 [node name="CodeLabel" type="Label" parent="VBoxContainer/LabelPanel/MarginContainer"]
 margin_left = 16.0
 margin_top = 5.0
-margin_right = 300.0
+margin_right = 360.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 0, 35 )
 custom_fonts/font = SubResource( 3 )
@@ -137,13 +111,13 @@ valign = 1
 
 [node name="Panel" type="PanelContainer" parent="VBoxContainer"]
 margin_top = 45.0
-margin_right = 300.0
+margin_right = 360.0
 margin_bottom = 95.0
 rect_min_size = Vector2( 0, 50 )
 custom_styles/panel = SubResource( 2 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Panel"]
-margin_right = 300.0
+margin_right = 360.0
 margin_bottom = 50.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -171,8 +145,8 @@ script = ExtResource( 4 )
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 margin_top = 95.0
-margin_right = 300.0
-margin_bottom = 450.0
+margin_right = 360.0
+margin_bottom = 500.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 0
@@ -183,16 +157,91 @@ custom_constants/margin_bottom = 0
 [node name="CodeEditor" type="TextEdit" parent="VBoxContainer/MarginContainer"]
 margin_left = 5.0
 margin_top = 15.0
-margin_right = 300.0
-margin_bottom = 355.0
+margin_right = 360.0
+margin_bottom = 405.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = SubResource( 15 )
 custom_styles/focus = SubResource( 16 )
+custom_fonts/font = SubResource( 19 )
 custom_colors/background_color = Color( 0.172549, 0.203922, 0.247059, 1 )
 syntax_highlighting = true
 context_menu_enabled = false
 smooth_scrolling = true
 wrap_enabled = true
+
+[node name="TurretInfoPanel" type="PanelContainer" parent="VBoxContainer"]
+margin_top = 500.0
+margin_right = 360.0
+margin_bottom = 550.0
+rect_min_size = Vector2( 0, 50 )
+custom_styles/panel = SubResource( 17 )
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/TurretInfoPanel"]
+margin_right = 360.0
+margin_bottom = 50.0
+custom_constants/margin_right = 0
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TurretInfoPanel/MarginContainer2"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 360.0
+margin_bottom = 45.0
+custom_constants/separation = 15
+alignment = 1
+
+[node name="RotateIcon" type="Label" parent="VBoxContainer/TurretInfoPanel/MarginContainer2/HBoxContainer"]
+margin_left = 93.0
+margin_top = 4.0
+margin_right = 123.0
+margin_bottom = 35.0
+hint_tooltip = "Can Rotate"
+mouse_filter = 1
+custom_fonts/font = SubResource( 18 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = ""
+valign = 1
+
+[node name="SensorIcon" type="Label" parent="VBoxContainer/TurretInfoPanel/MarginContainer2/HBoxContainer"]
+margin_left = 138.0
+margin_top = 4.0
+margin_right = 176.0
+margin_bottom = 35.0
+hint_tooltip = "Has Integrated Sensor"
+mouse_filter = 1
+custom_fonts/font = SubResource( 18 )
+text = ""
+valign = 1
+
+[node name="MoveIcon" type="Label" parent="VBoxContainer/TurretInfoPanel/MarginContainer2/HBoxContainer"]
+margin_left = 191.0
+margin_top = 4.0
+margin_right = 221.0
+margin_bottom = 35.0
+hint_tooltip = "Can Move"
+mouse_filter = 1
+custom_fonts/font = SubResource( 18 )
+text = ""
+valign = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TurretInfoPanel/MarginContainer2/HBoxContainer"]
+margin_left = 236.0
+margin_right = 261.0
+margin_bottom = 40.0
+custom_constants/margin_left = -5
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/TurretInfoPanel/MarginContainer2/HBoxContainer/MarginContainer"]
+margin_left = -5.0
+margin_right = 25.0
+margin_bottom = 40.0
+
+[node name="BulletIcon" type="TextureRect" parent="VBoxContainer/TurretInfoPanel/MarginContainer2/HBoxContainer/MarginContainer/CenterContainer"]
+margin_top = 5.0
+margin_right = 30.0
+margin_bottom = 35.0
+hint_tooltip = "Has Unlimited Ammo"
+texture = ExtResource( 7 )
 [connection signal="button_down" from="VBoxContainer/Panel/HBoxContainer/TurretButton1" to="VBoxContainer/Panel/HBoxContainer/TurretButton1" method="_on_TurretButton1_button_down"]
 [connection signal="turret_button_pressed" from="VBoxContainer/Panel/HBoxContainer/TurretButton1" to="." method="_on_TurretButton1_turret_button_pressed"]

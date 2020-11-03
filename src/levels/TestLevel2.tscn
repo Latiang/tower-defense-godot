@@ -102,10 +102,14 @@ rotation = 3.10843
 
 [node name="Turret" parent="." index="2" instance=ExtResource( 8 )]
 position = Vector2( 897.598, 532.377 )
+integrated_sensor = false
+unlimited_ammo = false
+ammo_count = 30
 
 [node name="Turret2" parent="." index="3" instance=ExtResource( 8 )]
 position = Vector2( 492.556, 800.904 )
 id = 1
+can_rotate = false
 
 [node name="MobPath1" parent="." index="4" instance=ExtResource( 7 )]
 curve = SubResource( 2 )
