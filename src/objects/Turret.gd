@@ -18,7 +18,7 @@ var distance_to_move = 0
 var direction_right : bool = false
 
 func _ready():
-	print($MovablePath.position)
+	pass
 
 func _process(delta):
 	if can_move and distance_to_move > 0 and $MovablePath/PathFollow2D.unit_offset < 1:

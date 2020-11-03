@@ -14,7 +14,14 @@ var wave_started = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	pass
+	
+func _process(delta):
+	set_coordinate_label()
+	
+func set_coordinate_label():
+	var pos = get_viewport().get_mouse_position()
+	$CoordinateLabel.text = "(%d, %d)" % [pos.x, pos.y]
 
 func hide():
 	$CodeWindow.hide()
