@@ -93,4 +93,6 @@ func count_turrets():
 func debug_tick_interpreter_once():
 	for child in self.get_children():
 		if child.is_in_group("Turret"):
+			child.get_node("ProgrammableBehaviour").locked = false
 			child.get_node("ProgrammableBehaviour").get_node("CodeInterpreter").run()
+			child.get_node("ProgrammableBehaviour").locked = true

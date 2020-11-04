@@ -10,6 +10,9 @@ var turrets = []
 var current_turret_index = -1;
 
 var turret_buttons = []
+var icon_disabled_color = Color("b34747")
+var icon_enabled_color = Color("50b347")
+var icon_enabled_yellow_color = Color("c7c951")
 
 func _ready():
 	setup_code_syntax_highlighting()
@@ -39,6 +42,7 @@ func open_code_window(id, save_current_open=true):
 	$VBoxContainer/MarginContainer/CodeEditor.text = turrets[id].get_code_source()
 	current_turret_index = id
 	set_button_highlighting(id)
+	set_turret_info_icons(id)
 
 func add_turret_button(turret):
 	turrets[turret.id] = turret
@@ -66,3 +70,19 @@ func set_button_highlighting(id):
 		$VBoxContainer/Panel/HBoxContainer/TurretButton1.disabled = false
 	for turret_button in turret_buttons:
 		turret_button.disabled = (int(turret_button.text) == (id+1))
+
+func set_turret_info_icons(id):
+	var turret = turrets[id]
+	var rotateIcon = $VBoxContainer/TurretInfoPanel/MarginContainer2/HBoxContainer/RotateIcon
+	rotateIcon.add_color_override("font_color", icon_enabled_color if turret.can_rotate else icon_disabled_color)
+	var sensorIcon = $VBoxContainer/TurretInfoPanel/MarginContainer2/HBoxContainer/SensorIcon
+	sensorIcon.add_color_override("font_color", icon_enabled_color if turret.integrated_sensor else icon_disabled_color)
+	var moveIcon = $VBoxContainer/TurretInfoPanel/MarginContainer2/HBoxContainer/MoveIcon
+	moveIcon.add_color_override("font_color", icon_enabled_color if turret.can_move else icon_disabled_color)
+	var bulletIcon = $VBoxContainer/TurretInfoPanel/MarginContainer2/HBoxContainer/MarginContainer/CenterContainer/BulletIcon
+	if turret.unlimited_ammo:
+		bulletIcon.modulate = icon_enabled_color
+		bulletIcon.hint_tooltip = "Has Unlimited Ammo"
+	else:
+		bulletIcon.modulate = icon_enabled_yellow_color
+		bulletIcon.hint_tooltip = "%d Ammo" % turret.ammo_count

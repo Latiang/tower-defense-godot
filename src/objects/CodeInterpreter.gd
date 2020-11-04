@@ -4,7 +4,6 @@ extends Node
 var code_source
 
 class CodeLine:
-	extends Reference
 	var text
 	var indent_size
 	var line
@@ -18,6 +17,28 @@ var operators
 func _add(lhs, rhs):
 	return lhs + rhs
 
+func _equals(lhs, rhs):
+	return lhs == rhs
+
+func _greater_than(lhs, rhs):
+	return lhs > rhs
+	
+func _less_than(lhs, rhs):
+	return lhs < rhs
+	
+func _multiply(lhs, rhs):
+	return lhs * rhs
+
+func _find_print(text, index):
+		var result = true
+		var original_text = text
+		text = text.right(index)
+		if text.begins_with(" print "):
+			return len(" print ")
+		elif text.begins_with("print ") and index == 0:
+			return len("print ")
+		return 0
+		
 func _print(val):
 	print(val)
 	return 0
@@ -43,6 +64,7 @@ class BinaryOperator:
 	var function
 	var syntax
 	var priority
+	var binary
 	
 	func _init(function_in, syntax_in, priority_in):
 		"""Creates a binary operator. syntax is a string that exactly matches 
@@ -50,22 +72,21 @@ class BinaryOperator:
 		of the operator and must take 2 arguments. Priority is used for order of
 		operators and should be an int. Higher number means higher priority"""
 		self.function = function_in
+		self.binary = true
 		self.syntax = syntax_in
 		self.priority = priority_in
 		
 	func identify_operator(text, index):
 		"""Checks if this operator starts at the specified index. If so the
 		length of the index is returned. Otherwise 0"""
-		var result = true
-		var offset = 0
-		while true:
-			if offset >= len(self.syntax):
-				return true
-			elif offset + index >= len(text):
-				return false
-			elif self.syntax[offset] != text[offset + index]:
-				return false
-			offset += 1 
+		if typeof(self.syntax) == TYPE_STRING:
+			text = text.right(index)
+			if text.begins_with(self.syntax):
+				return len(self.syntax)
+			else:
+				return 0
+		else:
+			return self.syntax.call_func(text, index)
 			
 	func evaluate(lhs, rhs):
 		return self.function.call_func(lhs, rhs)
@@ -76,6 +97,7 @@ class UnaryOperator:
 	var function
 	var syntax
 	var priority
+	var binary
 	
 	func _init(function_in, syntax_in, priority_in):
 		"""Creates a unary operator. syntax is a string that exactly matches 
@@ -84,21 +106,20 @@ class UnaryOperator:
 		operators and should be an int. Higher number means higher priority"""
 		self.function = function_in
 		self.syntax = syntax_in
+		self.binary = false
 		self.priority = priority_in
 		
 	func identify_operator(text, index):
 		"""Checks if this operator starts at the specified index. If so the
 		length of the index is returned. Otherwise 0"""
-		var result = true
-		var offset = 0
-		while true:
-			if offset >= len(self.syntax):
-				return true
-			elif offset + index >= len(text):
-				return false
-			elif self.syntax[offset] != text[offset + index]:
-				return false
-			offset += 1 
+		if typeof(self.syntax) == TYPE_STRING:
+			text = text.right(index)
+			if text.begins_with(self.syntax):
+				return len(self.syntax)
+			else:
+				return 0
+		else:
+			return self.syntax.call_func(text, index)
 	
 	func evaluate(value):
 		"""Evaluates the operator"""
@@ -108,63 +129,83 @@ class UnaryOperator:
 class Evaluatable:
 	"""Represents an expression with a determinable value"""
 	extends Statement
-	var expression
-	var expressions
-	var operator_order
+	var source
+	var lhs
+	var rhs
+	var op
 	var compiled
-	
+	#Needs to build a tree
+	#Tree prefered in order to properly apply multiple unary operators with differeing
+	#priority
 	
 	func _init(text):
-		self.expression = text
+		self.source = text
 		self.compiled = false
 		
 	func _compile(operators):
-		var text = self.expression
-		self.expressions = []
-		var string_stor = ""
-		var index = 0
-		while index  < len(text):
-			var offset = 0
-			for operator in operators:
-				offset = operator.identify_operator(text, index)
+		self.compiled = true
+		self.source = self.source.strip_edges()
+		#TODO:
+		#	Determine if the source is surrounded by ()
+		self.lhs = null
+		self.rhs = null
+		self.op = null
+		#We want to find the last operator that is applied outside of
+		#a parenthasis.
+		#operators is sorted by priority so by iterating over
+		#it in reverse order we start by looking for the operator
+		#with the lowest priority
+		var found_operator = false
+		for index in range(len(operators) - 1, -1, -1):
+			var operator = operators[index]
+			for char_index in range(len(self.source)):
+				#We now want to find the first instance of the specific operator
+				var offset = operator.identify_operator(self.source, char_index)
 				if offset:
-					self.expressions.push_back(string_stor)
-					string_stor = ""
-					self.operator_order.push_back(operator)
-					index += offset
+					#Operator found
+					self.op = operator #This is the operator we want to apply
+					var end_index = char_index + offset
+					found_operator = true
+					#operator starts at char_index and ends at char_index + offset - 1
+					self.lhs = self.source.left(char_index)
+					self.rhs = self.source.right(char_index + offset)
 					break
-			if offset == 0:
-				if text[index] != " ":
-					string_stor += text[index]
-				index += 1
-		if string_stor != "":
-			self.expressions.push_back(string_stor)
-		
+			if found_operator:
+				break
+		if found_operator:
+			self.rhs = Evaluatable.new(self.rhs)
+			if self.op.binary:
+				self.lhs = Evaluatable.new(self.lhs)
+			else: #Unary operator
+				self.lhs = null
+		else:	#No operator found
+			if self.source.is_valid_integer():
+				self.lhs = int(self.source)
+			elif self.source.is_valid_float():
+				self.lhs = int(self.source)
+			else:
+				self.lhs = self.source
+				
+	
 	func run(scope, operators):
 		if not self.compiled:
-			self.compile(operators)
-		var working_expressions = self.expressions.duplicate()
-		var working_operators = self.operator_order.duplicate()
-		for index in range(len(working_expressions)):
-			if working_expressions[index] in scope:
-				working_expressions[index] = scope[working_expressions[index]]
-			elif '.' in working_expressions[index]:
-				working_expressions[index] = float(working_expressions[index])
-			else:
-				working_expressions[index] = int(working_expressions[index])
-		for operator in operators:
-			var priority = operator.priority
-			var index = 0
-			while index < len(working_operators):
-				var op = working_operators[index]
-				if op.priority == priority:
-					if typeof(op) == typeof(BinaryOperator):
-						working_expressions[index] = op.evaluate(working_expressions[index], working_expressions[index + 1])
-						working_expressions.remove(index + 1)
-						working_operators.remove(index)
+			self._compile(operators)
+		if self.lhs == null: 
+			#Unary operator
+			return self.op.evaluate(self.rhs.run(scope, operators))
+		elif self.op == null:
+			#Expression contains a value
+			if typeof(self.lhs) == TYPE_STRING:
+				return scope[self.lhs]
+			return self.lhs
+		else:
+			#BinaryOperator
+			var left = self.lhs.run(scope, operators)
+			var right = self.rhs.run(scope, operators)
+			return self.op.evaluate(left, right)
 		
 	func string(start_string = ""):
-		return start_string + expression
+		return start_string + self.source
 		
 class Assignment:
 	"""Represents an assignment"""
@@ -173,7 +214,7 @@ class Assignment:
 	var rhs
 	
 	func _init(lhs, rhs):
-		self.lhs = lhs
+		self.lhs = lhs.strip_edges()
 		self.rhs = Evaluatable.new(rhs)
 		
 	func run(scope, operators):
@@ -356,29 +397,41 @@ func operator_cmp(lhs, rhs):
 
 func _ready():
 	operators = []
-	operators.push_back(BinaryOperator.new(funcref(self, "_add"), "+", 10))
-	operators.push_back(UnaryOperator.new(funcref(self, "_print"), " print ", 1000))
+	operators.push_back(BinaryOperator.new(funcref(self, "_add"),
+										"+", 
+										10))
+	operators.push_back(UnaryOperator.new(funcref(self, "_print"), 
+										funcref(self, "_find_print"),
+										-1000))
+	operators.push_back(BinaryOperator.new(funcref(self, "_equals"),
+										"==", 
+										-100))
+	operators.push_back(BinaryOperator.new(funcref(self, "_less_than"),
+										"<", 
+										-100))
+	operators.push_back(BinaryOperator.new(funcref(self, "_greater_than"),
+										">", 
+										-100))
 	operators.sort_custom(self, "operator_cmp")
 # Run the code
 func run():
 	# Generate code from source, preferably 
 	# expressions that link to new expressions
 	code_source = """
-while a >    5
-	print("hye")
-	lalala = 7
-	if apa
-		while apa
-			eat food
-a = 5
-while b > 5
-	print a
+apa = 7
+if apa == 7
+	print 0
+if apa 
 """
 	var lines = _lines_from_source()
 	var statements = _statements_from_lines(lines)
+	#for statement in statements:
+		#print(statement.string())
+	var scope = {"a": true, "p": false}
+	scope["_if_state"] = 0
 	for statement in statements:
-		print(statement.string())
-
+		statement.run(scope, operators)
+	
 	
 	# Interpret the code
 	# Certain functions will have outside effects, which is done by:

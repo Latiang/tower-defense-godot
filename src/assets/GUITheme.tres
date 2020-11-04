@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=8 format=2]
+[gd_resource type="Theme" load_steps=10 format=2]
 
 [ext_resource path="res://assets/fonts/Inter-SemiBold-slnt=0.ttf" type="DynamicFontData" id=1]
 
@@ -32,7 +32,23 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 shadow_size = 3
 
-[sub_resource type="StyleBoxFlat" id=5]
+[sub_resource type="DynamicFont" id=5]
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+content_margin_left = 5.0
+content_margin_right = 5.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color( 0.215686, 0.243137, 0.286275, 1 )
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_size = 3
+
+[sub_resource type="StyleBoxFlat" id=7]
 bg_color = Color( 0.321569, 0.364706, 0.431373, 1 )
 corner_radius_top_left = 1
 corner_radius_top_right = 1
@@ -40,12 +56,12 @@ corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 expand_margin_left = 1.0
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=8]
 size = 20
 font_data = ExtResource( 1 )
 
 [resource]
-default_font = SubResource( 6 )
+default_font = SubResource( 8 )
 Button/colors/font_color = Color( 0.878431, 0.878431, 0.878431, 1 )
 Button/colors/font_color_disabled = Color( 0.878431, 0.878431, 0.878431, 1 )
 Button/colors/font_color_hover = Color( 0.94, 0.94, 0.94, 1 )
@@ -59,5 +75,11 @@ Button/styles/normal = SubResource( 3 )
 Button/styles/pressed = SubResource( 1 )
 Panel/styles/panel = SubResource( 4 )
 PanelContainer/styles/panel = SubResource( 4 )
+TooltipLabel/colors/font_color = Color( 1, 1, 1, 1 )
+TooltipLabel/colors/font_color_shadow = Color( 0, 0, 0, 0.1 )
+TooltipLabel/constants/shadow_offset_x = 1
+TooltipLabel/constants/shadow_offset_y = 1
+TooltipLabel/fonts/font = SubResource( 5 )
+TooltipPanel/styles/panel = SubResource( 6 )
 VSeparator/constants/separation = 4
-VSeparator/styles/separator = SubResource( 5 )
+VSeparator/styles/separator = SubResource( 7 )
