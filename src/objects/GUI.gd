@@ -20,18 +20,21 @@ func _process(delta):
 	set_coordinate_label()
 	
 func set_coordinate_label():
-	var pos = get_viewport().get_mouse_position()
-	$CoordinateLabel.text = "(%d, %d)" % [pos.x, pos.y]
+	if $CoordinateLabel.visible:
+		var pos = get_viewport().get_mouse_position()
+		$CoordinateLabel.text = "(%d, %d)" % [pos.x, pos.y]
 
 func hide():
 	$CodeWindow.hide()
 	$LevelControlsPanel.hide()
 	$HealthPanel.hide()
+	$CoordinateLabel.hide()
 
 func show():
 	$CodeWindow.show()
 	$LevelControlsPanel.show()
 	$HealthPanel.show()
+	$CoordinateLabel.show()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

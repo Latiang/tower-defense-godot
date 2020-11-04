@@ -45,7 +45,8 @@ func load_level(level_index):
 	# Load turret code and such from file
 	save_state.load_level_data(current_level, current_level_index)
 	$GUI/CodeWindow.open_code_window(0, false)
-	$AutoSaveTimer.start()
+	if get_parent().autosave_enabled:
+		$AutoSaveTimer.start()
 
 # Start a level wave (start button pressed)
 func _on_GUI_start_wave():

@@ -2,6 +2,7 @@ extends Node
 
 export var debug_main_menu_override = false
 export var debug_tick_interpreter_once = false
+export var autosave_enabled = true
 
 func _ready():
 	# Load main menu
@@ -12,6 +13,10 @@ func _ready():
 		_on_MainMenu_start_level(0)
 		if debug_tick_interpreter_once:
 			$LevelManager.current_level.debug_tick_interpreter_once()
+
+func _input(event):
+	if event.is_action_pressed("fullscreen_toggle") and !event.is_echo():
+		OS.window_fullscreen = !OS.window_fullscreen
 
 func _on_MainMenu_start_level(level_number):
 	show_level()

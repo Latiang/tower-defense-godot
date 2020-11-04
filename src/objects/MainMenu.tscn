@@ -20,16 +20,15 @@ font_data = ExtResource( 1 )
 [sub_resource type="StyleBoxEmpty" id=6]
 
 [sub_resource type="DynamicFont" id=7]
-size = 35
-use_filter = true
+size = 40
 font_data = ExtResource( 1 )
 
 [sub_resource type="Theme" id=8]
 default_font = SubResource( 7 )
-Button/colors/font_color = Color( 0.88, 0.88, 0.88, 1 )
+Button/colors/font_color = Color( 1, 1, 1, 1 )
 Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
-Button/colors/font_color_hover = Color( 0.94, 0.94, 0.94, 1 )
-Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+Button/colors/font_color_hover = Color( 0.823529, 0.823529, 0.823529, 1 )
+Button/colors/font_color_pressed = Color( 0.862745, 0.862745, 0.862745, 1 )
 Button/constants/hseparation = 2
 Button/fonts/font = null
 Button/styles/disabled = SubResource( 2 )
@@ -82,7 +81,7 @@ __meta__ = {
 
 [node name="MainOptionsContainer" type="VBoxContainer" parent="TitleMenu/MarginContainer"]
 margin_left = 150.0
-margin_right = 291.0
+margin_right = 310.0
 margin_bottom = 210.0
 theme = SubResource( 8 )
 custom_constants/separation = 12
@@ -91,34 +90,35 @@ __meta__ = {
 }
 
 [node name="MarginContainer" type="MarginContainer" parent="TitleMenu/MarginContainer/MainOptionsContainer"]
-margin_right = 141.0
-margin_bottom = 43.0
+margin_right = 160.0
+margin_bottom = 49.0
 
 [node name="PlayButton" type="Button" parent="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer"]
-margin_right = 141.0
-margin_bottom = 43.0
+margin_right = 160.0
+margin_bottom = 55.0
+custom_colors/font_color_disabled = Color( 0.0625, 0.0419922, 0.0419922, 1 )
 text = "Play"
 align = 0
 
 [node name="MarginContainer2" type="MarginContainer" parent="TitleMenu/MarginContainer/MainOptionsContainer"]
-margin_top = 55.0
-margin_right = 141.0
-margin_bottom = 98.0
+margin_top = 61.0
+margin_right = 160.0
+margin_bottom = 110.0
 
 [node name="SettingsButton" type="Button" parent="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer2"]
-margin_right = 141.0
-margin_bottom = 43.0
+margin_right = 160.0
+margin_bottom = 55.0
 text = "Settings"
 align = 0
 
 [node name="MarginContainer3" type="MarginContainer" parent="TitleMenu/MarginContainer/MainOptionsContainer"]
-margin_top = 110.0
-margin_right = 141.0
-margin_bottom = 153.0
+margin_top = 122.0
+margin_right = 160.0
+margin_bottom = 171.0
 
 [node name="ExitButton" type="Button" parent="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer3"]
-margin_right = 141.0
-margin_bottom = 43.0
+margin_right = 160.0
+margin_bottom = 55.0
 text = "Exit"
 align = 0
 

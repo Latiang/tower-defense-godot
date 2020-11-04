@@ -14,8 +14,23 @@ class CodeLine:
 		
 var operators
 
+func _negate(value):
+	return -value
+
+func _power(lhs, rhs):
+	return pow(lhs, rhs)
+
+func _multiply(lhs, rhs):
+	return lhs * rhs
+	
+func _divide(lhs, rhs):
+	return float(lhs) / rhs
+
 func _add(lhs, rhs):
 	return lhs + rhs
+	
+func _sub(lhs, rhs):
+	return lhs - rhs
 
 func _equals(lhs, rhs):
 	return lhs == rhs
@@ -26,9 +41,6 @@ func _greater_than(lhs, rhs):
 func _less_than(lhs, rhs):
 	return lhs < rhs
 	
-func _multiply(lhs, rhs):
-	return lhs * rhs
-
 func _find_print(text, index):
 		var result = true
 		var original_text = text
@@ -397,8 +409,23 @@ func operator_cmp(lhs, rhs):
 
 func _ready():
 	operators = []
+	operators.push_back(UnaryOperator.new(funcref(self, "_negate"), 
+										"-",
+										40))
+	operators.push_back(BinaryOperator.new(funcref(self, "_power"),
+										"^", 
+										30))
+	operators.push_back(BinaryOperator.new(funcref(self, "_multiply"),
+										"*", 
+										20))
+	operators.push_back(BinaryOperator.new(funcref(self, "_divide"),
+										"/", 
+										20))
 	operators.push_back(BinaryOperator.new(funcref(self, "_add"),
 										"+", 
+										10))
+	operators.push_back(BinaryOperator.new(funcref(self, "_sub"),
+										"-", 
 										10))
 	operators.push_back(UnaryOperator.new(funcref(self, "_print"), 
 										funcref(self, "_find_print"),
@@ -413,15 +440,18 @@ func _ready():
 										">", 
 										-100))
 	operators.sort_custom(self, "operator_cmp")
+	for operator in operators:
+		print(operator.syntax)
 # Run the code
 func run():
 	# Generate code from source, preferably 
 	# expressions that link to new expressions
 	code_source = """
-apa = 7
-if apa == 7
-	print 0
-if apa 
+# Should be 40
+#a = 80/10*2 - 16 + 8*2 - 26 + 10^2/2
+b = -2
+#print a
+#print -2
 """
 	var lines = _lines_from_source()
 	var statements = _statements_from_lines(lines)
@@ -431,7 +461,7 @@ if apa
 	scope["_if_state"] = 0
 	for statement in statements:
 		statement.run(scope, operators)
-	
+	print(scope)
 	
 	# Interpret the code
 	# Certain functions will have outside effects, which is done by:
