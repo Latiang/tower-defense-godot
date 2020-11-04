@@ -7,6 +7,8 @@
 
 [node name="Main" type="Node"]
 script = ExtResource( 3 )
+debug_main_menu_override = true
+debug_tick_interpreter_once = true
 
 [node name="LevelManager" type="Node" parent="."]
 script = ExtResource( 2 )

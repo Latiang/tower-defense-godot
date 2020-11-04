@@ -1,18 +1,7 @@
 extends Node
 
 
-
-var code_source = """
-while a >    5
-	print("hye")
-	lalala = 7
-	if apa
-		while apa
-			eat food
-a = 5
-while b > 5
-	print a
-"""
+var code_source
 
 class CodeLine:
 	extends Reference
@@ -23,30 +12,16 @@ class CodeLine:
 		self.text = text
 		self.indent_size = indent_size
 		self.line = line
-
-
-class NextStatement:
-	"""Determines the next statement"""
-	var conditional
-	var statement
-	var condition
-	var conditional_statement
-	
-	func _init(statement, conditional_statement = null, condition = ""):
-		self.statement = statement
-		if conditional_statement:
-			self.conditional = true
-		else:
-			self.conditional = false
-		self.conditional_statement = conditional_statement
-		self.condition = condition
 		
-	func access_index():
-		if conditional:
-			pass
-		else:
-			return statement
-		
+var operators
+
+func _add(lhs, rhs):
+	return lhs + rhs
+
+func _print(val):
+	print(val)
+	return 0
+
 
 class Statement:
 	"""Base class for code elements"""
@@ -54,23 +29,139 @@ class Statement:
 	func _init():
 		pass
 		
-	func run(scope):
+	func run(scope, operators):
 		pass
 		
 	func string(start_string = ""):
 		pass
 		
+	func compile(operators):
+		pass
+		
+class BinaryOperator:
+	"""Represents a binary operator"""
+	var function
+	var syntax
+	var priority
+	
+	func _init(function_in, syntax_in, priority_in):
+		"""Creates a binary operator. syntax is a string that exactly matches 
+		the syntax of the operator ie '+' or 'and'. function is the behaviour 
+		of the operator and must take 2 arguments. Priority is used for order of
+		operators and should be an int. Higher number means higher priority"""
+		self.function = function_in
+		self.syntax = syntax_in
+		self.priority = priority_in
+		
+	func identify_operator(text, index):
+		"""Checks if this operator starts at the specified index. If so the
+		length of the index is returned. Otherwise 0"""
+		var result = true
+		var offset = 0
+		while true:
+			if offset >= len(self.syntax):
+				return true
+			elif offset + index >= len(text):
+				return false
+			elif self.syntax[offset] != text[offset + index]:
+				return false
+			offset += 1 
+			
+	func evaluate(lhs, rhs):
+		return self.function.call_func(lhs, rhs)
+
+
+class UnaryOperator:
+	"""Represents a unary operator"""
+	var function
+	var syntax
+	var priority
+	
+	func _init(function_in, syntax_in, priority_in):
+		"""Creates a unary operator. syntax is a string that exactly matches 
+		the syntax of the operator ie '+' or 'and'. function is the behaviour 
+		of the operator and must take 1 argument. Priority is used for order of
+		operators and should be an int. Higher number means higher priority"""
+		self.function = function_in
+		self.syntax = syntax_in
+		self.priority = priority_in
+		
+	func identify_operator(text, index):
+		"""Checks if this operator starts at the specified index. If so the
+		length of the index is returned. Otherwise 0"""
+		var result = true
+		var offset = 0
+		while true:
+			if offset >= len(self.syntax):
+				return true
+			elif offset + index >= len(text):
+				return false
+			elif self.syntax[offset] != text[offset + index]:
+				return false
+			offset += 1 
+	
+	func evaluate(value):
+		"""Evaluates the operator"""
+		return self.function.call_func(value)
+
 
 class Evaluatable:
 	"""Represents an expression with a determinable value"""
 	extends Statement
 	var expression
+	var expressions
+	var operator_order
+	var compiled
+	
 	
 	func _init(text):
 		self.expression = text
+		self.compiled = false
 		
-	func run(scope):
-		pass
+	func _compile(operators):
+		var text = self.expression
+		self.expressions = []
+		var string_stor = ""
+		var index = 0
+		while index  < len(text):
+			var offset = 0
+			for operator in operators:
+				offset = operator.identify_operator(text, index)
+				if offset:
+					self.expressions.push_back(string_stor)
+					string_stor = ""
+					self.operator_order.push_back(operator)
+					index += offset
+					break
+			if offset == 0:
+				if text[index] != " ":
+					string_stor += text[index]
+				index += 1
+		if string_stor != "":
+			self.expressions.push_back(string_stor)
+		
+	func run(scope, operators):
+		if not self.compiled:
+			self.compile(operators)
+		var working_expressions = self.expressions.duplicate()
+		var working_operators = self.operator_order.duplicate()
+		for index in range(len(working_expressions)):
+			if working_expressions[index] in scope:
+				working_expressions[index] = scope[working_expressions[index]]
+			elif '.' in working_expressions[index]:
+				working_expressions[index] = float(working_expressions[index])
+			else:
+				working_expressions[index] = int(working_expressions[index])
+		for operator in operators:
+			var priority = operator.priority
+			var index = 0
+			while index < len(working_operators):
+				var op = working_operators[index]
+				if op.priority == priority:
+					if typeof(op) == typeof(BinaryOperator):
+						working_expressions[index] = op.evaluate(working_expressions[index], working_expressions[index + 1])
+						working_expressions.remove(index + 1)
+						working_operators.remove(index)
 		
 	func string(start_string = ""):
 		return start_string + expression
@@ -85,8 +176,8 @@ class Assignment:
 		self.lhs = lhs
 		self.rhs = Evaluatable.new(rhs)
 		
-	func run(scope):
-		scope[self.lhs] = rhs.run(scope)
+	func run(scope, operators):
+		scope[self.lhs] = rhs.run(scope, operators)
 		
 	func string(start_string = ""):
 		return start_string + lhs + " = " + rhs.string()
@@ -106,12 +197,12 @@ class Loop:
 			self.end_action = null
 		self.code = code
 	
-	func run(scope):
-		while condition.run(scope):
+	func run(scope, operators):
+		while condition.run(scope, operators):
 			for line in code:
-				line.run(scope)
+				line.run(scope, operators)
 			if end_action != null:
-				end_action.run(scope)
+				end_action.run(scope, operators)
 				
 	func string(start_string = ""):
 		var text = start_string + "while " + condition.string() + "\n"
@@ -132,11 +223,11 @@ class Conditional:
 		self.code = code
 		self.condition = Evaluatable.new(condition)
 		
-	func run(scope):
-		if condition.run(scope) and (expected_if_state == null 
-				or expected_if_state == scope["_if_state"]):
+	func run(scope, operators):
+		if ((expected_if_state == null or expected_if_state == scope["_if_state"]) 
+				and condition.run(scope, operators)):
 			for line in code:
-				line.run(scope)
+				line.run(scope, operators)
 			scope["_if_state"] = 1
 		elif expected_if_state != null:
 			scope["_if_state"] = 0
@@ -256,19 +347,33 @@ func _statements_from_lines(lines):
 			rhs = rhs.substr(0, len(rhs) - 1)
 			statements.append(Assignment.new(lhs, rhs))
 		else:	#Raw expression
-			var next_statement = NextStatement.new(index + 1)
 			statements.append(Evaluatable.new(line))
 		index += 1
 	return statements
 
+func operator_cmp(lhs, rhs):
+	return (lhs.priority >= rhs.priority)
 
 func _ready():
-	pass
-
+	operators = []
+	operators.push_back(BinaryOperator.new(funcref(self, "_add"), "+", 10))
+	operators.push_back(UnaryOperator.new(funcref(self, "_print"), " print ", 1000))
+	operators.sort_custom(self, "operator_cmp")
 # Run the code
 func run():
 	# Generate code from source, preferably 
 	# expressions that link to new expressions
+	code_source = """
+while a >    5
+	print("hye")
+	lalala = 7
+	if apa
+		while apa
+			eat food
+a = 5
+while b > 5
+	print a
+"""
 	var lines = _lines_from_source()
 	var statements = _statements_from_lines(lines)
 	for statement in statements:
