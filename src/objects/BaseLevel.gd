@@ -5,9 +5,6 @@ var wave_started = false
 signal open_code_window(turret)
 signal level_complete()
 
-var screen_width = 1280
-var screen_height = 720
-
 var time_scale = 1
 
 # Level start.
@@ -16,11 +13,10 @@ func _ready():
 
 # Close the level and unload everything
 func close():
-	queue_free()
+	queue_free() 
 
 func _process(delta):
 	if wave_started:
-		update_scaling()
 		check_for_win()
 
 func set_time_scale(new_time_scale):
@@ -29,15 +25,6 @@ func set_time_scale(new_time_scale):
 		for child in self.get_children():
 			if child.is_in_group("Turret") || child.is_in_group("MobPath"):
 				child.update_time_scale(new_time_scale)
-
-func update_scaling():
-	pass
-	#var new_width = get_viewport().size.x
-	#var new_height = get_viewport().size.y
-	#if (new_width != screen_width):
-		#scale.x = float(new_width) / 1280
-	#if (new_height != screen_height):
-		#scale.y = float(new_height) / 720
 
 # Start the waves for this level
 func start_wave():
