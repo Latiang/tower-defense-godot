@@ -73,6 +73,7 @@ func _on_StartButton_pressed():
 		emit_signal("start_wave")
 		enable_speed_buttons()
 	_on_Speed1Button_pressed()
+	$CodeWindow.set_execution_mode()
 
 # Reset the gui
 func reset():
@@ -80,6 +81,7 @@ func reset():
 	wave_started = false
 	disable_speed_buttons()
 	show_pause_button(false)
+	$CodeWindow.set_coding_mode()
 	
 func level_lost():
 	reset()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://objects/CodeWindow.gd" type="Script" id=1]
 [ext_resource path="res://assets/GUITheme.tres" type="Theme" id=2]
@@ -49,20 +49,27 @@ bg_color = Color( 0.172549, 0.203922, 0.247059, 1 )
 size = 20
 font_data = ExtResource( 5 )
 
-[sub_resource type="StyleBoxFlat" id=16]
+[sub_resource type="StyleBoxFlat" id=14]
 bg_color = Color( 0.215686, 0.243137, 0.286275, 1 )
 
-[sub_resource type="DynamicFont" id=19]
+[sub_resource type="DynamicFont" id=15]
 size = 24
 font_data = ExtResource( 3 )
 
-[sub_resource type="StyleBoxFlat" id=17]
+[sub_resource type="DynamicFontData" id=18]
+font_path = "res://assets/fonts/SourceCodePro-SemiBold.ttf"
+
+[sub_resource type="DynamicFont" id=19]
+size = 20
+font_data = SubResource( 18 )
+
+[sub_resource type="StyleBoxFlat" id=16]
 bg_color = Color( 0.215686, 0.243137, 0.286275, 1 )
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 anti_aliasing = false
 
-[sub_resource type="DynamicFont" id=18]
+[sub_resource type="DynamicFont" id=17]
 size = 30
 use_filter = true
 font_data = ExtResource( 6 )
@@ -151,30 +158,53 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 0
 custom_constants/margin_top = 15
-custom_constants/margin_left = 5
+custom_constants/margin_left = 10
 custom_constants/margin_bottom = 0
 
 [node name="CodeEditor" type="TextEdit" parent="VBoxContainer/MarginContainer"]
-margin_left = 5.0
+margin_left = 10.0
 margin_top = 15.0
 margin_right = 360.0
 margin_bottom = 405.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/focus = SubResource( 16 )
-custom_fonts/font = SubResource( 19 )
+custom_styles/focus = SubResource( 14 )
+custom_fonts/font = SubResource( 15 )
 custom_colors/background_color = Color( 0.172549, 0.203922, 0.247059, 1 )
 syntax_highlighting = true
 context_menu_enabled = false
 smooth_scrolling = true
 wrap_enabled = true
 
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer"]
+margin_left = 10.0
+margin_top = 15.0
+margin_right = 360.0
+margin_bottom = 405.0
+custom_constants/margin_right = 10
+custom_constants/margin_left = 10
+
+[node name="ConsoleText" type="RichTextLabel" parent="VBoxContainer/MarginContainer/MarginContainer"]
+margin_left = 10.0
+margin_right = 340.0
+margin_bottom = 390.0
+custom_fonts/mono_font = SubResource( 19 )
+custom_fonts/normal_font = SubResource( 19 )
+bbcode_enabled = true
+bbcode_text = "[code]--- Turret Executing ---
+>
+[/code]"
+text = "--- Turret Executing ---
+>
+"
+scroll_following = true
+
 [node name="TurretInfoPanel" type="PanelContainer" parent="VBoxContainer"]
 margin_top = 500.0
 margin_right = 360.0
 margin_bottom = 550.0
 rect_min_size = Vector2( 0, 50 )
-custom_styles/panel = SubResource( 17 )
+custom_styles/panel = SubResource( 16 )
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/TurretInfoPanel"]
 margin_right = 360.0
@@ -199,7 +229,7 @@ margin_right = 123.0
 margin_bottom = 35.0
 hint_tooltip = "Can Rotate"
 mouse_filter = 1
-custom_fonts/font = SubResource( 18 )
+custom_fonts/font = SubResource( 17 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = ""
 valign = 1
@@ -211,7 +241,7 @@ margin_right = 176.0
 margin_bottom = 35.0
 hint_tooltip = "Has Integrated Sensor"
 mouse_filter = 1
-custom_fonts/font = SubResource( 18 )
+custom_fonts/font = SubResource( 17 )
 text = ""
 valign = 1
 
@@ -222,7 +252,7 @@ margin_right = 221.0
 margin_bottom = 35.0
 hint_tooltip = "Can Move"
 mouse_filter = 1
-custom_fonts/font = SubResource( 18 )
+custom_fonts/font = SubResource( 17 )
 text = ""
 valign = 1
 

@@ -2,7 +2,7 @@
 
 [ext_resource path="res://objects/BaseEnemy.gd" type="Script" id=1]
 
-[sub_resource type="SpriteFrames" id=1]
+[sub_resource type="SpriteFrames" id=3]
 animations = [ {
 "frames": [  ],
 "loop": true,
@@ -17,7 +17,6 @@ height = 0.0
 [node name="BaseEnemy" type="PathFollow2D" groups=[
 "Enemy",
 ]]
-rotate = false
 loop = false
 script = ExtResource( 1 )
 
@@ -26,7 +25,7 @@ collision_layer = 1025
 collision_mask = 1025
 
 [node name="EnemySprite" type="AnimatedSprite" parent="Area2D"]
-frames = SubResource( 1 )
+frames = SubResource( 3 )
 
 [node name="EnemyCollisionShape" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 2 )
