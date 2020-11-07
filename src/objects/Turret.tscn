@@ -1,15 +1,20 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://assets/textures/turret-firing.png" type="Texture" id=1]
 [ext_resource path="res://objects/Bullet.tscn" type="PackedScene" id=2]
 [ext_resource path="res://objects/Turret.gd" type="Script" id=3]
 [ext_resource path="res://objects/ProgrammableBehaviour.tscn" type="PackedScene" id=4]
-[ext_resource path="res://assets/textures/turret.png" type="Texture" id=5]
+[ext_resource path="res://assets/textures/turret-orange.png" type="Texture" id=5]
 [ext_resource path="res://objects/Gun.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/textures/turret-dark.png" type="Texture" id=8]
+
+[sub_resource type="StreamTexture" id=4]
+flags = 4
+load_path = "res://.import/turret-red.png-3bd203c874ff72553751436124d323b6.stex"
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 5 ) ],
+"frames": [ ExtResource( 8 ), ExtResource( 5 ), SubResource( 4 ) ],
 "loop": false,
 "name": "default",
 "speed": 5.0
@@ -21,7 +26,7 @@ animations = [ {
 } ]
 
 [sub_resource type="CapsuleShape2D" id=2]
-radius = 20.6462
+radius = 95.063
 height = 0.0265656
 
 [sub_resource type="Curve2D" id=3]
@@ -33,7 +38,7 @@ _data = {
 [node name="Turret" type="Area2D" groups=[
 "Turret",
 ]]
-scale = Vector2( 2, 2 )
+scale = Vector2( 0.5, 0.5 )
 z_index = 21
 z_as_relative = false
 script = ExtResource( 3 )
@@ -41,6 +46,7 @@ Bullet = ExtResource( 2 )
 can_move = false
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0.515945, -36.5193 )
 frames = SubResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

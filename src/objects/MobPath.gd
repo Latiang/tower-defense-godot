@@ -31,7 +31,7 @@ func update_time_scale(new_time_scale):
 	# Modify spawned enemies
 	for child in self.get_children():
 		if child.is_in_group("Enemy"):
-			child.speed_multiplier = new_time_scale
+			child.update_speed_multiplier(new_time_scale)
 	
 
 func _on_SpawningBehaviour_spawning_complete():

@@ -2,17 +2,17 @@
 
 [ext_resource path="res://objects/BaseEnemy.gd" type="Script" id=1]
 
-[sub_resource type="CapsuleShape2D" id=1]
-radius = 8.5
-height = 4.0
-
-[sub_resource type="SpriteFrames" id=2]
+[sub_resource type="SpriteFrames" id=1]
 animations = [ {
 "frames": [  ],
 "loop": true,
 "name": "default",
 "speed": 5.0
 } ]
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 22.0721
+height = 0.0
 
 [node name="BaseEnemy" type="PathFollow2D" groups=[
 "Enemy",
@@ -25,9 +25,9 @@ script = ExtResource( 1 )
 collision_layer = 1025
 collision_mask = 1025
 
-[node name="EnemyCollisionShape" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource( 1 )
-
 [node name="EnemySprite" type="AnimatedSprite" parent="Area2D"]
-frames = SubResource( 2 )
+frames = SubResource( 1 )
+
+[node name="EnemyCollisionShape" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 2 )
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
