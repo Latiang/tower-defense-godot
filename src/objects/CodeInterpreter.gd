@@ -449,7 +449,7 @@ func run():
 	code_source = """
 # Should be 40
 #a = 80/10*2 - 16 + 8*2 - 26 + 10^2/2
-b = -2
+#b = -2
 #print a
 #print -2
 """

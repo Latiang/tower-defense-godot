@@ -6,8 +6,8 @@ export var autosave_enabled = true
 
 func _ready():
 	# Load main menu
+	$MainMenu/LevelSelectionMenu.populate_level_buttons($LevelManager.save_state)
 	if !debug_main_menu_override:
-		$MainMenu/LevelSelectionMenu.populate_level_buttons($LevelManager.save_state)
 		show_MainMenu()
 	else: # Load first level for debugging
 		_on_MainMenu_start_level(0)
@@ -32,3 +32,6 @@ func show_MainMenu():
 func show_level():
 	$MainMenu.hide()
 	$LevelManager/GUI.show()
+
+func _on_GUI_return_to_main_menu():
+	show_MainMenu()

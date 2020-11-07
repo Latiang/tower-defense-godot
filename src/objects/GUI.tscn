@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://assets/GUITheme.tres" type="Theme" id=1]
 [ext_resource path="res://objects/CodeWindow.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://assets/fonts/Inter-SemiBold-slnt=0.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://objects/PopupDialogOk.tscn" type="PackedScene" id=6]
 [ext_resource path="res://objects/PopupDialogTwoChoices.tscn" type="PackedScene" id=7]
+[ext_resource path="res://objects/EscapeMenu.tscn" type="PackedScene" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 size = 35
@@ -193,7 +194,7 @@ valign = 1
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0, 0, 0, 0.305882 )
+color = Color( 0, 0, 0, 0.337255 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -223,6 +224,9 @@ text = "(50, 50)"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="EscapeMenu" parent="." instance=ExtResource( 8 )]
+visible = false
 [connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/Speed3Button" to="." method="_on_Speed3Button_pressed"]
 [connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/Speed2Button" to="." method="_on_Speed2Button_pressed"]
 [connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/Speed1Button" to="." method="_on_Speed1Button_pressed"]
@@ -232,3 +236,7 @@ __meta__ = {
 [connection signal="button_pressed" from="WonPopup" to="." method="_on_WonPopup_button_pressed"]
 [connection signal="button1_pressed" from="DebugPopup" to="." method="_on_DebugPopup_button1_pressed"]
 [connection signal="button2_pressed" from="DebugPopup" to="." method="_on_DebugPopup_button2_pressed"]
+[connection signal="exit" from="EscapeMenu" to="." method="_on_EscapeMenu_exit"]
+[connection signal="restart" from="EscapeMenu" to="." method="_on_EscapeMenu_restart"]
+[connection signal="resume" from="EscapeMenu" to="." method="_on_EscapeMenu_resume"]
+[connection signal="settings" from="EscapeMenu" to="." method="_on_EscapeMenu_settings"]
