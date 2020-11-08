@@ -42,6 +42,12 @@ func _greater_than(lhs, rhs):
 func _less_than(lhs, rhs):
 	return lhs < rhs
 	
+func _and(lhs, rhs):
+	return lhs and rhs
+	
+func _or(lhs, rhs):
+	return lhs or rhs
+
 func _find_print(text, index):
 		var result = true
 		var original_text = text
@@ -79,8 +85,8 @@ class BinaryOperator:
 	var priority
 	var binary
 	var neutral_element
-	
-	func _init(function_in, syntax_in, priority_in, neutral_element_in=null):
+	var padding
+	func _init(function_in, syntax_in, priority_in, require_padding=false, neutral_element_in=null):
 		"""Creates a binary operator. syntax is a string that exactly matches 
 		the syntax of the operator ie '+' or 'and'. function is the behaviour 
 		of the operator and must take 2 arguments. Priority is used for order of
@@ -90,16 +96,24 @@ class BinaryOperator:
 		self.syntax = syntax_in
 		self.priority = priority_in
 		self.neutral_element = neutral_element_in
+		self.padding = require_padding
+		
 		
 	func identify_operator(text, index):
 		"""Checks if this operator starts at the specified index. If so the
 		length of the index is returned. Otherwise 0"""
 		if typeof(self.syntax) == TYPE_STRING:
 			text = text.right(index)
-			if text.begins_with(self.syntax):
-				return len(self.syntax)
+			if self.padding:
+				if text.begins_with(" " + self.syntax + " "):
+					return len(self.syntax) + 2
+				elif index == 0 and text.begins_with(self.syntax + " "):
+					return len(self.syntax) + 1
 			else:
-				return 0
+				if text.begins_with(self.syntax):
+					return len(self.syntax)
+				else:
+					return 0
 		else:
 			return self.syntax.call_func(text, index)
 			
@@ -116,8 +130,9 @@ class UnaryOperator:
 	var syntax
 	var priority
 	var binary
+	var padding
 	
-	func _init(function_in, syntax_in, priority_in):
+	func _init(function_in, syntax_in, priority_in, require_padding=false):
 		"""Creates a unary operator. syntax is a string that exactly matches 
 		the syntax of the operator ie '+' or 'and'. function is the behaviour 
 		of the operator and must take 1 argument. Priority is used for order of
@@ -126,16 +141,23 @@ class UnaryOperator:
 		self.syntax = syntax_in
 		self.binary = false
 		self.priority = priority_in
+		self.padding = require_padding
 		
 	func identify_operator(text, index):
 		"""Checks if this operator starts at the specified index. If so the
 		length of the index is returned. Otherwise 0"""
 		if typeof(self.syntax) == TYPE_STRING:
 			text = text.right(index)
-			if text.begins_with(self.syntax):
-				return len(self.syntax)
+			if self.padding:
+				if text.begins_with(" " + self.syntax + " "):
+					return len(self.syntax) + 2
+				elif index == 0 and text.begins_with(self.syntax + " "):
+					return len(self.syntax) + 1
 			else:
-				return 0
+				if text.begins_with(self.syntax):
+					return len(self.syntax)
+				else:
+					return 0
 		else:
 			return self.syntax.call_func(text, index)
 	
@@ -163,6 +185,10 @@ class Evaluatable:
 	func _compile(operators):
 		self.compiled = true
 		self.source = self.source.strip_edges()
+		while self.source != "" and self.source[0] == "(" and self.source[-1] == ")":
+			self.source = self.source.right(1)
+			self.source = self.source.left(len(self.source) - 1)
+			self.source = self.source.strip_edges()
 		#TODO:
 		#	Determine if the source is surrounded by ()
 		self.lhs = null
@@ -176,9 +202,18 @@ class Evaluatable:
 		var found_operator = false
 		for index in range(len(operators) - 1, -1, -1):
 			var operator = operators[index]
+			var parenthasis_count = 0
 			for char_index in range(len(self.source)):
+				if self.source[char_index] == ")":
+					parenthasis_count -= 1
+				elif self.source[char_index] == "(":
+					parenthasis_count += 1
+				if parenthasis_count != 0:
+					continue
 				#We now want to find the first instance of the specific operator
 				var offset = operator.identify_operator(self.source, char_index)
+				if parenthasis_count != 0:
+					offset = 0
 				if offset:
 					#Operator found
 					self.op = operator #This is the operator we want to apply
@@ -224,7 +259,7 @@ class Evaluatable:
 		
 	func string(start_string = ""):
 		return start_string + self.source
-		
+
 class Assignment:
 	"""Represents an assignment"""
 	extends Statement
@@ -240,7 +275,7 @@ class Assignment:
 		
 	func string(start_string = ""):
 		return start_string + lhs + " = " + rhs.string()
-		
+
 class Loop:
 	"""Represents a loopdiloop"""
 	extends Statement
@@ -268,8 +303,7 @@ class Loop:
 		for line in code:
 			text = text + line.string(start_string + "\t") + "\n"
 		return text
-				
-				
+
 class Conditional:
 	"""Represents a conditional statement"""
 	extends Statement
@@ -306,7 +340,6 @@ class Conditional:
 			text = text + line.string(start_string + "\t") + "\n"
 		return text
 
-		
 func _count_leading_spaces(line):
 	var count = 0
 	for character in line:
@@ -427,14 +460,17 @@ func _ready():
 	operators.push_back(BinaryOperator.new(funcref(self, "_add"),
 										"+", 
 										10,
+										false,
 										0))
 	operators.push_back(BinaryOperator.new(funcref(self, "_sub"),
 										"-", 
 										10,
+										false,
 										0))
 	operators.push_back(UnaryOperator.new(funcref(self, "_print"), 
-										funcref(self, "_find_print"),
-										-1000))
+										"print",
+										-1000,
+										true))
 	operators.push_back(BinaryOperator.new(funcref(self, "_equals"),
 										"==", 
 										-100))
@@ -444,6 +480,14 @@ func _ready():
 	operators.push_back(BinaryOperator.new(funcref(self, "_greater_than"),
 										">", 
 										-100))
+	operators.push_back(BinaryOperator.new(funcref(self, "_and"),
+										"and",
+										-101,
+										true))
+	operators.push_back(BinaryOperator.new(funcref(self, "_or"),
+										"or",
+										-102,
+										true))
 	operators.sort_custom(self, "operator_cmp")
 	for operator in operators:
 		print(operator.syntax)
@@ -452,16 +496,7 @@ func run():
 	# Generate code from source, preferably 
 	# expressions that link to new expressions
 	code_source = """
-# Should be 40
-#a = 80/10*2 - 16 + 8*2 - 26 + 10^2/2
-#b = -2
-#print a
-#print -2
-print 2
-print +2
-print 2
-print -2
-print 2 - 2
+print 0
 """
 	var lines = _lines_from_source()
 	var statements = _statements_from_lines(lines)
