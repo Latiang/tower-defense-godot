@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://assets/GUITheme.tres" type="Theme" id=1]
 [ext_resource path="res://objects/CodeWindow.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://assets/fonts/Inter-SemiBold-slnt=0.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://objects/PopupDialogOk.tscn" type="PackedScene" id=6]
 [ext_resource path="res://objects/PopupDialogTwoChoices.tscn" type="PackedScene" id=7]
+[ext_resource path="res://objects/EscapeMenu.tscn" type="PackedScene" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 size = 35
@@ -18,14 +19,21 @@ size = 25
 use_filter = true
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=6]
 size = 35
-use_filter = true
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=7]
+size = 20
+extra_spacing_top = -4
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 39
 font_data = ExtResource( 4 )
 
 [sub_resource type="DynamicFont" id=4]
 size = 35
-use_filter = true
 font_data = ExtResource( 5 )
 
 [sub_resource type="DynamicFont" id=5]
@@ -149,11 +157,71 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HealthPanel" type="PanelContainer" parent="."]
+[node name="LevelNamePanel" type="PanelContainer" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -150.0
+margin_left = -360.0
 margin_bottom = 70.0
+rect_min_size = Vector2( 360, 70 )
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="LevelNamePanel"]
+margin_right = 360.0
+margin_bottom = 70.0
+custom_constants/margin_right = 20
+custom_constants/margin_top = 10
+custom_constants/margin_left = 30
+custom_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LevelNamePanel/MarginContainer"]
+margin_left = 30.0
+margin_top = 10.0
+margin_right = 340.0
+margin_bottom = 60.0
+custom_constants/separation = 15
+
+[node name="LevelCountLabel" type="Label" parent="LevelNamePanel/MarginContainer/HBoxContainer"]
+margin_top = 3.0
+margin_right = 117.0
+margin_bottom = 46.0
+rect_min_size = Vector2( 0, 43 )
+custom_fonts/font = SubResource( 6 )
+text = "Level 1"
+
+[node name="VSeparator" type="VSeparator" parent="LevelNamePanel/MarginContainer/HBoxContainer"]
+margin_left = 132.0
+margin_right = 136.0
+margin_bottom = 50.0
+
+[node name="CenterContainer" type="CenterContainer" parent="LevelNamePanel/MarginContainer/HBoxContainer"]
+margin_left = 151.0
+margin_right = 310.0
+margin_bottom = 50.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LevelNameLabel" type="Label" parent="LevelNamePanel/MarginContainer/HBoxContainer/CenterContainer"]
+margin_left = 7.0
+margin_top = 2.0
+margin_right = 152.0
+margin_bottom = 47.0
+rect_min_size = Vector2( 145, 40 )
+custom_fonts/font = SubResource( 7 )
+text = "While Loops are Useful"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="HealthPanel" type="PanelContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 0.108
+anchor_right = 1.0
+anchor_bottom = 0.194
+margin_left = -150.0
+margin_bottom = -22.88
 rect_min_size = Vector2( 150, 70 )
 theme = ExtResource( 1 )
 __meta__ = {
@@ -172,28 +240,30 @@ margin_left = 20.0
 margin_right = 130.0
 margin_bottom = 70.0
 rect_min_size = Vector2( 0, 70 )
+alignment = 1
 
 [node name="HeartLabel" type="Label" parent="HealthPanel/MarginContainer/HBoxContainer"]
-margin_top = 17.0
-margin_right = 35.0
-margin_bottom = 53.0
+margin_left = 13.0
+margin_top = 15.0
+margin_right = 52.0
+margin_bottom = 55.0
 custom_fonts/font = SubResource( 3 )
 text = ""
 
 [node name="HealthLabel" type="Label" parent="HealthPanel/MarginContainer/HBoxContainer"]
-margin_left = 39.0
-margin_right = 102.0
+margin_left = 56.0
+margin_right = 96.0
 margin_bottom = 70.0
 rect_min_size = Vector2( 0, 70 )
 custom_fonts/font = SubResource( 4 )
-text = "100"
+text = "10"
 valign = 1
 
 [node name="PopupGreyCover" type="ColorRect" parent="."]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0, 0, 0, 0.305882 )
+color = Color( 0, 0, 0, 0.337255 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -223,6 +293,9 @@ text = "(50, 50)"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="EscapeMenu" parent="." instance=ExtResource( 8 )]
+visible = false
 [connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/Speed3Button" to="." method="_on_Speed3Button_pressed"]
 [connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/Speed2Button" to="." method="_on_Speed2Button_pressed"]
 [connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/Speed1Button" to="." method="_on_Speed1Button_pressed"]
@@ -232,3 +305,7 @@ __meta__ = {
 [connection signal="button_pressed" from="WonPopup" to="." method="_on_WonPopup_button_pressed"]
 [connection signal="button1_pressed" from="DebugPopup" to="." method="_on_DebugPopup_button1_pressed"]
 [connection signal="button2_pressed" from="DebugPopup" to="." method="_on_DebugPopup_button2_pressed"]
+[connection signal="exit" from="EscapeMenu" to="." method="_on_EscapeMenu_exit"]
+[connection signal="restart" from="EscapeMenu" to="." method="_on_EscapeMenu_restart"]
+[connection signal="resume" from="EscapeMenu" to="." method="_on_EscapeMenu_resume"]
+[connection signal="settings" from="EscapeMenu" to="." method="_on_EscapeMenu_settings"]

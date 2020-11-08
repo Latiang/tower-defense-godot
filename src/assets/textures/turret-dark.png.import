@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/turret.png-54022cbf2106bc383902c76b01ff8de2.stex"
+path="res://.import/turret-dark.png-ceb0dd6caa4b98e83e1c0a03c8ce1416.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/turret.png"
-dest_files=[ "res://.import/turret.png-54022cbf2106bc383902c76b01ff8de2.stex" ]
+source_file="res://assets/textures/turret-dark.png"
+dest_files=[ "res://.import/turret-dark.png-ceb0dd6caa4b98e83e1c0a03c8ce1416.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

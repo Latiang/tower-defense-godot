@@ -7,7 +7,9 @@ export var comments_color = Color("27b441")
 
 # Reference to the turret currently having code edited
 var turrets = []
+var turret_output_logs = [""]
 var current_turret_index = -1;
+var executing_mode = false
 
 var turret_buttons = []
 var icon_disabled_color = Color("b34747")
@@ -17,6 +19,18 @@ var icon_enabled_yellow_color = Color("c7c951")
 func _ready():
 	setup_code_syntax_highlighting()
 	turrets.resize(10)
+
+func _process(delta):
+	if executing_mode:
+		# Check if there is new output to display
+		var interpreter = turrets[current_turret_index].get_node("ProgrammableBehaviour").get_node("CodeInterpreter")
+		# Are there strings to be printed in the output buffers?
+		if len(interpreter.console_output_buffer) > 0:
+			for line in interpreter.console_output_buffer:
+				turret_output_logs[current_turret_index] += "\n%s" % line
+			# Clear buffer
+			interpreter.console_output_buffer = []
+			update_terminal_text()
 
 # Register keywords and other syntax highlighting for the CodeEditor
 func setup_code_syntax_highlighting():
@@ -43,6 +57,7 @@ func open_code_window(id, save_current_open=true):
 	current_turret_index = id
 	set_button_highlighting(id)
 	set_turret_info_icons(id)
+	$VBoxContainer/MarginContainer/MarginContainer/ConsoleText.text = turret_output_logs[current_turret_index]
 
 func add_turret_button(turret):
 	turrets[turret.id] = turret
@@ -53,6 +68,7 @@ func add_turret_button(turret):
 		newButton.disabled = false
 		$VBoxContainer/Panel/HBoxContainer.add_child(newButton)
 		turret_buttons.append(newButton)
+		turret_output_logs.append("")
 
 # Remove excess turret buttons
 func reset():
@@ -86,3 +102,23 @@ func set_turret_info_icons(id):
 	else:
 		bulletIcon.modulate = icon_enabled_yellow_color
 		bulletIcon.hint_tooltip = "%d Ammo" % turret.ammo_count
+		
+# Disables the code editor and opens the console
+func set_execution_mode():
+	executing_mode = true
+	$VBoxContainer/LabelPanel/MarginContainer/CodeLabel.text = "Turret Logs"
+	$VBoxContainer/MarginContainer/CodeEditor.hide()
+	$VBoxContainer/MarginContainer/MarginContainer.show()
+	for i in range(len(turret_output_logs)):
+		turret_output_logs[i] = "--- Turret Executing ---"
+	update_terminal_text()
+	
+# Enable the code editor and close the console
+func set_coding_mode():
+	executing_mode = false
+	$VBoxContainer/LabelPanel/MarginContainer/CodeLabel.text = "Turret Code"
+	$VBoxContainer/MarginContainer/CodeEditor.show()
+	$VBoxContainer/MarginContainer/MarginContainer.hide()
+
+func update_terminal_text():
+	$VBoxContainer/MarginContainer/MarginContainer/ConsoleText.text = turret_output_logs[current_turret_index] + "\n>"

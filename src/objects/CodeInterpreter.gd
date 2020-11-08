@@ -2,6 +2,7 @@ extends Node
 
 
 var code_source
+var console_output_buffer = []
 
 class CodeLine:
 	var text
@@ -77,8 +78,9 @@ class BinaryOperator:
 	var syntax
 	var priority
 	var binary
+	var neutral_element
 	
-	func _init(function_in, syntax_in, priority_in):
+	func _init(function_in, syntax_in, priority_in, neutral_element_in=null):
 		"""Creates a binary operator. syntax is a string that exactly matches 
 		the syntax of the operator ie '+' or 'and'. function is the behaviour 
 		of the operator and must take 2 arguments. Priority is used for order of
@@ -87,6 +89,7 @@ class BinaryOperator:
 		self.binary = true
 		self.syntax = syntax_in
 		self.priority = priority_in
+		self.neutral_element = neutral_element_in
 		
 	func identify_operator(text, index):
 		"""Checks if this operator starts at the specified index. If so the
@@ -101,6 +104,9 @@ class BinaryOperator:
 			return self.syntax.call_func(text, index)
 			
 	func evaluate(lhs, rhs):
+		if self.neutral_element != null:
+			if typeof(lhs) == TYPE_STRING:
+				lhs = neutral_element
 		return self.function.call_func(lhs, rhs)
 
 
@@ -207,7 +213,7 @@ class Evaluatable:
 			return self.op.evaluate(self.rhs.run(scope, operators))
 		elif self.op == null:
 			#Expression contains a value
-			if typeof(self.lhs) == TYPE_STRING:
+			if typeof(self.lhs) == TYPE_STRING && self.lhs != "":
 				return scope[self.lhs]
 			return self.lhs
 		else:
@@ -420,10 +426,12 @@ func _ready():
 										20))
 	operators.push_back(BinaryOperator.new(funcref(self, "_add"),
 										"+", 
-										10))
+										10,
+										0))
 	operators.push_back(BinaryOperator.new(funcref(self, "_sub"),
 										"-", 
-										10))
+										10,
+										0))
 	operators.push_back(UnaryOperator.new(funcref(self, "_print"), 
 										funcref(self, "_find_print"),
 										-1000))
@@ -444,7 +452,16 @@ func run():
 	# Generate code from source, preferably 
 	# expressions that link to new expressions
 	code_source = """
--2
+# Should be 40
+#a = 80/10*2 - 16 + 8*2 - 26 + 10^2/2
+#b = -2
+#print a
+#print -2
+print 2
+print +2
+print 2
+print -2
+print 2 - 2
 """
 	var lines = _lines_from_source()
 	var statements = _statements_from_lines(lines)
@@ -466,7 +483,7 @@ func run():
 	var result = {}
 	get_parent().emit_signal("sensor_detect", result, 1)
 	if result[0]:
-		print("[Interpreter] Sensor distance: %f" % result[0])
+		console_output_buffer.append("Sensor 1 distance: %f" % result[0])
 	
 # The code interpreting should stop if:
 # 1. A signal function is emitted

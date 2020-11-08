@@ -34,6 +34,7 @@ func load_level(level_index):
 	var level_name = save_state.get_level_data(level_index)["file"]
 	$GUI.reset()
 	$GUI.update_health(health)
+	$GUI.update_level_data(save_state.get_level_data(level_index))
 	print("[Level] Loading level: %s" % level_name)
 	if current_level:
 		current_level.close()

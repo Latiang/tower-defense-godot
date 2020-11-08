@@ -1,7 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://objects/BaseEnemy.tscn" type="PackedScene" id=1]
-[ext_resource path="res://assets/textures/enemy.png" type="Texture" id=2]
+[ext_resource path="res://assets/textures/slime.png" type="Texture" id=2]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -11,7 +11,18 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[node name="GruntEnemy" instance=ExtResource( 1 )]
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 73.4149
+height = 91.2301
 
-[node name="EnemySprite" parent="Area2D" index="1"]
+[node name="GruntEnemy" instance=ExtResource( 1 )]
+scale = Vector2( 0.3, 0.3 )
+slime_animation = true
+
+[node name="EnemySprite" parent="Area2D" index="0"]
 frames = SubResource( 1 )
+
+[node name="EnemyCollisionShape" parent="Area2D" index="1"]
+position = Vector2( -5.98632, -14.918 )
+rotation = 1.5708
+shape = SubResource( 2 )
