@@ -29,5 +29,5 @@ func _on_Button2_pressed():
 	if close_on_press:
 		visible = false
 
-func setText(text):
+func set_text(text):
 	$MarginContainer/VBoxContainer/MarginContainer2/Label.text = text

@@ -4,11 +4,11 @@
 [ext_resource path="res://objects/PopupDialogTwoChoices.gd" type="Script" id=2]
 [ext_resource path="res://assets/fonts/Inter-SemiBold-slnt=0.ttf" type="DynamicFontData" id=3]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=1]
 size = 25
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=2]
 size = 20
 font_data = ExtResource( 3 )
 
@@ -55,7 +55,7 @@ margin_left = 15.0
 margin_top = 15.0
 margin_right = 365.0
 margin_bottom = 47.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 align = 1
 valign = 1
 autowrap = true
@@ -80,13 +80,13 @@ margin_left = 15.0
 margin_right = 155.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 140, 40 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 
 [node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 margin_left = 195.0
 margin_right = 335.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 140, 35 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 [connection signal="pressed" from="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Button1" to="." method="_on_Button1_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Button2" to="." method="_on_Button2_pressed"]

@@ -16,6 +16,8 @@ var icon_disabled_color = Color("b34747")
 var icon_enabled_color = Color("50b347")
 var icon_enabled_yellow_color = Color("c7c951")
 
+var old_ammo = -1
+
 func _ready():
 	setup_code_syntax_highlighting()
 	turrets.resize(10)
@@ -31,6 +33,17 @@ func _process(delta):
 			# Clear buffer
 			interpreter.console_output_buffer = []
 			update_terminal_text()
+		# Try updating ammo count
+		var turret = turrets[current_turret_index]
+		if !turret.unlimited_ammo && (old_ammo != turret.ammo_count):
+			var bulletIcon = $VBoxContainer/TurretInfoPanel/MarginContainer2/HBoxContainer/MarginContainer/CenterContainer/BulletIcon
+			bulletIcon.hint_tooltip = "%d Ammo" % turret.ammo_count
+			old_ammo = turret.ammo_count
+
+func highlight_code_line(line, color = icon_disabled_color):
+	# Inbuilt Godot method for colring a line is not exposed. 
+	# Temporary solution
+	$VBoxContainer/MarginContainer/CodeEditor.cursor_set_line(line)
 
 # Register keywords and other syntax highlighting for the CodeEditor
 func setup_code_syntax_highlighting():
@@ -61,6 +74,7 @@ func open_code_window(id, save_current_open=true):
 
 func add_turret_button(turret):
 	turrets[turret.id] = turret
+	turret.connect("code_error", get_parent(), "_on_turret_code_error")
 	# Add button
 	if (turret.id != 0):
 		var newButton = $VBoxContainer/Panel/HBoxContainer/TurretButton1.duplicate()

@@ -56,20 +56,20 @@ bg_color = Color( 0.215686, 0.243137, 0.286275, 1 )
 size = 24
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFontData" id=18]
+[sub_resource type="DynamicFontData" id=16]
 font_path = "res://assets/fonts/SourceCodePro-SemiBold.ttf"
 
-[sub_resource type="DynamicFont" id=19]
+[sub_resource type="DynamicFont" id=17]
 size = 20
-font_data = SubResource( 18 )
+font_data = SubResource( 16 )
 
-[sub_resource type="StyleBoxFlat" id=16]
+[sub_resource type="StyleBoxFlat" id=18]
 bg_color = Color( 0.215686, 0.243137, 0.286275, 1 )
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 anti_aliasing = false
 
-[sub_resource type="DynamicFont" id=17]
+[sub_resource type="DynamicFont" id=19]
 size = 30
 use_filter = true
 font_data = ExtResource( 6 )
@@ -188,8 +188,8 @@ custom_constants/margin_left = 10
 margin_left = 10.0
 margin_right = 340.0
 margin_bottom = 390.0
-custom_fonts/mono_font = SubResource( 19 )
-custom_fonts/normal_font = SubResource( 19 )
+custom_fonts/mono_font = SubResource( 17 )
+custom_fonts/normal_font = SubResource( 17 )
 bbcode_enabled = true
 bbcode_text = "[code]--- Turret Executing ---
 >
@@ -204,7 +204,7 @@ margin_top = 500.0
 margin_right = 360.0
 margin_bottom = 550.0
 rect_min_size = Vector2( 0, 50 )
-custom_styles/panel = SubResource( 16 )
+custom_styles/panel = SubResource( 18 )
 
 [node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/TurretInfoPanel"]
 margin_right = 360.0
@@ -229,7 +229,7 @@ margin_right = 123.0
 margin_bottom = 35.0
 hint_tooltip = "Can Rotate"
 mouse_filter = 1
-custom_fonts/font = SubResource( 17 )
+custom_fonts/font = SubResource( 19 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = ""
 valign = 1
@@ -241,7 +241,7 @@ margin_right = 176.0
 margin_bottom = 35.0
 hint_tooltip = "Has Integrated Sensor"
 mouse_filter = 1
-custom_fonts/font = SubResource( 17 )
+custom_fonts/font = SubResource( 19 )
 text = ""
 valign = 1
 
@@ -252,7 +252,7 @@ margin_right = 221.0
 margin_bottom = 35.0
 hint_tooltip = "Can Move"
 mouse_filter = 1
-custom_fonts/font = SubResource( 17 )
+custom_fonts/font = SubResource( 19 )
 text = ""
 valign = 1
 

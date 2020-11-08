@@ -449,10 +449,12 @@ func run():
 	# expressions that link to new expressions
 	code_source = """
 # Should be 40
-#a = 80/10*2 - 16 + 8*2 - 26 + 10^2/2
-#b = -2
-#print a
-#print -2
+if 1
+	print 1
+elif 1
+	print 2
+else
+	print 3
 """
 	var lines = _lines_from_source()
 	var statements = _statements_from_lines(lines)

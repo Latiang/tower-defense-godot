@@ -3,15 +3,16 @@ extends Area2D
 export (PackedScene) var Bullet
 
 signal turret_pressed(turret)
+signal code_error(id, error_message, error_line)
 
 export var id = 0;
 export var can_rotate = true
 export var integrated_sensor = true
 export var can_move = true
-export var move_speed = 100
+export var move_speed = 100 # Pixels/s 
 export var unlimited_ammo = true
 export var ammo_count = 50
-export var reload_time = 0.3 #seconds
+export var reload_time = 0.3 # Seconds
 
 var time_scale = 1
 var distance_to_move = 0
@@ -22,7 +23,8 @@ func _ready():
 
 func _process(delta):
 	if can_move and distance_to_move > 0 and $MovablePath/PathFollow2D.unit_offset < 1:
-		position = position - $MovablePath/PathFollow2D.position # Ugly fix
+		 # Ugly fix, translate position temporarily so that this acts in world space
+		position = position - $MovablePath/PathFollow2D.position
 		var offset = move_speed * delta * time_scale
 		offset = distance_to_move if ((distance_to_move - offset) < 0) else offset
 		distance_to_move -= offset
@@ -86,3 +88,5 @@ func update_time_scale(new_time_scale):
 	time_scale = new_time_scale
 	$Gun.update_bullet_speeds(new_time_scale)
 
+func _on_ProgrammableBehaviour_code_error(error_message, error_line):
+	emit_signal("code_error", id, error_message, error_line)
