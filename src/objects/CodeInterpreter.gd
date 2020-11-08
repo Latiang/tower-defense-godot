@@ -15,6 +15,17 @@ class CodeLine:
 		
 var operators
 
+var _eval_object
+
+var _lines_left = 0
+export var OPS_PER_RUN = 200
+
+func _shoot(value):
+	pass
+	
+func _dist(value):
+	pass
+
 func _negate(value):
 	return -value
 
@@ -57,6 +68,20 @@ func _find_print(text, index):
 		elif text.begins_with("print ") and index == 0:
 			return len("print ")
 		return 0
+	
+func _run_code():
+	var lines = _lines_from_source()
+	var statements = _statements_from_lines(lines)
+	#for statement in statements:
+		#print(statement.string())
+	var scope = {}
+	scope["_if_state"] = 0
+	var res
+	for statement in statements:
+		res = statement.run(scope, self)
+		while res is GDScriptFunctionState and res.is_valid():
+			yield()
+			res = res.resume()
 		
 func _print(val):
 	print(val)
@@ -69,7 +94,7 @@ class Statement:
 	func _init():
 		pass
 		
-	func run(scope, operators):
+	func run(scope, parent):
 		pass
 		
 	func string(start_string = ""):
@@ -240,12 +265,21 @@ class Evaluatable:
 				self.lhs = self.source
 				
 	
-	func run(scope, operators):
+	func run(scope, parent):
+		parent._lines_left -= 1
+		if parent._lines_left <= 0:
+			yield()
+		var left
+		var right
 		if not self.compiled:
-			self._compile(operators)
+			self._compile(parent.operators)
 		if self.lhs == null: 
 			#Unary operator
-			return self.op.evaluate(self.rhs.run(scope, operators))
+			right = self.rhs.run(scope, parent)
+			while right is GDScriptFunctionState: #If it is invalide we have a problem
+				yield()
+				right = right.resume()
+			return self.op.evaluate(right)
 		elif self.op == null:
 			#Expression contains a value
 			if typeof(self.lhs) == TYPE_STRING && self.lhs != "":
@@ -253,8 +287,15 @@ class Evaluatable:
 			return self.lhs
 		else:
 			#BinaryOperator
-			var left = self.lhs.run(scope, operators)
-			var right = self.rhs.run(scope, operators)
+			left = self.lhs.run(scope, parent)
+			while left is GDScriptFunctionState:
+				yield()
+				left = left.resume()
+			
+			right = self.rhs.run(scope, parent)
+			while right is GDScriptFunctionState:
+				yield()
+				right = right.resume()
 			return self.op.evaluate(left, right)
 		
 	func string(start_string = ""):
@@ -270,8 +311,15 @@ class Assignment:
 		self.lhs = lhs.strip_edges()
 		self.rhs = Evaluatable.new(rhs)
 		
-	func run(scope, operators):
-		scope[self.lhs] = rhs.run(scope, operators)
+	func run(scope, parent):
+		parent._lines_left -= 1
+		if parent._lines_left <= 0:
+			yield()
+		var inp = rhs.run(scope, parent)
+		while inp is GDScriptFunctionState:
+			yield()
+			inp = inp.resume()
+		scope[self.lhs] = inp
 		
 	func string(start_string = ""):
 		return start_string + lhs + " = " + rhs.string()
@@ -291,12 +339,30 @@ class Loop:
 			self.end_action = null
 		self.code = code
 	
-	func run(scope, operators):
-		while condition.run(scope, operators):
+	func run(scope, parent):
+		parent._lines_left -= 1
+		var exe
+		if parent._lines_left <= 0:
+			yield()
+		var cond_val = condition.run(scope, parent)
+		while cond_val is GDScriptFunctionState:
+			yield()
+			cond_val = cond_val.resume()
+		while cond_val:
 			for line in code:
-				line.run(scope, operators)
+				exe = line.run(scope, parent)
+				while exe is GDScriptFunctionState and exe.is_valid():
+					yield()
+					exe = exe.resume()
 			if end_action != null:
-				end_action.run(scope, operators)
+				exe = end_action.run(scope, parent)
+				while exe is GDScriptFunctionState:
+					yield()
+					exe = exe.resume()
+			cond_val = condition.run(scope, parent)
+			while cond_val is GDScriptFunctionState:
+				yield()
+				cond_val = cond_val.resume()
 				
 	func string(start_string = ""):
 		var text = start_string + "while " + condition.string() + "\n"
@@ -316,14 +382,26 @@ class Conditional:
 		self.code = code
 		self.condition = Evaluatable.new(condition)
 		
-	func run(scope, operators):
-		if ((expected_if_state == null or expected_if_state == scope["_if_state"]) 
-				and condition.run(scope, operators)):
-			for line in code:
-				line.run(scope, operators)
-			scope["_if_state"] = 1
-		elif expected_if_state != null:
-			scope["_if_state"] = 0
+	func run(scope, parent):
+		parent._lines_left -= 1
+		if parent._lines_left <= 0:
+			yield()
+		var cond = false
+		var start_if_state = scope["_if_state"]
+		if expected_if_state == null or expected_if_state == scope["_if_state"]:
+			cond = self.condition.run(scope, parent)
+			while cond is GDScriptFunctionState:
+				yield()
+				cond = cond.resume()
+			if cond:
+				for line in code:
+					var exe = line.run(scope, parent)
+					while exe is GDScriptFunctionState and exe.is_valid():
+						yield()
+						exe = exe.run()
+				scope["_if_state"] = 1
+			elif expected_if_state == null:
+				scope["_if_state"] = 0
 
 	func string(start_string = ""):
 		var text = start_string
@@ -491,22 +569,24 @@ func _ready():
 	operators.sort_custom(self, "operator_cmp")
 	for operator in operators:
 		print(operator.syntax)
+	self._eval_object = null
 # Run the code
 func run():
+	self._lines_left += self.OPS_PER_RUN
+	code_source = """
+n = 0
+while 1
+	print n
+	n = n + 1
+"""
+	if self._eval_object == null:
+		self._eval_object = self._run_code()
+	else:
+		if self._eval_object is GDScriptFunctionState and self._eval_object.is_valid():
+			self._eval_object = self._eval_object.resume()
+	
 	# Generate code from source, preferably 
 	# expressions that link to new expressions
-	code_source = """
-print 0
-"""
-	var lines = _lines_from_source()
-	var statements = _statements_from_lines(lines)
-	#for statement in statements:
-		#print(statement.string())
-	var scope = {"a": true, "p": false}
-	scope["_if_state"] = 0
-	for statement in statements:
-		statement.run(scope, operators)
-	print(scope)
 	
 	# Interpret the code
 	# Certain functions will have outside effects, which is done by:
@@ -520,6 +600,9 @@ print 0
 	if result[0]:
 		console_output_buffer.append("Sensor 1 distance: %f" % result[0])
 	
+	
+func ready_code():
+	self._eval_object = null
 # The code interpreting should stop if:
 # 1. A signal function is emitted
 # 2. The total runtime exceeds some limit, maybe 5 ms?
