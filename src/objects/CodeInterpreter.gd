@@ -409,9 +409,6 @@ func operator_cmp(lhs, rhs):
 
 func _ready():
 	operators = []
-	operators.push_back(UnaryOperator.new(funcref(self, "_negate"), 
-										"-",
-										40))
 	operators.push_back(BinaryOperator.new(funcref(self, "_power"),
 										"^", 
 										30))
@@ -447,11 +444,7 @@ func run():
 	# Generate code from source, preferably 
 	# expressions that link to new expressions
 	code_source = """
-# Should be 40
-#a = 80/10*2 - 16 + 8*2 - 26 + 10^2/2
-b = -2
-#print a
-#print -2
+-2
 """
 	var lines = _lines_from_source()
 	var statements = _statements_from_lines(lines)
