@@ -83,7 +83,6 @@ func _on_GUI_next_level():
 		load_level(current_level_index + 1)
 	else: # Return to main menu if no more levels are left
 		get_parent().show_MainMenu()
-		
 	
 func debug_tick_interpreter_once():
 	current_level.tick_once

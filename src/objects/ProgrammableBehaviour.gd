@@ -6,8 +6,14 @@ signal rotate(angle)
 signal move(distance)
 signal sensor_detect(out_dict, id)
 
+signal code_error(error_message, error_line)
+
 var locked = true
 var printnow = false
+
+var code_error = false
+var error_message = ""
+var error_line = 0
 
 # Input variables
 var out_hit = false;
@@ -35,6 +41,9 @@ func _process(delta):
 func lock_for_time(time):
 	locked = true
 	$LockTimer.start(time)
+	
+func report_error(error, line):
+	emit_signal("code_error", error, line)
 
 # Disable lock
 func _on_LockTimer_timeout():

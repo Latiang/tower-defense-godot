@@ -9,6 +9,7 @@
 script = ExtResource( 3 )
 debug_main_menu_override = true
 debug_tick_interpreter_once = true
+autosave_enabled = false
 
 [node name="LevelManager" type="Node" parent="."]
 script = ExtResource( 2 )
@@ -21,6 +22,7 @@ wait_time = 10.0
 [node name="MainMenu" parent="." instance=ExtResource( 4 )]
 [connection signal="next_level" from="LevelManager/GUI" to="LevelManager" method="_on_GUI_next_level"]
 [connection signal="restart_level" from="LevelManager/GUI" to="LevelManager" method="_on_GUI_restart_level"]
+[connection signal="return_to_main_menu" from="LevelManager/GUI" to="." method="_on_GUI_return_to_main_menu"]
 [connection signal="start_wave" from="LevelManager/GUI" to="LevelManager" method="_on_GUI_start_wave"]
 [connection signal="update_time_scale" from="LevelManager/GUI" to="LevelManager" method="_on_GUI_update_time_scale"]
 [connection signal="timeout" from="LevelManager/AutoSaveTimer" to="LevelManager" method="_on_AutoSaveTimer_timeout"]

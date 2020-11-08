@@ -15,12 +15,17 @@ var wave_started = false
 var escape_menu_open = false
 var current_time_scale = 1
 
+var error_line = 0
+var force_debug_cursor_position = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
 	
 func _process(delta):
 	set_coordinate_label()
+	if force_debug_cursor_position:
+		$CodeWindow.highlight_code_line(error_line)
 	
 func _input(event):
 	if $LevelControlsPanel.visible:
@@ -82,6 +87,11 @@ func reset():
 	disable_speed_buttons()
 	show_pause_button(false)
 	$CodeWindow.set_coding_mode()
+	if error_line: # Start cursor on error line
+		$CodeWindow/VBoxContainer/MarginContainer/CodeEditor.grab_focus()
+		force_debug_cursor_position = true
+		$DebugLineCursorTimer.start()
+		#error_line = 0
 	
 func level_lost():
 	reset()
@@ -162,7 +172,7 @@ func _on_DebugPopup_button1_pressed():
 func _on_DebugPopup_button2_pressed():
 	$PopupGreyCover.visible = false
 	# Probably something more complicated required
-	_on_StartButton_pressed()
+	emit_signal("update_time_scale", current_time_scale)
 
 # Return to Main Menu
 func _on_EscapeMenu_exit():
@@ -178,3 +188,15 @@ func _on_EscapeMenu_resume():
 
 func _on_EscapeMenu_settings():
 	pass # Replace with function body.
+
+func _on_turret_code_error(id, error_message, error_line):
+	$PopupGreyCover.visible = true
+	$DebugPopup.set_text("Error in line %d in Turret %d:\n%s" % [error_line, id, error_message])
+	$DebugPopup.visible = true
+	self.error_line = error_line
+	emit_signal("update_time_scale", 0.001)
+
+
+func _on_DebugLineCursorTimer_timeout():
+	force_debug_cursor_position = false
+	error_line = 0
