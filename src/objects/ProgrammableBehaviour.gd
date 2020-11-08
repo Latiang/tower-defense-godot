@@ -11,24 +11,21 @@ signal code_error(error_message, error_line)
 var locked = true
 var printnow = false
 
-var code_error = false
-var error_message = ""
-var error_line = 0
-
-# Input variables
-var out_hit = false;
+var frames_testing = 0
 
 func _ready():
 	pass
 	
 # Run every frame. Shoot bullet if mouse pressed
 func _process(delta):
+	frames_testing += 1
+	
 	# Functionality that is not time locked (temporary)
-	var angle = get_parent().position.angle_to_point(get_viewport().get_mouse_position()) - PI/2
-	emit_signal("rotate", angle)
+	#var angle = get_parent().position.angle_to_point(get_viewport().get_mouse_position()) - PI/2
+	#emit_signal("rotate", angle)
 	# Time locked functonality, such as code execution
 	if (!locked):
-		#$CodeInterpreter.run()
+		$CodeInterpreter.run()
 		if Input.is_action_pressed("mouse_left_click"):
 			emit_signal("fire")
 			$CodeInterpreter.run()

@@ -1,5 +1,11 @@
 extends Node
 
+# 	TODO
+#	
+#	Functions
+#	Vectors
+#	Vector functions
+#	Strings (I guess)
 
 var code_source
 var console_output_buffer = []
@@ -14,14 +20,29 @@ class CodeLine:
 		self.line = line
 		
 var operators
-
+var _stop = false
 var _eval_object
 
 var _lines_left = 0
-export var OPS_PER_RUN = 200
+export var OPS_PER_RUN = 10
 
 func _shoot(value):
-	pass
+	self._stop = true
+	get_parent().emit_signal("fire")
+	return 0
+	
+func _rotate(value):
+	self._stop = true
+	get_parent().emit_signal("rotate", value / 180.0 * PI)
+	return 0
+	
+func _read(value):
+	var result = {}
+	get_parent().emit_signal("sensor_detect", result, 1)
+	if result[0]:
+		return result[0]
+	else:
+		return 0
 	
 func _dist(value):
 	pass
@@ -267,6 +288,8 @@ class Evaluatable:
 	
 	func run(scope, parent):
 		parent._lines_left -= 1
+		if parent._stop:
+			yield()
 		if parent._lines_left <= 0:
 			yield()
 		var left
@@ -398,7 +421,7 @@ class Conditional:
 					var exe = line.run(scope, parent)
 					while exe is GDScriptFunctionState and exe.is_valid():
 						yield()
-						exe = exe.run()
+						exe = exe.resume()
 				scope["_if_state"] = 1
 			elif expected_if_state == null:
 				scope["_if_state"] = 0
@@ -540,6 +563,10 @@ func _ready():
 										10,
 										false,
 										0))
+	operators.push_back(UnaryOperator.new(funcref(self, "_read"),
+										"dist", 
+										-999,
+										true))
 	operators.push_back(BinaryOperator.new(funcref(self, "_sub"),
 										"-", 
 										10,
@@ -548,6 +575,14 @@ func _ready():
 	operators.push_back(UnaryOperator.new(funcref(self, "_print"), 
 										"print",
 										-1000,
+										true))
+	operators.push_back(UnaryOperator.new(funcref(self, "_shoot"), 
+										"shoot",
+										-1001,
+										true))
+	operators.push_back(UnaryOperator.new(funcref(self, "_rotate"), 
+										"rotate",
+										-1002,
 										true))
 	operators.push_back(BinaryOperator.new(funcref(self, "_equals"),
 										"==", 
@@ -572,12 +607,10 @@ func _ready():
 	self._eval_object = null
 # Run the code
 func run():
-	self._lines_left += self.OPS_PER_RUN
+	self._stop = false
+	self._lines_left = self.OPS_PER_RUN
 	code_source = """
 n = 0
-while 1
-	print n
-	n = n + 1
 """
 	if self._eval_object == null:
 		self._eval_object = self._run_code()
