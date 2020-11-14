@@ -16,7 +16,7 @@ class CodeLine:
 	var text
 	var indent_size
 	var line
-	func _init(text, indent_size, line = null):
+	func _init(text, indent_size, line=null):
 		self.text = text
 		self.indent_size = indent_size
 		self.line = line
@@ -27,6 +27,9 @@ var _eval_object
 
 var _lines_left = 0
 export var OPS_PER_RUN = 100000
+
+func _error(message, line):
+	get_parent().emit_signal("code_error", message, line)
 
 func _shoot(value):
 	self._stop = true
@@ -593,7 +596,7 @@ func _lines_from_source():
 		lines.append(CodeLine.new(text, leading_spaces, index + 1))
 	return lines
 
-func _statements_from_lines(lines):
+func _statements_from_lines(lines, function=false):
 	var statements = []
 	# Statements need to cover loops as well in order to properly work
 	# ToDo
@@ -601,6 +604,7 @@ func _statements_from_lines(lines):
 	while index < len(lines):
 		var indent = lines[index].indent_size
 		var line = lines[index].text
+		var line_index = lines[index].line
 		var splits = line.split("=")
 		if line.begins_with("while "):
 			var condition = line.substr(6)
@@ -610,7 +614,7 @@ func _statements_from_lines(lines):
 					next_index = i
 					break
 			var code = lines.slice(index + 1, next_index - 1)
-			code = _statements_from_lines(code)
+			code = _statements_from_lines(code, function)
 			index = next_index - 1
 			statements.append(Loop.new(condition, code))
 		elif line.begins_with("for "):
@@ -624,12 +628,12 @@ func _statements_from_lines(lines):
 					next_index = i
 					break
 			var code = lines.slice(index + 1, next_index - 1)
-			code = _statements_from_lines(code)
+			code = _statements_from_lines(code, function)
 			index = next_index - 1
 			statements.append(Conditional.new(condition, code))
 		elif line.begins_with("else") and len(line) == 4:
 			if typeof(statements[-1]) != typeof(Conditional):
-				print("error")
+				print("Error")
 			var condition = "1"
 			var next_index = len(lines)
 			for i in range(index + 1, len(lines)):
@@ -637,7 +641,7 @@ func _statements_from_lines(lines):
 					next_index = i
 					break
 			var code = lines.slice(index + 1, next_index - 1)
-			code = _statements_from_lines(code)
+			code = _statements_from_lines(code, function)
 			index = next_index - 1
 			statements.append(Conditional.new(condition, code, 0))
 		elif line.begins_with("elif "):
@@ -650,13 +654,16 @@ func _statements_from_lines(lines):
 					next_index = i
 					break
 			var code = lines.slice(index + 1, next_index - 1)
-			code = _statements_from_lines(code)
+			code = _statements_from_lines(code, function)
 			index = next_index - 1
 			statements.append(Conditional.new(condition, code, 0))
 		elif line.begins_with("return "):
-			var eval = line.substr(7)
-			eval = eval.strip_edges()
-			statements.append(Return.new(eval))
+			if not function:
+				self._error("return outside of function", line_index)
+			else:
+				var eval = line.substr(7)
+				eval = eval.strip_edges()
+				statements.append(Return.new(eval))
 		elif line.begins_with("def "): #Function
 			#Need to find function name
 			var name = ""
@@ -688,7 +695,7 @@ func _statements_from_lines(lines):
 					next_index = i
 					break
 			var code = lines.slice(index + 1, next_index - 1)
-			code = _statements_from_lines(code)
+			code = _statements_from_lines(code, true)
 			index = next_index - 1
 			self._functions[name] = Function.new(name, args, code)
 		elif len(splits) % 2 == 0: #Even number implies odd number of =, means assignment
@@ -731,10 +738,6 @@ func _ready():
 										10,
 										false,
 										0))
-	operators.push_back(UnaryOperator.new(funcref(self, "_rotate"), 
-										"rotate",
-										-1002,
-										true))
 	operators.push_back(BinaryOperator.new(funcref(self, "_equals"),
 										"==", 
 										-100))
@@ -763,14 +766,6 @@ func _ready():
 func run():
 	self._stop = false
 	self._lines_left = self.OPS_PER_RUN
-	code_source = """
-def fib(n)
-	if n < 2
-		return 1
-	return fib(n - 1) + fib(n - 2)
-print(fib(10))
-fire()
-"""
 	if self._eval_object == null:
 		self._eval_object = self._run_code()
 	else:

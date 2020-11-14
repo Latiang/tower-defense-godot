@@ -1,1 +1,1 @@
-{"levels":[{"count":1,"description":"test","file":"TestLevel1","status":2,"turret_code":["\nn = 0\nwhile 1\n\tprint n\n\tn = n + 1\n"]},{"count":2,"description":"test2","file":"TestLevel2","status":3,"turret_code":["\nprint ((0 ))\n","\nprint ((0 ))\n"]}]}
+{"levels":[{"count":1,"description":"test","file":"TestLevel1","status":2,"turret_code":["return 7\nprint(3)"]},{"count":2,"description":"test2","file":"TestLevel2","status":3,"turret_code":["\nprint ((0 ))\n","\nprint ((0 ))\n"]}]}
