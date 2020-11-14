@@ -56,7 +56,7 @@ func setup_code_syntax_highlighting():
 	# Comment highlighting
 	$VBoxContainer/MarginContainer/CodeEditor.add_color_region("#", "", comments_color, true)
 	$VBoxContainer/MarginContainer/CodeEditor.add_color_region("//", "", comments_color, true)
-
+	
 # Save button pressed, save the edited code in the turret object
 func save_code_to_turret():
 	if (current_turret_index >= 0):
