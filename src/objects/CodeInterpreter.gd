@@ -26,7 +26,7 @@ var _stop = false
 var _eval_object
 
 var _lines_left = 0
-export var OPS_PER_RUN = 1000
+export var OPS_PER_RUN = 500
 
 func _error(message, line):
 	get_parent().emit_signal("code_error", message, line - 1)
