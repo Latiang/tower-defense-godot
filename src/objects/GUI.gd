@@ -223,3 +223,6 @@ func _on_TutorialPopup_button_pressed():
 	else:
 		$TutorialPopup.hide()
 		$PopupGreyCover.hide()
+
+func _on_DebugPopup_button_pressed():
+	pass # Replace with function body.

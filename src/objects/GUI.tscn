@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://assets/GUITheme.tres" type="Theme" id=1]
 [ext_resource path="res://objects/CodeWindow.tscn" type="PackedScene" id=2]
@@ -6,7 +6,6 @@
 [ext_resource path="res://assets/fonts/fa-solid-900.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://assets/fonts/Inter-SemiBold-slnt=0.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://objects/PopupDialogOk.tscn" type="PackedScene" id=6]
-[ext_resource path="res://objects/PopupDialogTwoChoices.tscn" type="PackedScene" id=7]
 [ext_resource path="res://objects/EscapeMenu.tscn" type="PackedScene" id=8]
 [ext_resource path="res://objects/TutorialPopup.tscn" type="PackedScene" id=9]
 
@@ -279,10 +278,13 @@ visible = false
 text = "Congratulations! Level complete"
 button_text = "Next Level"
 
-[node name="DebugPopup" parent="." instance=ExtResource( 7 )]
+[node name="DebugPopup" parent="." instance=ExtResource( 6 )]
 visible = false
-button1_text = "Close"
-button2_text = "Play Anyway"
+margin_left = -100.0
+margin_top = -66.5
+margin_right = 200.0
+margin_bottom = 70.5
+button_text = "Close"
 
 [node name="TutorialPopup" parent="." instance=ExtResource( 9 )]
 visible = false
@@ -311,8 +313,7 @@ one_shot = true
 [connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/PauseButton" to="." method="_on_PauseButton2_pressed"]
 [connection signal="button_pressed" from="LostPopup" to="." method="_on_LostPopup_button_pressed"]
 [connection signal="button_pressed" from="WonPopup" to="." method="_on_WonPopup_button_pressed"]
-[connection signal="button1_pressed" from="DebugPopup" to="." method="_on_DebugPopup_button1_pressed"]
-[connection signal="button2_pressed" from="DebugPopup" to="." method="_on_DebugPopup_button2_pressed"]
+[connection signal="button_pressed" from="DebugPopup" to="." method="_on_DebugPopup_button_pressed"]
 [connection signal="button_pressed" from="TutorialPopup" to="." method="_on_TutorialPopup_button_pressed"]
 [connection signal="exit" from="EscapeMenu" to="." method="_on_EscapeMenu_exit"]
 [connection signal="restart" from="EscapeMenu" to="." method="_on_EscapeMenu_restart"]
