@@ -29,7 +29,7 @@ var _lines_left = 0
 export var OPS_PER_RUN = 1000
 
 func _error(message, line):
-	get_parent().emit_signal("code_error", message, line)
+	get_parent().emit_signal("code_error", message, line - 1)
 
 func _shoot(value):
 	self._stop = true
@@ -105,7 +105,7 @@ func _print(val):
 
 class Statement:
 	"""Base class for code elements"""
-	
+	var original_line
 	func _init():
 		pass
 		
@@ -617,8 +617,9 @@ func _statements_from_lines(lines, function=false):
 			code = _statements_from_lines(code, function)
 			index = next_index - 1
 			statements.append(Loop.new(condition, code))
+			statements[-1].original_line = line_index
 		elif line.begins_with("for "):
-			assert(false)
+			self._error("for loops does not exist", line_index)
 			pass
 		elif line.begins_with("if "):
 			var condition = line.substr(3)
@@ -631,9 +632,10 @@ func _statements_from_lines(lines, function=false):
 			code = _statements_from_lines(code, function)
 			index = next_index - 1
 			statements.append(Conditional.new(condition, code))
+			statements[-1].original_line = line_index
 		elif line.begins_with("else") and len(line) == 4:
-			if typeof(statements[-1]) != typeof(Conditional):
-				print("Error")
+			if not (statements[-1] is Conditional):
+				self._error("else must follow a conditional", line_index)
 			var condition = "1"
 			var next_index = len(lines)
 			for i in range(index + 1, len(lines)):
@@ -644,9 +646,10 @@ func _statements_from_lines(lines, function=false):
 			code = _statements_from_lines(code, function)
 			index = next_index - 1
 			statements.append(Conditional.new(condition, code, 0))
+			statements[-1].original_line = line_index
 		elif line.begins_with("elif "):
-			if typeof(statements[-1]) != typeof(Conditional):
-				print("error")
+			if not (statements[-1] is Conditional):
+				self._error("elif must follow a conditional", line_index)
 			var condition = line.substr(5)
 			var next_index = len(lines)
 			for i in range(index + 1, len(lines)):
@@ -657,6 +660,7 @@ func _statements_from_lines(lines, function=false):
 			code = _statements_from_lines(code, function)
 			index = next_index - 1
 			statements.append(Conditional.new(condition, code, 0))
+			statements[-1].original_line = line_index
 		elif line.begins_with("return "):
 			if not function:
 				self._error("return outside of function", line_index)
@@ -664,6 +668,7 @@ func _statements_from_lines(lines, function=false):
 				var eval = line.substr(7)
 				eval = eval.strip_edges()
 				statements.append(Return.new(eval))
+				statements[-1].original_line = line_index
 		elif line.begins_with("def "): #Function
 			#Need to find function name
 			var name = ""
@@ -705,8 +710,10 @@ func _statements_from_lines(lines, function=false):
 				rhs += splits[split_index] + "="
 			rhs = rhs.substr(0, len(rhs) - 1)
 			statements.append(Assignment.new(lhs, rhs))
+			statements[-1].original_line = line_index
 		else:	#Raw expression
 			statements.append(Evaluatable.new(line))
+			statements[-1].original_line = line_index
 		index += 1
 	return statements
 
