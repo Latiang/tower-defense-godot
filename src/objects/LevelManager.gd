@@ -19,6 +19,12 @@ func _on_AutoSaveTimer_timeout():
 		save_state.save_to_file()
 		print("[Level] Autosaving level")
 
+func save_level():
+	$GUI/CodeWindow.save_code_to_turret()
+	save_state.save_level_data(current_level, current_level_index, 2)
+	save_state.save_to_file()
+	print("[Level] Saving level")
+
 # Handle input for debugging purposes
 var level_toggle = false
 func _input(event):
@@ -55,6 +61,7 @@ func load_level(level_index):
 func _on_GUI_start_wave():
 	if !current_level.wave_started:
 		$GUI/CodeWindow.save_code_to_turret()
+		save_level()
 		current_level.start_wave()
 
 # Open a code window for a specific turret, send to GUI
