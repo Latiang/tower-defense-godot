@@ -9,6 +9,8 @@ extends Node
 
 var code_source
 var console_output_buffer = []
+var _functions = {}
+var _std_functions = {}
 
 class CodeLine:
 	var text
@@ -24,7 +26,7 @@ var _stop = false
 var _eval_object
 
 var _lines_left = 0
-export var OPS_PER_RUN = 10
+export var OPS_PER_RUN = 100000
 
 func _shoot(value):
 	self._stop = true
@@ -33,7 +35,7 @@ func _shoot(value):
 	
 func _rotate(value):
 	self._stop = true
-	get_parent().emit_signal("rotate", value / 180.0 * PI)
+	get_parent().emit_signal("rotate", value[0] / 180.0 * PI)
 	return 0
 	
 func _read(value):
@@ -80,16 +82,6 @@ func _and(lhs, rhs):
 func _or(lhs, rhs):
 	return lhs or rhs
 
-func _find_print(text, index):
-		var result = true
-		var original_text = text
-		text = text.right(index)
-		if text.begins_with(" print "):
-			return len(" print ")
-		elif text.begins_with("print ") and index == 0:
-			return len("print ")
-		return 0
-	
 func _run_code():
 	var lines = _lines_from_source()
 	var statements = _statements_from_lines(lines)
@@ -105,9 +97,8 @@ func _run_code():
 			res = res.resume()
 		
 func _print(val):
-	print(val)
+	print(val[0])
 	return 0
-
 
 class Statement:
 	"""Base class for code elements"""
@@ -169,7 +160,6 @@ class BinaryOperator:
 				lhs = neutral_element
 		return self.function.call_func(lhs, rhs)
 
-
 class UnaryOperator:
 	"""Represents a unary operator"""
 	var function
@@ -211,7 +201,96 @@ class UnaryOperator:
 		"""Evaluates the operator"""
 		return self.function.call_func(value)
 
+class Function:
+	"""Represents a function"""
+	var name
+	var inputs
+	var code
+	
+	func _init(name_in, inputs_in, code_in):
+		self.name = name_in
+		self.inputs = inputs_in.split(",")
+		for i in range(len(self.inputs)):
+			self.inputs[i] = self.inputs[i].strip_edges()
+		self.code = code_in
+	
+	func string(start_string=""):
+		var text = start_string + "def " + self.name + "("
+		text = text + self.inputs.join(", ") + "\n"
+		for line in self.code:
+			text = text + line.string(start_string + "\t") + "\n"
+		return text
+		
+	func call_func(args, parent):
+		var scope = {}
+		scope["_if_state"] = 0
+		scope["_return"] = null
+		assert(len(args) == len(inputs))
+		for i in range(len(self.inputs)):
+			scope[self.inputs[i]] = args[i]
+		var exe
+		for line in self.code:
+			exe = line.run(scope, parent)
+			while exe is GDScriptFunctionState:
+				if scope["_return"] != null:
+					return scope["_return"]
+				yield()
+				exe.resume()
+		return null
+	
+class FunctionCall:
+	"""Represents a function call"""
+	extends Statement
+	var args
+	var func_name
+	
+	func _init(func_name_in, args_text):
+		self.args = []
+		args_text = args_text.strip_edges()
+		assert(len(args_text) >= 2)
+		assert(args_text[0] == "(")
+		assert(args_text[len(args_text) - 1] == ")")
+		args_text = args_text.trim_prefix("(")
+		args_text = args_text.trim_suffix(")")
+		var parenthasis = 0
+		var temp_src = ""
+		for chr in args_text:
+			if chr == "(":
+				parenthasis = parenthasis + 1
+			elif chr == ")":
+				parenthasis = parenthasis - 1
+			if chr == ",":
+				temp_src = temp_src.strip_edges()
+				assert(len(temp_src) > 0)
+				self.args.append(temp_src)
+				temp_src = ""
+			else:
+				temp_src = temp_src + chr
+		if temp_src != "":
+			temp_src = temp_src.strip_edges()
+			self.args.append(temp_src)
+		for i in range(len(self.args)):
+			self.args[i] = Evaluatable.new(self.args[i])
+		self.func_name = func_name_in
 
+	func run(scope, parent):
+		var argument_list = []
+		var exe
+		for arg in self.args:
+			exe = arg.run(scope, parent)
+			while exe is GDScriptFunctionState:
+				yield()
+				exe.resume()
+			argument_list.append(exe)
+		if func_name in parent._functions:
+			exe = parent._functions[func_name].call_func(argument_list, parent)
+		else:
+			exe = parent._std_functions[func_name].call_func(argument_list)
+		while exe is GDScriptFunctionState:
+			yield()
+			exe = exe.resume()
+		return exe
+	
 class Evaluatable:
 	"""Represents an expression with a determinable value"""
 	extends Statement
@@ -282,6 +361,22 @@ class Evaluatable:
 				self.lhs = int(self.source)
 			elif self.source.is_valid_float():
 				self.lhs = int(self.source)
+			elif "(" in self.source:
+				var name = ""
+				var end_index = 0
+				for chr in self.source:
+					if chr == " ":
+						if name != "":
+							break
+					elif chr == "(":
+						break
+					elif chr == ")":
+						break
+					else:
+						name = name + chr
+					end_index = end_index + 1
+				var arg_list = self.source.right(end_index)
+				self.lhs = FunctionCall.new(name, arg_list)
 			else:
 				self.lhs = self.source
 				
@@ -303,6 +398,12 @@ class Evaluatable:
 				yield()
 				right = right.resume()
 			return self.op.evaluate(right)
+		elif self.lhs is FunctionCall:
+			left = self.lhs.run(scope, parent)
+			while left is GDScriptFunctionState:
+				yield()
+				left = left.resume()
+			return left
 		elif self.op == null:
 			#Expression contains a value
 			if typeof(self.lhs) == TYPE_STRING && self.lhs != "":
@@ -323,7 +424,26 @@ class Evaluatable:
 		
 	func string(start_string = ""):
 		return start_string + self.source
-
+	
+class Return:
+	"""Represents a return statement"""
+	extends Statement
+	var source
+	var ret_eval
+	
+	func _init(source_in):
+		self.source = source_in
+		self.ret_eval = Evaluatable.new(self.source)
+	
+	func run(scope, parent):
+		var exe = self.ret_eval.run(scope, parent)
+		while exe is GDScriptFunctionState:
+			yield()
+			exe = exe.resume()
+		scope["_return"] = exe
+		yield()
+		return exe
+	
 class Assignment:
 	"""Represents an assignment"""
 	extends Statement
@@ -494,6 +614,7 @@ func _statements_from_lines(lines):
 			index = next_index - 1
 			statements.append(Loop.new(condition, code))
 		elif line.begins_with("for "):
+			assert(false)
 			pass
 		elif line.begins_with("if "):
 			var condition = line.substr(3)
@@ -532,6 +653,44 @@ func _statements_from_lines(lines):
 			code = _statements_from_lines(code)
 			index = next_index - 1
 			statements.append(Conditional.new(condition, code, 0))
+		elif line.begins_with("return "):
+			var eval = line.substr(7)
+			eval = eval.strip_edges()
+			statements.append(Return.new(eval))
+		elif line.begins_with("def "): #Function
+			#Need to find function name
+			var name = ""
+			line = line.substr(4)
+			var j = 0
+			while j < len(line):
+				if line[j] == " ":
+					if name != "":
+						break
+				elif line[j] == "(":
+					break
+				else:
+					name = name + line[j]
+				j = j + 1
+			assert(name != "")
+			line = line.substr(len(name))
+			line = line.strip_edges()
+			assert(len(line) >= 2)
+			assert(line[0] == "(")
+			assert(line[len(line) - 1] == ")")
+			line = line.trim_prefix("(")
+			line = line.trim_suffix(")")
+			assert(("(" in line) == false)
+			assert((")" in line) == false)
+			var args = line
+			var next_index = len(lines)
+			for i in range(index + 1, len(lines)):
+				if lines[i].indent_size <= indent:
+					next_index = i
+					break
+			var code = lines.slice(index + 1, next_index - 1)
+			code = _statements_from_lines(code)
+			index = next_index - 1
+			self._functions[name] = Function.new(name, args, code)
 		elif len(splits) % 2 == 0: #Even number implies odd number of =, means assignment
 			var lhs = splits[0]
 			var rhs = ""
@@ -572,14 +731,6 @@ func _ready():
 										10,
 										false,
 										0))
-	operators.push_back(UnaryOperator.new(funcref(self, "_print"), 
-										"print",
-										-1000,
-										true))
-	operators.push_back(UnaryOperator.new(funcref(self, "_shoot"), 
-										"shoot",
-										-1001,
-										true))
 	operators.push_back(UnaryOperator.new(funcref(self, "_rotate"), 
 										"rotate",
 										-1002,
@@ -602,6 +753,9 @@ func _ready():
 										-102,
 										true))
 	operators.sort_custom(self, "operator_cmp")
+	self._std_functions["print"] = funcref(self, "_print")
+	self._std_functions["fire"] = funcref(self, "_shoot")
+	self._std_functions["rotate"] = funcref(self, "_rotate")
 	for operator in operators:
 		print(operator.syntax)
 	self._eval_object = null
@@ -610,7 +764,12 @@ func run():
 	self._stop = false
 	self._lines_left = self.OPS_PER_RUN
 	code_source = """
-n = 0
+def fib(n)
+	if n < 2
+		return 1
+	return fib(n - 1) + fib(n - 2)
+print(fib(10))
+fire()
 """
 	if self._eval_object == null:
 		self._eval_object = self._run_code()
