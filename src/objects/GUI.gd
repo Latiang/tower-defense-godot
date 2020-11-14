@@ -18,6 +18,9 @@ var current_time_scale = 1
 var error_line = 0
 var force_debug_cursor_position = false
 
+var tutorial_popups = []
+var current_tutorial_popup_index = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
@@ -35,6 +38,17 @@ func _input(event):
 func update_level_data(data):
 	$LevelNamePanel/MarginContainer/HBoxContainer/LevelCountLabel.text = "Level %s" % data["count"]
 	$LevelNamePanel/MarginContainer/HBoxContainer/CenterContainer/LevelNameLabel.text = data["description"]
+		
+func update_tutorial_popups(popups):
+	tutorial_popups = popups
+	if len(popups):
+		show_next_tutorial_popup()
+		$PopupGreyCover.show()
+		
+func show_next_tutorial_popup():
+	$TutorialPopup.popup(tutorial_popups[current_tutorial_popup_index][0],
+					tutorial_popups[current_tutorial_popup_index][1])
+	current_tutorial_popup_index += 1
 		
 func toggle_escape_menu():
 	escape_menu_open = !escape_menu_open
@@ -83,6 +97,7 @@ func _on_StartButton_pressed():
 # Reset the gui
 func reset():
 	$CodeWindow.reset()
+	current_tutorial_popup_index = 0
 	wave_started = false
 	disable_speed_buttons()
 	show_pause_button(false)
@@ -200,3 +215,11 @@ func _on_turret_code_error(id, error_message, error_line):
 func _on_DebugLineCursorTimer_timeout():
 	force_debug_cursor_position = false
 	error_line = 0
+
+
+func _on_TutorialPopup_button_pressed():
+	if len(tutorial_popups) > current_tutorial_popup_index:
+		show_next_tutorial_popup()
+	else:
+		$TutorialPopup.hide()
+		$PopupGreyCover.hide()

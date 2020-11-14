@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://assets/GUITheme.tres" type="Theme" id=1]
 [ext_resource path="res://objects/CodeWindow.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://objects/PopupDialogOk.tscn" type="PackedScene" id=6]
 [ext_resource path="res://objects/PopupDialogTwoChoices.tscn" type="PackedScene" id=7]
 [ext_resource path="res://objects/EscapeMenu.tscn" type="PackedScene" id=8]
+[ext_resource path="res://objects/TutorialPopup.tscn" type="PackedScene" id=9]
 
 [sub_resource type="DynamicFont" id=1]
 size = 35
@@ -283,6 +284,9 @@ visible = false
 button1_text = "Close"
 button2_text = "Play Anyway"
 
+[node name="TutorialPopup" parent="." instance=ExtResource( 9 )]
+visible = false
+
 [node name="CoordinateLabel" type="Label" parent="."]
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -309,6 +313,7 @@ one_shot = true
 [connection signal="button_pressed" from="WonPopup" to="." method="_on_WonPopup_button_pressed"]
 [connection signal="button1_pressed" from="DebugPopup" to="." method="_on_DebugPopup_button1_pressed"]
 [connection signal="button2_pressed" from="DebugPopup" to="." method="_on_DebugPopup_button2_pressed"]
+[connection signal="button_pressed" from="TutorialPopup" to="." method="_on_TutorialPopup_button_pressed"]
 [connection signal="exit" from="EscapeMenu" to="." method="_on_EscapeMenu_exit"]
 [connection signal="restart" from="EscapeMenu" to="." method="_on_EscapeMenu_restart"]
 [connection signal="resume" from="EscapeMenu" to="." method="_on_EscapeMenu_resume"]

@@ -55,5 +55,14 @@ func load_level_data(level, level_id):
 func get_level_states():
 	return raw_json["levels"]
 	
+func get_tutorial_popups(level_id):
+	var popups = []
+	if raw_json["levels"][level_id].has("tutorial_popups"):
+		for popup in raw_json["levels"][level_id]["tutorial_popups"]:
+			if len(popup) != 3:
+				print("[Save State] Tutorial Popup for Level %d is malformed" % level_id)
+			popups.append([Vector2(popup[0], popup[1]), popup[2]])
+	return popups
+	
 func get_level_data(level_id):
 	return raw_json["levels"][level_id]

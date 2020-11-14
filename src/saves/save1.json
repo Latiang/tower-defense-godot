@@ -1,1 +1,0 @@
-{"levels":[{"count":1,"description":"test","file":"TestLevel1","status":2,"turret_code":["\nprint ((0 ))\n"]},{"count":2,"description":"test2","file":"TestLevel2","status":3,"turret_code":["\nprint ((0 ))\n","\nprint ((0 ))\n"]}]}

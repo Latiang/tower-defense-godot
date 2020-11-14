@@ -35,6 +35,7 @@ func load_level(level_index):
 	$GUI.reset()
 	$GUI.update_health(health)
 	$GUI.update_level_data(save_state.get_level_data(level_index))
+	$GUI.update_tutorial_popups(save_state.get_tutorial_popups(level_index))
 	print("[Level] Loading level: %s" % level_name)
 	if current_level:
 		current_level.close()
@@ -46,6 +47,7 @@ func load_level(level_index):
 	# Load turret code and such from file
 	save_state.load_level_data(current_level, current_level_index)
 	$GUI/CodeWindow.open_code_window(0, false)
+	
 	if get_parent().autosave_enabled:
 		$AutoSaveTimer.start()
 
