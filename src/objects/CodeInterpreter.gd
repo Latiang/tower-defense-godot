@@ -101,6 +101,7 @@ func _run_code():
 		
 func _print(val):
 	print(val[0])
+	console_output_buffer.append(str(val[0]))
 	return 0
 
 class Statement:
