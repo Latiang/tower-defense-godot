@@ -33,6 +33,7 @@ func start_wave():
 	for child in self.get_children():
 		if child.is_in_group("Turret"):
 			child.get_node("ProgrammableBehaviour").locked = false
+			child.get_node("ProgrammableBehaviour").allow_interpreting = true
 		elif child.is_in_group("MobPath"):
 			child.start_spawning_time()
 
@@ -42,6 +43,7 @@ func end_wave():
 	for child in self.get_children():
 		if child.is_in_group("Turret"):
 			child.get_node("ProgrammableBehaviour").lock()
+			child.get_node("ProgrammableBehaviour").allow_interpreting = false
 	emit_signal("level_complete")
 
 func _on_Turret_turret_pressed(turret):

@@ -8,6 +8,7 @@ signal sensor_detect(out_dict, id)
 
 signal code_error(error_message, error_line)
 
+var allow_interpreting = false
 var locked = true
 var printnow = false
 
@@ -44,7 +45,8 @@ func report_error(error, line):
 
 # Disable lock
 func _on_LockTimer_timeout():
-	locked = false
+	if allow_interpreting:
+		locked = false
 	
 func lock():
 	$LockTimer.stop()
