@@ -16,6 +16,9 @@ func _ready():
 	$MarginContainer/VBoxContainer/MarginContainer2/Label.text = text
 	$MarginContainer/VBoxContainer/MarginContainer/Button.text = button_text
 
+func set_text(text):
+	$MarginContainer/VBoxContainer/MarginContainer2/Label.text = text
+
 func _on_Button_pressed():
 	emit_signal("button_pressed")
 	if close_on_press:

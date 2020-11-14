@@ -780,6 +780,7 @@ fire()
 	# Generate code from source, preferably 
 	# expressions that link to new expressions
 	
+	get_parent().emit_signal("code_error", "Very serious compilation error!!! Error errror!", 2)
 	# Interpret the code
 	# Certain functions will have outside effects, which is done by:
 	#get_parent().emit_signal("fire")

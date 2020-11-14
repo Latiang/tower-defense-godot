@@ -179,15 +179,9 @@ func _on_WonPopup_button_pressed():
 	emit_signal("next_level")
 	
 # Return to edit phase
-func _on_DebugPopup_button1_pressed():
+func _on_DebugPopup_button_pressed():
 	$PopupGreyCover.visible = false
 	emit_signal("restart_level")
-
-# Continue starting level
-func _on_DebugPopup_button2_pressed():
-	$PopupGreyCover.visible = false
-	# Probably something more complicated required
-	emit_signal("update_time_scale", current_time_scale)
 
 # Return to Main Menu
 func _on_EscapeMenu_exit():
@@ -223,6 +217,3 @@ func _on_TutorialPopup_button_pressed():
 	else:
 		$TutorialPopup.hide()
 		$PopupGreyCover.hide()
-
-func _on_DebugPopup_button_pressed():
-	pass # Replace with function body.
