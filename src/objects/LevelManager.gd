@@ -54,6 +54,7 @@ func load_level(level_index):
 # Start a level wave (start button pressed)
 func _on_GUI_start_wave():
 	if !current_level.wave_started:
+		$GUI/CodeWindow.save_code_to_turret()
 		current_level.start_wave()
 
 # Open a code window for a specific turret, send to GUI
