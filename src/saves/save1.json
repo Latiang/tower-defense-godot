@@ -1,1 +1,1 @@
-{"levels":[{"count":1,"description":"test","file":"TestLevel1","status":2,"turret_code":["return 7\nprint(3)"]},{"count":2,"description":"test2","file":"TestLevel2","status":3,"turret_code":["\nprint ((0 ))\n","\nprint ((0 ))\n"]}]}
+{"levels":[{"count":1,"description":"test","file":"TestLevel1","status":2,"turret_code":["apa = \nwhile 1\n\tapa = apa + 2\n\tprint(apa)\n\t\nelse\n\tprint(5)"]},{"count":2,"description":"test2","file":"TestLevel2","status":3,"turret_code":["\nprint ((0 ))\n","\nprint ((0 ))\n"]}]}
