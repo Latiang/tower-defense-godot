@@ -43,7 +43,7 @@ func _rotate(value):
 	
 func _read(value):
 	var result = {}
-	get_parent().emit_signal("sensor_detect", result, 1)
+	get_parent().emit_signal("sensor_detect", result, value[0])
 	if result[0]:
 		return result[0]
 	else:
@@ -287,8 +287,10 @@ class FunctionCall:
 			argument_list.append(exe)
 		if func_name in parent._functions:
 			exe = parent._functions[func_name].call_func(argument_list, parent)
-		else:
+		elif func_name in parent._std_functions:
 			exe = parent._std_functions[func_name].call_func(argument_list)
+		else:
+			parent._error("The function " + func_name + " does not exist", 0)
 		while exe is GDScriptFunctionState:
 			yield()
 			exe = exe.resume()
@@ -355,6 +357,7 @@ class Evaluatable:
 				break
 		if found_operator:
 			self.rhs = Evaluatable.new(self.rhs)
+			self.rhs.original_line = self.original_line
 			if self.op.binary:
 				self.lhs = Evaluatable.new(self.lhs)
 			else: #Unary operator
@@ -634,7 +637,7 @@ func _statements_from_lines(lines, function=false):
 			statements.append(Conditional.new(condition, code))
 			statements[-1].original_line = line_index
 		elif line.begins_with("else") and len(line) == 4:
-			if not (statements[-1] is Conditional):
+			if len(statements) == 0 or (not (statements[-1] is Conditional)):
 				self._error("else must follow a conditional", line_index)
 			var condition = "1"
 			var next_index = len(lines)
@@ -648,7 +651,7 @@ func _statements_from_lines(lines, function=false):
 			statements.append(Conditional.new(condition, code, 0))
 			statements[-1].original_line = line_index
 		elif line.begins_with("elif "):
-			if not (statements[-1] is Conditional):
+			if len(statements) == 0 or (not (statements[-1] is Conditional)):
 				self._error("elif must follow a conditional", line_index)
 			var condition = line.substr(5)
 			var next_index = len(lines)
@@ -664,6 +667,8 @@ func _statements_from_lines(lines, function=false):
 		elif line.begins_with("return "):
 			if not function:
 				self._error("return outside of function", line_index)
+				index = index + 1
+				continue
 			else:
 				var eval = line.substr(7)
 				eval = eval.strip_edges()
@@ -683,16 +688,30 @@ func _statements_from_lines(lines, function=false):
 				else:
 					name = name + line[j]
 				j = j + 1
-			assert(name != "")
+			if name == "":
+				self._error("A function name must follow def", line_index)
+				index = index + 1
+				continue
 			line = line.substr(len(name))
 			line = line.strip_edges()
-			assert(len(line) >= 2)
-			assert(line[0] == "(")
-			assert(line[len(line) - 1] == ")")
+			if (len(line) >= 2):
+				self._error("A function must be followed by parentheses", line_index)
+				index = index + 1
+				continue
+			if (line[0] == "("):
+				self._error("A function must be followed by parentheses", line_index)
+				index = index + 1
+				continue
+			if (line[len(line) - 1] == ")"):
+				self._error("A function must be followed by parentheses", line_index)
+				index = index + 1
+				continue
 			line = line.trim_prefix("(")
 			line = line.trim_suffix(")")
-			assert(("(" in line) == false)
-			assert((")" in line) == false)
+			if "(" in line or ")" in line:
+				self._error("A function definition cannot contain more than one pair of parentheses", line_index)
+				index = index + 1
+				continue
 			var args = line
 			var next_index = len(lines)
 			for i in range(index + 1, len(lines)):
@@ -736,10 +755,6 @@ func _ready():
 										10,
 										false,
 										0))
-	operators.push_back(UnaryOperator.new(funcref(self, "_read"),
-										"dist", 
-										-999,
-										true))
 	operators.push_back(BinaryOperator.new(funcref(self, "_sub"),
 										"-", 
 										10,
@@ -766,6 +781,7 @@ func _ready():
 	self._std_functions["print"] = funcref(self, "_print")
 	self._std_functions["fire"] = funcref(self, "_shoot")
 	self._std_functions["rotate"] = funcref(self, "_rotate")
+	self._std_functions["read_sensor"] = funcref(self, "_read")
 	for operator in operators:
 		print(operator.syntax)
 	self._eval_object = null
