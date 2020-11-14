@@ -73,6 +73,8 @@ func hide():
 	$CoordinateLabel.hide()
 	$EscapeMenu.hide()
 	$LevelNamePanel.hide()
+	$TutorialPopup.hide()
+	$PopupGreyCover.hide()
 
 func show():
 	$CodeWindow.show()
