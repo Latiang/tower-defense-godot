@@ -27,9 +27,9 @@ func set_time_scale(new_time_scale, continue_interpreting):
 				child.update_time_scale(new_time_scale)
 				if child.is_in_group("Turret"):
 					if !continue_interpreting:
-						child.get_node("ProgrammableBehaviour").locked = true
+						child.get_node("ProgrammableBehaviour").allow_interpreting = false
 					else:
-						child.get_node("ProgrammableBehaviour").locked = false
+						child.get_node("ProgrammableBehaviour").allow_interpreting = true
 
 # Start the waves for this level
 func start_wave():

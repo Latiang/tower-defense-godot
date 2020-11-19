@@ -26,7 +26,7 @@ func _ready():
 
 func _process(delta):
 	if can_rotate and (distance_to_rotate > 0.01 or distance_to_rotate < -0.01):
-		var dist = deg2rad(rotation_speed) * delta
+		var dist = deg2rad(rotation_speed) * delta * time_scale
 		if (distance_to_rotate < 0):
 			dist = -dist
 			if (distance_to_rotate - dist > 0):
@@ -58,14 +58,13 @@ func move(distance):
 			
 func fire():
 	if unlimited_ammo or ammo_count > 0:
-		var dir = Vector2(cos(rotation + PI/2), sin(rotation + PI/2))
+		var dir = Vector2(cos(rotation + PI), sin(rotation + PI))
 		$Gun.spawn_bullet(position, dir, time_scale)
 		ammo_count -= 1
 
 func rotate(angle):
 	if can_rotate:
-		#rotation = angle
-		distance_to_rotate = angle
+		distance_to_rotate = -fmod(rotation + angle, 2*PI)
 
 func sensor_detect(out_dict):
 	if (integrated_sensor):
@@ -82,8 +81,9 @@ func _on_ProgrammableBehaviour_fire():
 	$ProgrammableBehaviour.lock_for_time(reload_time / time_scale)
 
 func _on_ProgrammableBehaviour_rotate(angle):
+	var move_angle = fmod(rotation + angle, 2*PI)
 	rotate(angle)
-	$ProgrammableBehaviour.lock_for_time(float(distance_to_rotate) / deg2rad(rotation_speed))
+	$ProgrammableBehaviour.lock_for_time(abs(move_angle) / (deg2rad(rotation_speed) * time_scale))
 	
 func _on_ProgrammableBehaviour_move(distance):
 	move(distance)
