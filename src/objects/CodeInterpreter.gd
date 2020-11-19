@@ -31,14 +31,23 @@ export var OPS_PER_RUN = 500
 func _error(message, line):
 	get_parent().emit_signal("code_error", message, line - 1)
 
-func _shoot(value):
+func _vector2(inputs):
+	return Vector2(inputs[0], inputs[1])
+
+func _shoot(vector):
 	self._stop = true
 	get_parent().emit_signal("fire")
 	return 0
 	
+func _target(inputs):
+	var self_pos = Vector2(0, 0)
+	var diff = inputs[0] - self_pos
+	return self._rotate(diff.angle() * 180.0 / PI)
+		
+
 func _rotate(value):
 	self._stop = true
-	get_parent().emit_signal("rotate", value[0] / 180.0 * PI)
+	get_parent().emit_signal("rotate", (90 - value[0]) / 180.0 * PI)
 	return 0
 	
 func _read(value):
@@ -263,7 +272,7 @@ class FunctionCall:
 				parenthasis = parenthasis + 1
 			elif chr == ")":
 				parenthasis = parenthasis - 1
-			if chr == ",":
+			if chr == "," and parenthasis == 0:
 				temp_src = temp_src.strip_edges()
 				assert(len(temp_src) > 0)
 				self.args.append(temp_src)
@@ -783,6 +792,7 @@ func _ready():
 	self._std_functions["fire"] = funcref(self, "_shoot")
 	self._std_functions["rotate"] = funcref(self, "_rotate")
 	self._std_functions["read_sensor"] = funcref(self, "_read")
+	self._std_functions["vector"] = funcref(self, "_vector2")
 	for operator in operators:
 		print(operator.syntax)
 	self._eval_object = null
