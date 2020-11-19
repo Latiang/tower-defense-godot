@@ -26,19 +26,30 @@ var _stop = false
 var _eval_object
 
 var _lines_left = 0
-export var OPS_PER_RUN = 1000
+export var OPS_PER_RUN = 500
 
 func _error(message, line):
-	get_parent().emit_signal("code_error", message, line - 1)
+	get_parent().emit_signal("code_error", message, line)
+	self._stop = true
+	self.ready_code()
 
-func _shoot(value):
+func _vector2(inputs):
+	return Vector2(inputs[0], inputs[1])
+
+func _shoot(vector):
 	self._stop = true
 	get_parent().emit_signal("fire")
 	return 0
 	
+func _target(inputs):
+	var self_pos = Vector2(0, 0)
+	var diff = inputs[0] - self_pos
+	return self._rotate([diff.angle() * 180.0 / PI])
+		
+
 func _rotate(value):
 	self._stop = true
-	get_parent().emit_signal("rotate", value[0] / 180.0 * PI)
+	get_parent().emit_signal("rotate", (90 - value[0]) / 180.0 * PI)
 	return 0
 	
 func _read(value):
@@ -116,7 +127,7 @@ class Statement:
 	func string(start_string = ""):
 		pass
 		
-	func compile(operators):
+	func compile(operators, parent):
 		pass
 		
 class BinaryOperator:
@@ -248,12 +259,16 @@ class FunctionCall:
 	var args
 	var func_name
 	
-	func _init(func_name_in, args_text):
+	func _init(func_name_in, args_text, line, parent):
 		self.args = []
+		self.original_line = line
+		self.func_name = func_name_in
 		args_text = args_text.strip_edges()
-		assert(len(args_text) >= 2)
-		assert(args_text[0] == "(")
-		assert(args_text[len(args_text) - 1] == ")")
+		if len(args_text) < 2 or args_text[0] != "(" or args_text[-1] != ")":
+			parent._error("A function call must be followed by parentheses", self.original_line)
+			parent._stop = true
+			yield()
+			print(5)
 		args_text = args_text.trim_prefix("(")
 		args_text = args_text.trim_suffix(")")
 		var parenthasis = 0
@@ -263,7 +278,7 @@ class FunctionCall:
 				parenthasis = parenthasis + 1
 			elif chr == ")":
 				parenthasis = parenthasis - 1
-			if chr == ",":
+			if chr == "," and parenthasis == 0:
 				temp_src = temp_src.strip_edges()
 				assert(len(temp_src) > 0)
 				self.args.append(temp_src)
@@ -274,10 +289,11 @@ class FunctionCall:
 			temp_src = temp_src.strip_edges()
 			self.args.append(temp_src)
 		for i in range(len(self.args)):
-			self.args[i] = Evaluatable.new(self.args[i])
-		self.func_name = func_name_in
+			self.args[i] = Evaluatable.new(self.args[i], self.original_line)
 
 	func run(scope, parent):
+		while parent._stop:
+			yield()
 		var argument_list = []
 		var exe
 		for arg in self.args:
@@ -291,7 +307,7 @@ class FunctionCall:
 		elif func_name in parent._std_functions:
 			exe = parent._std_functions[func_name].call_func(argument_list)
 		else:
-			parent._error("The function " + func_name + " does not exist", 0)
+			parent._error("The function " + self.func_name + " does not exist", self.original_line)
 		while exe is GDScriptFunctionState:
 			yield()
 			exe = exe.resume()
@@ -309,11 +325,12 @@ class Evaluatable:
 	#Tree prefered in order to properly apply multiple unary operators with differeing
 	#priority
 	
-	func _init(text):
+	func _init(text, line):
 		self.source = text
 		self.compiled = false
+		self.original_line = line
 		
-	func _compile(operators):
+	func _compile(operators, parent):
 		self.compiled = true
 		self.source = self.source.strip_edges()
 		while self.source != "" and self.source[0] == "(" and self.source[-1] == ")":
@@ -357,10 +374,10 @@ class Evaluatable:
 			if found_operator:
 				break
 		if found_operator:
-			self.rhs = Evaluatable.new(self.rhs)
+			self.rhs = Evaluatable.new(self.rhs, self.original_line)
 			self.rhs.original_line = self.original_line
 			if self.op.binary:
-				self.lhs = Evaluatable.new(self.lhs)
+				self.lhs = Evaluatable.new(self.lhs, self.original_line)
 			else: #Unary operator
 				self.lhs = null
 		else:	#No operator found
@@ -368,6 +385,10 @@ class Evaluatable:
 				self.lhs = int(self.source)
 			elif self.source.is_valid_float():
 				self.lhs = int(self.source)
+			elif self.source == "true":
+				self.lhs = true
+			elif self.source == "false":
+				self.lhs = false
 			elif "(" in self.source:
 				var name = ""
 				var end_index = 0
@@ -383,7 +404,7 @@ class Evaluatable:
 						name = name + chr
 					end_index = end_index + 1
 				var arg_list = self.source.right(end_index)
-				self.lhs = FunctionCall.new(name, arg_list)
+				self.lhs = FunctionCall.new(name, arg_list, self.original_line, parent)
 			else:
 				self.lhs = self.source
 				
@@ -397,7 +418,7 @@ class Evaluatable:
 		var left
 		var right
 		if not self.compiled:
-			self._compile(parent.operators)
+			self._compile(parent.operators, parent)
 		if self.lhs == null: 
 			#Unary operator
 			right = self.rhs.run(scope, parent)
@@ -414,7 +435,27 @@ class Evaluatable:
 		elif self.op == null:
 			#Expression contains a value
 			if typeof(self.lhs) == TYPE_STRING && self.lhs != "":
-				return scope[self.lhs]
+				if "." in self.lhs:
+					var index_dot = self.lhs.find(".")
+					var target_var = self.lhs.left(index_dot)
+					var target_member = self.lhs.right(index_dot + 1)
+					if not (target_var in scope):
+						parent._error("No variable with the name " + target_var + " exists in the current scope", self.original_line)
+						yield()
+					if target_member == "x":
+						if scope[target_var] is Vector2:
+							return scope[target_var].x
+						else:
+							parent._error("The variable " + target_var + " has no member x", self.original_line)
+							yield()
+					elif target_member == "y":
+						if scope[target_var] is Vector2:
+							return scope[target_var].y
+						else:
+							parent._error("The variable " + target_var + " has no member y", self.original_line)
+							yield()
+				else:
+					return scope[self.lhs]
 			return self.lhs
 		else:
 			#BinaryOperator
@@ -438,11 +479,15 @@ class Return:
 	var source
 	var ret_eval
 	
-	func _init(source_in):
+	func _init(source_in, line):
 		self.source = source_in
-		self.ret_eval = Evaluatable.new(self.source)
+		self.original_line = line
+		self.ret_eval = Evaluatable.new(self.source, self.original_line)
 	
 	func run(scope, parent):
+		
+		if parent._stop:
+			yield()
 		var exe = self.ret_eval.run(scope, parent)
 		while exe is GDScriptFunctionState:
 			yield()
@@ -457,19 +502,47 @@ class Assignment:
 	var lhs
 	var rhs
 	
-	func _init(lhs, rhs):
+	func _init(lhs, rhs, line):
 		self.lhs = lhs.strip_edges()
-		self.rhs = Evaluatable.new(rhs)
+		self.original_line = line
+		self.rhs = Evaluatable.new(rhs, self.original_line)
 		
 	func run(scope, parent):
 		parent._lines_left -= 1
+		if parent._stop:
+			yield()
 		if parent._lines_left <= 0:
 			yield()
 		var inp = rhs.run(scope, parent)
 		while inp is GDScriptFunctionState:
 			yield()
 			inp = inp.resume()
-		scope[self.lhs] = inp
+		if "." in self.lhs:
+			var index_dot = self.lhs.find(".")
+			var target_var = self.lhs.left(index_dot)
+			var target_member = self.lhs.right(index_dot + 1)
+			if target_member == "x":
+				if scope[target_var] is Vector2:
+					if inp is float or inp is int:
+						scope[target_var].x = inp
+					else:
+						parent._error("x must be a numerical value", self.original_line)
+						yield()
+				else:
+					parent._error("No such member exists for this type", self.original_line)
+					yield()
+			if target_member == "y":
+				if scope[target_var] is Vector2:
+					if inp is float or inp is int:
+						scope[target_var].y = inp
+					else:
+						parent._error("Y must be a numerical value", self.original_line)
+						yield()
+				else:
+					parent._error("No such member exists for this type", self.original_line)
+					yield()
+		else:
+			scope[self.lhs] = inp
 		
 	func string(start_string = ""):
 		return start_string + lhs + " = " + rhs.string()
@@ -481,15 +554,18 @@ class Loop:
 	var end_action
 	var code
 	
-	func _init(condition, code, end_action = null):
-		self.condition = Evaluatable.new(condition)
+	func _init(condition, code, line, end_action = null):
+		self.condition = Evaluatable.new(condition, self.original_line)
+		self.original_line = line
 		if end_action != null:
-			self.end_action = Evaluatable.new(end_action)
+			self.end_action = Evaluatable.new(end_action, self.original_line)
 		else:
 			self.end_action = null
 		self.code = code
 	
 	func run(scope, parent):
+		if parent._stop:
+			yield()
 		parent._lines_left -= 1
 		var exe
 		if parent._lines_left <= 0:
@@ -527,12 +603,15 @@ class Conditional:
 	var code
 	var expected_if_state
 	
-	func _init(condition, code, expected_if_state=null):
+	func _init(condition, code, line, expected_if_state=null):
 		self.expected_if_state = expected_if_state
+		self.original_line = line
 		self.code = code
-		self.condition = Evaluatable.new(condition)
+		self.condition = Evaluatable.new(condition, self.original_line)
 		
 	func run(scope, parent):
+		if parent._stop:
+			yield()
 		parent._lines_left -= 1
 		if parent._lines_left <= 0:
 			yield()
@@ -620,8 +699,7 @@ func _statements_from_lines(lines, function=false):
 			var code = lines.slice(index + 1, next_index - 1)
 			code = _statements_from_lines(code, function)
 			index = next_index - 1
-			statements.append(Loop.new(condition, code))
-			statements[-1].original_line = line_index
+			statements.append(Loop.new(condition, code, line_index))
 		elif line.begins_with("for "):
 			self._error("for loops does not exist", line_index)
 			pass
@@ -635,8 +713,7 @@ func _statements_from_lines(lines, function=false):
 			var code = lines.slice(index + 1, next_index - 1)
 			code = _statements_from_lines(code, function)
 			index = next_index - 1
-			statements.append(Conditional.new(condition, code))
-			statements[-1].original_line = line_index
+			statements.append(Conditional.new(condition, code, line_index))
 		elif line.begins_with("else") and len(line) == 4:
 			if len(statements) == 0 or (not (statements[-1] is Conditional)):
 				self._error("else must follow a conditional", line_index)
@@ -673,8 +750,7 @@ func _statements_from_lines(lines, function=false):
 			else:
 				var eval = line.substr(7)
 				eval = eval.strip_edges()
-				statements.append(Return.new(eval))
-				statements[-1].original_line = line_index
+				statements.append(Return.new(eval, line_index))
 		elif line.begins_with("def "): #Function
 			#Need to find function name
 			var name = ""
@@ -729,11 +805,10 @@ func _statements_from_lines(lines, function=false):
 			for split_index in range(1, len(splits)):
 				rhs += splits[split_index] + "="
 			rhs = rhs.substr(0, len(rhs) - 1)
-			statements.append(Assignment.new(lhs, rhs))
+			statements.append(Assignment.new(lhs, rhs, line_index))
 			statements[-1].original_line = line_index
 		else:	#Raw expression
-			statements.append(Evaluatable.new(line))
-			statements[-1].original_line = line_index
+			statements.append(Evaluatable.new(line, line_index))
 		index += 1
 	return statements
 
@@ -783,6 +858,8 @@ func _ready():
 	self._std_functions["fire"] = funcref(self, "_shoot")
 	self._std_functions["rotate"] = funcref(self, "_rotate")
 	self._std_functions["read_sensor"] = funcref(self, "_read")
+	self._std_functions["vector"] = funcref(self, "_vector2")
+	self._std_functions["target"] = funcref(self, "_target")
 	for operator in operators:
 		print(operator.syntax)
 	self._eval_object = null
@@ -793,10 +870,16 @@ func run():
 	self._stop = false
 	self._lines_left = self.OPS_PER_RUN
 	if self._eval_object == null:
-		self._eval_object = self._run_code()
+		self._eval_object = true
+		var temp = self._run_code()
+		if self._eval_object:
+			self._eval_object = temp
 	else:
 		if self._eval_object is GDScriptFunctionState and self._eval_object.is_valid():
-			self._eval_object = self._eval_object.resume()
+			var temp = self._eval_object.resume()
+			if self._eval_object != null:
+				self._eval_object = temp
+	print("Done")
 	
 func ready_code():
 	self._eval_object = null
