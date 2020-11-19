@@ -7,7 +7,7 @@ signal code_error(id, error_message, error_line)
 
 export var id = 0;
 export var can_rotate = true
-export var rotation_speed = 180 # Degrees/s
+export var rotation_speed = 260 # Degrees/s
 export var integrated_sensor = true
 export var can_move = true
 export var move_speed = 100 # Pixels/s 
@@ -25,17 +25,22 @@ func _ready():
 	pass
 
 func _process(delta):
-	if can_rotate and (distance_to_rotate > 0.1 or distance_to_rotate < -0.1):
+	if can_rotate and (distance_to_rotate > 0.01 or distance_to_rotate < -0.01):
 		var dist = deg2rad(rotation_speed) * delta
 		if (distance_to_rotate < 0):
 			dist = -dist
 			if (distance_to_rotate - dist > 0):
 				dist = distance_to_rotate
+				distance_to_rotate = 0
+			else:
+				distance_to_rotate -= dist
 		else:
 			if (distance_to_rotate - dist < 0):
 				dist = distance_to_rotate
-		rotate(dist)
-		distance_to_rotate -= dist
+				distance_to_rotate = 0
+			else:
+				distance_to_rotate -= dist
+		rotation += dist
 			
 	elif can_move and distance_to_move > 0 and $MovablePath/PathFollow2D.unit_offset < 1:
 		 # Ugly fix, translate position temporarily so that this acts in world space
@@ -59,8 +64,8 @@ func fire():
 
 func rotate(angle):
 	if can_rotate:
-		rotation = angle
-		#distance_to_rotate = deg2rad(angle)
+		#rotation = angle
+		distance_to_rotate = angle
 
 func sensor_detect(out_dict):
 	if (integrated_sensor):
@@ -70,7 +75,7 @@ func sensor_detect(out_dict):
 		out_dict[0] = false
 
 func _on_ProgrammableBehaviour_turret_position(out_dict):
-	out_dict[0] = position
+	out_dict[0] = Vector2(position.x, 1080-position.y)
 
 func _on_ProgrammableBehaviour_fire():
 	fire()
@@ -78,6 +83,7 @@ func _on_ProgrammableBehaviour_fire():
 
 func _on_ProgrammableBehaviour_rotate(angle):
 	rotate(angle)
+	$ProgrammableBehaviour.lock_for_time(float(distance_to_rotate) / deg2rad(rotation_speed))
 	
 func _on_ProgrammableBehaviour_move(distance):
 	move(distance)
@@ -109,3 +115,7 @@ func update_time_scale(new_time_scale):
 
 func _on_ProgrammableBehaviour_code_error(error_message, error_line):
 	emit_signal("code_error", id, error_message, error_line)
+
+
+func _on_ProgrammableBehaviour_sleep(time):
+	$ProgrammableBehaviour.lock_for_time(time)

@@ -5,6 +5,7 @@ extends Node
 signal fire()
 signal rotate(angle)
 signal move(distance)
+signal sleep(time)
 # Functions which return a value
 signal sensor_detect(out_dict, id)
 signal turret_position(out_dict)
