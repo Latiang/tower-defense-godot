@@ -11,7 +11,7 @@ var code_source
 var console_output_buffer = []
 var _functions = {}
 var _std_functions = {}
-
+var last_run_line = 0
 class CodeLine:
 	var text
 	var indent_size
@@ -53,6 +53,7 @@ func _rotate(value):
 	return 0
 	
 func _read(value):
+	self._stop = true
 	var result = {}
 	get_parent().emit_signal("sensor_detect", result, value[0])
 	if result[0]:
@@ -292,6 +293,7 @@ class FunctionCall:
 			self.args[i] = Evaluatable.new(self.args[i], self.original_line)
 
 	func run(scope, parent):
+		parent.last_run_line = self.original_line
 		while parent._stop:
 			yield()
 		var argument_list = []
@@ -410,6 +412,7 @@ class Evaluatable:
 				
 	
 	func run(scope, parent):
+		parent.last_run_line = self.original_line
 		parent._lines_left -= 1
 		if parent._stop:
 			yield()
@@ -455,6 +458,9 @@ class Evaluatable:
 							parent._error("The variable " + target_var + " has no member y", self.original_line)
 							yield()
 				else:
+					if not (self.lhs in scope):
+						parent._error("No variable with the name " + self.lhs + " exists in the current scope", self.original_line)
+						yield()
 					return scope[self.lhs]
 			return self.lhs
 		else:
@@ -485,7 +491,7 @@ class Return:
 		self.ret_eval = Evaluatable.new(self.source, self.original_line)
 	
 	func run(scope, parent):
-		
+		parent.last_run_line = self.original_line
 		if parent._stop:
 			yield()
 		var exe = self.ret_eval.run(scope, parent)
@@ -508,6 +514,7 @@ class Assignment:
 		self.rhs = Evaluatable.new(rhs, self.original_line)
 		
 	func run(scope, parent):
+		parent.last_run_line = self.original_line
 		parent._lines_left -= 1
 		if parent._stop:
 			yield()
@@ -564,6 +571,7 @@ class Loop:
 		self.code = code
 	
 	func run(scope, parent):
+		parent.last_run_line = self.original_line
 		if parent._stop:
 			yield()
 		parent._lines_left -= 1
@@ -610,6 +618,7 @@ class Conditional:
 		self.condition = Evaluatable.new(condition, self.original_line)
 		
 	func run(scope, parent):
+		parent.last_run_line = self.original_line
 		if parent._stop:
 			yield()
 		parent._lines_left -= 1
