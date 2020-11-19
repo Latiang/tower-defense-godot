@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/slime.png-8f0ffacd3ba4025f65208a82a26b8ed4.stex"
+path="res://.import/turret-base.png-39e2ce4ab233a839201f34a3f83c40ab.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/slime.png"
-dest_files=[ "res://.import/slime.png-8f0ffacd3ba4025f65208a82a26b8ed4.stex" ]
+source_file="res://assets/textures/turret-base.png"
+dest_files=[ "res://.import/turret-base.png-39e2ce4ab233a839201f34a3f83c40ab.stex" ]
 
 [params]
 

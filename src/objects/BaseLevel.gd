@@ -19,12 +19,17 @@ func _process(delta):
 	if wave_started:
 		check_for_win()
 
-func set_time_scale(new_time_scale):
+func set_time_scale(new_time_scale, continue_interpreting):
 	time_scale = new_time_scale
 	if wave_started:
 		for child in self.get_children():
 			if child.is_in_group("Turret") || child.is_in_group("MobPath"):
 				child.update_time_scale(new_time_scale)
+				if child.is_in_group("Turret"):
+					if !continue_interpreting:
+						child.get_node("ProgrammableBehaviour").locked = true
+					else:
+						child.get_node("ProgrammableBehaviour").locked = false
 
 # Start the waves for this level
 func start_wave():

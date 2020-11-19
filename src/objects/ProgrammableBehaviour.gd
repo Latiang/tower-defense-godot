@@ -30,13 +30,6 @@ func _process(delta):
 	# Time locked functonality, such as code execution
 	if (!locked):
 		$CodeInterpreter.run()
-		if Input.is_action_pressed("mouse_left_click"):
-			emit_signal("fire")
-			$CodeInterpreter.run()
-		elif Input.is_key_pressed(KEY_A):
-			emit_signal("move", -20)
-		elif Input.is_key_pressed(KEY_D):
-			emit_signal("move", 20)
 
 # Lock the object from executing code for a certain amount of time
 func lock_for_time(time):
