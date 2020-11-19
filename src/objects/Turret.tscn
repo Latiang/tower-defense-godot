@@ -83,4 +83,5 @@ loop = false
 [connection signal="move" from="ProgrammableBehaviour" to="." method="_on_ProgrammableBehaviour_move"]
 [connection signal="rotate" from="ProgrammableBehaviour" to="." method="_on_ProgrammableBehaviour_rotate"]
 [connection signal="sensor_detect" from="ProgrammableBehaviour" to="." method="_on_ProgrammableBehaviour_sensor_detect"]
+[connection signal="sleep" from="ProgrammableBehaviour" to="." method="_on_ProgrammableBehaviour_sleep"]
 [connection signal="turret_position" from="ProgrammableBehaviour" to="." method="_on_ProgrammableBehaviour_turret_position"]

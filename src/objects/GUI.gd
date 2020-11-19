@@ -64,7 +64,7 @@ func toggle_escape_menu():
 func set_coordinate_label():
 	if $CoordinateLabel.visible:
 		var pos = get_viewport().get_mouse_position()
-		$CoordinateLabel.text = "(%d, %d)" % [pos.x, pos.y]
+		$CoordinateLabel.text = "(%d, %d)" % [pos.x, 1080 - pos.y]
 
 func hide():
 	$CodeWindow.hide()
@@ -204,7 +204,7 @@ func _on_EscapeMenu_settings():
 
 func _on_turret_code_error(id, error_message, error_line):
 	$PopupGreyCover.visible = true
-	$DebugPopup.set_text("Error in line %d in Turret %d:\n%s" % [error_line, id, error_message])
+	$DebugPopup.set_text("Error in line %d in Turret %d:\n%s" % [error_line, id+1, error_message])
 	$DebugPopup.visible = true
 	self.error_line = error_line
 	emit_signal("update_time_scale", 0.001, false)

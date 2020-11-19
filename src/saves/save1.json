@@ -1,1 +1,1 @@
-{"levels":[{"count":1,"description":"test","file":"TestLevel1","status":2,"turret_code":["shoot()\nrotate(180)\nrotate(0)"]},{"count":2,"description":"test2","file":"TestLevel2","status":0,"turret_code":["#Code for level 2 turret 1","#Code for level 2 turret 2"]}]}
+{"levels":[{"count":1,"description":"test","file":"TestLevel1","status":2,"turret_code":["rotate(180)\nrotate(-180)"]},{"count":2,"description":"test2","file":"TestLevel2","status":0,"turret_code":["#Code for level 2 turret 1","#Code for level 2 turret 2"]}]}
