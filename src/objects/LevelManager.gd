@@ -82,7 +82,7 @@ func _on_Level_base_damage(damage):
 	health -= damage
 	$GUI.update_health(health)
 	if (health <= 0): # Level lost
-		current_level.set_time_scale(0.0001)
+		current_level.set_time_scale(0.0001, false)
 		$GUI.level_lost()
 
 func _on_GUI_restart_level():
