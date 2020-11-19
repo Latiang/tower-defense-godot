@@ -51,7 +51,8 @@ position = Vector2( 0, 70 )
 texture = ExtResource( 7 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( 0.515945, -36.5193 )
+position = Vector2( 35.5975, -0.843132 )
+rotation = 1.5708
 frames = SubResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

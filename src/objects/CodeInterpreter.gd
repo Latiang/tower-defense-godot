@@ -45,24 +45,29 @@ func _target(inputs):
 	var self_pos = Vector2(0, 0)
 	var diff = inputs[0] - self_pos
 	return self._rotate([diff.angle() * 180.0 / PI])
-		
+	
+func _position(inputs):
+	var result = {}
+	get_parent().emit_signal("turret_position", result)
+	return result[0]
 
-func _rotate(value):
+func _sleep(inputs):
+	get_parent().emit_signal("sleep", inputs[0])
+	return 0
+
+func _rotate(inputs):
 	self._stop = true
-	get_parent().emit_signal("rotate", (90 - value[0]) / 180.0 * PI)
+	get_parent().emit_signal("rotate", (inputs[0]) / 180.0 * PI)
 	return 0
 	
-func _read(value):
+func _read(inputs):
 	self._stop = true
 	var result = {}
-	get_parent().emit_signal("sensor_detect", result, value[0])
+	get_parent().emit_signal("sensor_detect", result, inputs[0])
 	if result[0]:
 		return result[0]
 	else:
 		return 0
-	
-func _dist(value):
-	pass
 
 func _negate(value):
 	return -value
@@ -869,8 +874,8 @@ func _ready():
 	self._std_functions["read_sensor"] = funcref(self, "_read")
 	self._std_functions["vector"] = funcref(self, "_vector2")
 	self._std_functions["target"] = funcref(self, "_target")
-	for operator in operators:
-		print(operator.syntax)
+	self._std_functions["position"] = funcref(self, "_position")
+	self._std_functions["sleep"] = funcref(self, "_sleep")
 	self._eval_object = null
 	
 # Run the code

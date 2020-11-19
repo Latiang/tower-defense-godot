@@ -119,13 +119,14 @@ func set_turret_info_icons(id):
 		
 # Disables the code editor and opens the console
 func set_execution_mode():
-	executing_mode = true
-	$VBoxContainer/LabelPanel/MarginContainer/CodeLabel.text = "Turret Logs"
-	$VBoxContainer/MarginContainer/CodeEditor.hide()
-	$VBoxContainer/MarginContainer/MarginContainer.show()
-	for i in range(len(turret_output_logs)):
-		turret_output_logs[i] = "--- Turret Executing ---"
-	update_terminal_text()
+	if (!executing_mode):
+		executing_mode = true
+		$VBoxContainer/LabelPanel/MarginContainer/CodeLabel.text = "Turret Logs"
+		$VBoxContainer/MarginContainer/CodeEditor.hide()
+		$VBoxContainer/MarginContainer/MarginContainer.show()
+		for i in range(len(turret_output_logs)):
+			turret_output_logs[i] = "--- Turret Executing ---"
+		update_terminal_text()
 	
 # Enable the code editor and close the console
 func set_coding_mode():

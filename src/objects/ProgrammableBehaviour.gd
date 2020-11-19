@@ -29,7 +29,7 @@ func _process(delta):
 	#var angle = get_parent().position.angle_to_point(get_viewport().get_mouse_position()) - PI/2
 	#emit_signal("rotate", angle)
 	# Time locked functonality, such as code execution
-	if (!locked):
+	if (!locked && allow_interpreting):
 		$CodeInterpreter.run()
 
 # Lock the object from executing code for a certain amount of time
