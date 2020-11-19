@@ -9,10 +9,12 @@ func _ready():
 func hide():
 	$TitleMenu.hide()
 	$LevelSelectionMenu.hide()
+	$BackgroundTexture.hide()
 
 func show():
 	$TitleMenu.show()
 	$LevelSelectionMenu.show()
+	$BackgroundTexture.show()
 
 # Open level selection menu
 func _on_PlayButton_pressed():

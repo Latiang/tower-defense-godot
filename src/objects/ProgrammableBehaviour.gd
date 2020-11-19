@@ -1,10 +1,13 @@
 extends Node
 
 # Output functions
+# Functions which do not return a value
 signal fire()
 signal rotate(angle)
 signal move(distance)
+# Functions which return a value
 signal sensor_detect(out_dict, id)
+signal turret_position(out_dict)
 
 signal code_error(error_message, error_line)
 

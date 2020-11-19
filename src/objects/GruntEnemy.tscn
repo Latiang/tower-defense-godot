@@ -20,6 +20,7 @@ scale = Vector2( 0.3, 0.3 )
 slime_animation = true
 
 [node name="EnemySprite" parent="Area2D" index="0"]
+position = Vector2( 0.700734, 0.700747 )
 frames = SubResource( 1 )
 
 [node name="EnemyCollisionShape" parent="Area2D" index="1"]

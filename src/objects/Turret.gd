@@ -53,6 +53,9 @@ func sensor_detect(out_dict):
 	else:
 		out_dict[0] = false
 
+func _on_ProgrammableBehaviour_turret_position(out_dict):
+	out_dict[0] = position
+
 func _on_ProgrammableBehaviour_fire():
 	fire()
 	$ProgrammableBehaviour.lock_for_time(reload_time / time_scale)
