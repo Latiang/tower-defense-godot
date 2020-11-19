@@ -5,7 +5,7 @@ signal restart_level()
 signal next_level()
 signal return_to_main_menu()
 signal update_code_source(new_source, turret_name)
-signal update_time_scale(new_time_scale)
+signal update_time_scale(new_time_scale, continue_interpreting)
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -127,28 +127,29 @@ func update_health(health):
 func _on_Speed1Button_pressed():
 	enable_speed_buttons()
 	$LevelControlsPanel/MarginContainer/HBoxContainer/Speed1Button.disabled = true
-	emit_signal("update_time_scale", 1)
+	emit_signal("update_time_scale", 1, true)
 	current_time_scale = 1
 	show_pause_button(true)
 
 func _on_Speed2Button_pressed():
 	enable_speed_buttons()
 	$LevelControlsPanel/MarginContainer/HBoxContainer/Speed2Button.disabled = true
-	emit_signal("update_time_scale", 3)
+	emit_signal("update_time_scale", 3, true)
 	current_time_scale = 3
 	show_pause_button(true)
 
 func _on_Speed3Button_pressed():
 	enable_speed_buttons()
 	$LevelControlsPanel/MarginContainer/HBoxContainer/Speed3Button.disabled = true
-	emit_signal("update_time_scale", 5)
+	emit_signal("update_time_scale", 5, true)
 	current_time_scale = 5
 	show_pause_button(true)
 
 func _on_PauseButton2_pressed():
 	enable_speed_buttons()
-	emit_signal("update_time_scale", 0.001)
+	emit_signal("update_time_scale", 0.001, false)
 	current_time_scale = 0.001
+	$CodeWindow.turrets
 	# Enable play button instead
 	show_pause_button(false)
 
@@ -206,7 +207,7 @@ func _on_turret_code_error(id, error_message, error_line):
 	$DebugPopup.set_text("Error in line %d in Turret %d:\n%s" % [error_line, id, error_message])
 	$DebugPopup.visible = true
 	self.error_line = error_line
-	emit_signal("update_time_scale", 0.001)
+	emit_signal("update_time_scale", 0.001, false)
 
 
 func _on_DebugLineCursorTimer_timeout():

@@ -7,6 +7,7 @@ signal code_error(id, error_message, error_line)
 
 export var id = 0;
 export var can_rotate = true
+export var rotation_speed = 180 # Degrees/s
 export var integrated_sensor = true
 export var can_move = true
 export var move_speed = 100 # Pixels/s 
@@ -18,11 +19,25 @@ var time_scale = 1
 var distance_to_move = 0
 var direction_right : bool = false
 
+var distance_to_rotate = 0
+
 func _ready():
 	pass
 
 func _process(delta):
-	if can_move and distance_to_move > 0 and $MovablePath/PathFollow2D.unit_offset < 1:
+	if can_rotate and (distance_to_rotate > 0.1 or distance_to_rotate < -0.1):
+		var dist = deg2rad(rotation_speed) * delta
+		if (distance_to_rotate < 0):
+			dist = -dist
+			if (distance_to_rotate - dist > 0):
+				dist = distance_to_rotate
+		else:
+			if (distance_to_rotate - dist < 0):
+				dist = distance_to_rotate
+		rotate(dist)
+		distance_to_rotate -= dist
+			
+	elif can_move and distance_to_move > 0 and $MovablePath/PathFollow2D.unit_offset < 1:
 		 # Ugly fix, translate position temporarily so that this acts in world space
 		position = position - $MovablePath/PathFollow2D.position
 		var offset = move_speed * delta * time_scale
@@ -43,8 +58,9 @@ func fire():
 		ammo_count -= 1
 
 func rotate(angle):
-	if (can_rotate):
+	if can_rotate:
 		rotation = angle
+		#distance_to_rotate = deg2rad(angle)
 
 func sensor_detect(out_dict):
 	if (integrated_sensor):
