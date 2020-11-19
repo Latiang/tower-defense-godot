@@ -458,6 +458,9 @@ class Evaluatable:
 							parent._error("The variable " + target_var + " has no member y", self.original_line)
 							yield()
 				else:
+					if not (self.lhs in scope):
+						parent._error("No variable with the name " + self.lhs + " exists in the current scope", self.original_line)
+						yield()
 					return scope[self.lhs]
 			return self.lhs
 		else:
