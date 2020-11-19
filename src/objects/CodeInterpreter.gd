@@ -24,35 +24,46 @@ class CodeLine:
 var operators
 var _stop = false
 var _eval_object
-
+var _error = false
 var _lines_left = 0
-export var OPS_PER_RUN = 500
+export var OPS_PER_RUN = 50
 
 func _error(message, line):
 	get_parent().emit_signal("code_error", message, line)
 	self._stop = true
-	self.ready_code()
+	self._error = true
+	return 0
 
 func _vector2(inputs):
+	if self._error:
+		return 0
 	return Vector2(inputs[0], inputs[1])
 
 func _shoot(vector):
+	if self._error:
+		return 0
 	self._stop = true
 	get_parent().emit_signal("fire")
 	return 0
 	
 func _target(inputs):
+	if self._error:
+		return 0
 	var self_pos = Vector2(0, 0)
 	var diff = inputs[0] - self_pos
 	return self._rotate([diff.angle() * 180.0 / PI])
 		
 
 func _rotate(value):
+	if self._error:
+		return 0
 	self._stop = true
 	get_parent().emit_signal("rotate", (90 - value[0]) / 180.0 * PI)
 	return 0
 	
 func _read(value):
+	if self._error:
+		return 0
 	self._stop = true
 	var result = {}
 	get_parent().emit_signal("sensor_detect", result, value[0])
@@ -62,39 +73,63 @@ func _read(value):
 		return 0
 	
 func _dist(value):
-	pass
+	if self._error:
+		return 0
+	return 0
 
 func _negate(value):
+	if self._error:
+		return 0
 	return -value
 
 func _power(lhs, rhs):
+	if self._error:
+		return 0
 	return pow(lhs, rhs)
 
 func _multiply(lhs, rhs):
+	if self._error:
+		return 0
 	return lhs * rhs
 	
 func _divide(lhs, rhs):
+	if self._error:
+		return 0
 	return float(lhs) / rhs
 
 func _add(lhs, rhs):
+	if self._error:
+		return 0
 	return lhs + rhs
 	
 func _sub(lhs, rhs):
+	if self._error:
+		return 0
 	return lhs - rhs
 
 func _equals(lhs, rhs):
+	if self._error:
+		return 0
 	return lhs == rhs
 
 func _greater_than(lhs, rhs):
+	if self._error:
+		return 0
 	return lhs > rhs
 	
 func _less_than(lhs, rhs):
+	if self._error:
+		return 0
 	return lhs < rhs
 	
 func _and(lhs, rhs):
+	if self._error:
+		return 0
 	return lhs and rhs
 	
 func _or(lhs, rhs):
+	if self._error:
+		return 0
 	return lhs or rhs
 
 func _run_code():
@@ -110,7 +145,6 @@ func _run_code():
 		while res is GDScriptFunctionState and res.is_valid():
 			yield()
 			res = res.resume()
-		
 func _print(val):
 	print(val[0])
 	console_output_buffer.append(str(val[0]))
@@ -251,7 +285,7 @@ class Function:
 				if scope["_return"] != null:
 					return scope["_return"]
 				yield()
-				exe.resume()
+				exe = exe.resume()
 		return null
 	
 class FunctionCall:
@@ -294,7 +328,7 @@ class FunctionCall:
 
 	func run(scope, parent):
 		parent.last_run_line = self.original_line
-		while parent._stop:
+		if parent._stop:
 			yield()
 		var argument_list = []
 		var exe
@@ -302,7 +336,7 @@ class FunctionCall:
 			exe = arg.run(scope, parent)
 			while exe is GDScriptFunctionState:
 				yield()
-				exe.resume()
+				exe = exe.resume()
 			argument_list.append(exe)
 		if func_name in parent._functions:
 			exe = parent._functions[func_name].call_func(argument_list, parent)
@@ -776,26 +810,31 @@ func _statements_from_lines(lines, function=false):
 				j = j + 1
 			if name == "":
 				self._error("A function name must follow def", line_index)
+				return []
 				index = index + 1
 				continue
 			line = line.substr(len(name))
 			line = line.strip_edges()
-			if (len(line) >= 2):
+			if (len(line) < 2):
 				self._error("A function must be followed by parentheses", line_index)
+				return []
 				index = index + 1
 				continue
-			if (line[0] == "("):
+			if (line[0] != "("):
 				self._error("A function must be followed by parentheses", line_index)
+				return []
 				index = index + 1
 				continue
-			if (line[len(line) - 1] == ")"):
+			if (line[len(line) - 1] != ")"):
 				self._error("A function must be followed by parentheses", line_index)
+				return []
 				index = index + 1
 				continue
 			line = line.trim_prefix("(")
 			line = line.trim_suffix(")")
 			if "(" in line or ")" in line:
 				self._error("A function definition cannot contain more than one pair of parentheses", line_index)
+				return []
 				index = index + 1
 				continue
 			var args = line
@@ -877,17 +916,13 @@ func _ready():
 func run():
 	print(code_source)
 	self._stop = false
-	self._lines_left = self.OPS_PER_RUN
+	self._lines_left = 50
+	self._error = false
 	if self._eval_object == null:
-		self._eval_object = true
-		var temp = self._run_code()
-		if self._eval_object:
-			self._eval_object = temp
+		self._eval_object = self._run_code()
 	else:
 		if self._eval_object is GDScriptFunctionState and self._eval_object.is_valid():
-			var temp = self._eval_object.resume()
-			if self._eval_object != null:
-				self._eval_object = temp
+			self._eval_object = self._eval_object.resume()
 	print("Done")
 	
 func ready_code():
