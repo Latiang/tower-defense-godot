@@ -2,7 +2,5 @@
 
 {"description":"test","file":"TestLevel1","count": 1, "status":1,"turret_code":["#Code for level 1 turret 1"]},
 
-{"description":"test2","file":"TestLevel2","count": 2, "status":0,"turret_code":["#Code for level 2 turret 1", "#Code for level 2 turret 2"], "tutorial_popups": 
-[[1250, 350, "[center]Welcome to the game! This is where you will write code for the turrets to execute[\center]"], 
-[10, 10, "This is the corner of the screen. Nothing interesting happens here"]]}
+{"description":"test2","file":"TestLevel2","count": 2, "status":0,"turret_code":["#Code for level 2 turret 1", "#Code for level 2 turret 2"]}
 ]}

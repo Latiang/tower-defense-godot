@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://assets/GUITheme.tres" type="Theme" id=1]
 [ext_resource path="res://objects/CodeWindow.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://assets/fonts/fa-solid-900.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://assets/fonts/Inter-SemiBold-slnt=0.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://objects/PopupDialogOk.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/textures/gui-background-1.png" type="Texture" id=7]
 [ext_resource path="res://objects/EscapeMenu.tscn" type="PackedScene" id=8]
 [ext_resource path="res://objects/TutorialPopup.tscn" type="PackedScene" id=9]
 
@@ -43,6 +44,16 @@ font_data = ExtResource( 5 )
 
 [node name="GUI" type="CanvasLayer"]
 script = ExtResource( 3 )
+
+[node name="RightPanelBackground" type="TextureRect" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -360.0
+margin_bottom = 1080.0
+texture = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CodeWindow" parent="." instance=ExtResource( 2 )]
 anchor_left = 1.0

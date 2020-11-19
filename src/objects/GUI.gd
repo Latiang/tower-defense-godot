@@ -188,6 +188,7 @@ func _on_DebugPopup_button_pressed():
 # Return to Main Menu
 func _on_EscapeMenu_exit():
 	toggle_escape_menu()
+	$CodeWindow.set_coding_mode()
 	emit_signal("return_to_main_menu")
 
 func _on_EscapeMenu_restart():
