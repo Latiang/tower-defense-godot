@@ -1,18 +1,158 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=23 format=2]
 
-[ext_resource path="res://assets/GUITheme.tres" type="Theme" id=1]
+[ext_resource path="res://objects/SettingsMenu.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/Inter-Medium-slnt=0.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/fonts/Inter-SemiBold-slnt=0.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://objects/SettingsCheckbox.tscn" type="PackedScene" id=4]
+[ext_resource path="res://objects/SettingsSlider.tscn" type="PackedScene" id=5]
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.28, 0.525, 0.7, 1 )
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.28, 0.525, 0.7, 1 )
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_size = 2
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.360784, 0.67451, 0.898039, 1 )
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxEmpty" id=13]
+
+[sub_resource type="StyleBoxEmpty" id=14]
+
+[sub_resource type="StyleBoxEmpty" id=15]
+
+[sub_resource type="StyleBoxEmpty" id=16]
+
+[sub_resource type="StyleBoxEmpty" id=17]
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.172549, 0.203922, 0.247059, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_size = 3
+
+[sub_resource type="DynamicFont" id=5]
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+content_margin_left = 5.0
+content_margin_right = 5.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color( 0.215686, 0.243137, 0.286275, 1 )
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_size = 3
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0.470588, 0.533333, 0.627451, 1 )
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+expand_margin_left = 1.0
+
+[sub_resource type="DynamicFont" id=8]
+size = 30
+font_data = ExtResource( 3 )
+
+[sub_resource type="Theme" id=10]
+default_font = SubResource( 8 )
+Button/colors/font_color = Color( 0.878431, 0.878431, 0.878431, 1 )
+Button/colors/font_color_disabled = Color( 0.878431, 0.878431, 0.878431, 1 )
+Button/colors/font_color_hover = Color( 0.94, 0.94, 0.94, 1 )
+Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+Button/constants/hseparation = 2
+Button/fonts/font = null
+Button/styles/disabled = SubResource( 1 )
+Button/styles/focus = null
+Button/styles/hover = SubResource( 2 )
+Button/styles/normal = SubResource( 3 )
+Button/styles/pressed = SubResource( 1 )
+CheckBox/colors/font_color = Color( 0.88, 0.88, 0.88, 1 )
+CheckBox/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
+CheckBox/colors/font_color_hover = Color( 0.94, 0.94, 0.94, 1 )
+CheckBox/colors/font_color_hover_pressed = Color( 1, 1, 1, 1 )
+CheckBox/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+CheckBox/constants/check_vadjust = 0
+CheckBox/constants/hseparation = 4
+CheckBox/fonts/font = null
+CheckBox/icons/checked = null
+CheckBox/icons/radio_checked = null
+CheckBox/icons/radio_unchecked = null
+CheckBox/icons/unchecked = null
+CheckBox/styles/disabled = null
+CheckBox/styles/focus = SubResource( 13 )
+CheckBox/styles/hover = SubResource( 14 )
+CheckBox/styles/hover_pressed = SubResource( 15 )
+CheckBox/styles/normal = SubResource( 16 )
+CheckBox/styles/pressed = SubResource( 17 )
+Panel/styles/panel = SubResource( 4 )
+PanelContainer/styles/panel = SubResource( 4 )
+TooltipLabel/colors/font_color = Color( 1, 1, 1, 1 )
+TooltipLabel/colors/font_color_shadow = Color( 0, 0, 0, 0.1 )
+TooltipLabel/constants/shadow_offset_x = 1
+TooltipLabel/constants/shadow_offset_y = 1
+TooltipLabel/fonts/font = SubResource( 5 )
+TooltipPanel/styles/panel = SubResource( 6 )
+VSeparator/constants/separation = 4
+VSeparator/styles/separator = SubResource( 7 )
+
+[sub_resource type="DynamicFont" id=11]
 size = 40
 outline_size = 3
 outline_color = Color( 0, 0, 0, 0 )
 font_data = ExtResource( 2 )
 
+[sub_resource type="DynamicFont" id=12]
+size = 22
+font_data = ExtResource( 3 )
+
+[sub_resource type="Theme" id=9]
+default_font = SubResource( 12 )
+Label/colors/font_color = Color( 0.894118, 0.894118, 0.894118, 1 )
+Label/colors/font_color_shadow = Color( 0, 0, 0, 0 )
+Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
+Label/constants/line_spacing = 3
+Label/constants/shadow_as_outline = 0
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 1
+Label/fonts/font = null
+Label/styles/normal = null
+Panel/styles/panel = SubResource( 4 )
+PanelContainer/styles/panel = SubResource( 4 )
+TooltipLabel/colors/font_color = Color( 1, 1, 1, 1 )
+TooltipLabel/colors/font_color_shadow = Color( 0, 0, 0, 0.1 )
+TooltipLabel/constants/shadow_offset_x = 1
+TooltipLabel/constants/shadow_offset_y = 1
+TooltipLabel/fonts/font = SubResource( 5 )
+TooltipPanel/styles/panel = SubResource( 6 )
+VSeparator/constants/separation = 4
+VSeparator/styles/separator = SubResource( 7 )
+
 [node name="SettingsMenu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = ExtResource( 1 )
+theme = SubResource( 10 )
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -48,7 +188,7 @@ custom_constants/separation = 10
 [node name="SettingsLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
 margin_right = 520.0
 margin_bottom = 49.0
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 11 )
 text = "Settings"
 align = 1
 valign = 1
@@ -70,35 +210,131 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="GeneralMarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 margin_top = 121.0
 margin_right = 520.0
-margin_bottom = 121.0
+margin_bottom = 217.0
+custom_constants/margin_right = 25
+custom_constants/margin_top = 10
+custom_constants/margin_left = 25
+custom_constants/margin_bottom = 20
 
-[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
-margin_top = 131.0
+[node name="TooltipsCheckbox" parent="PanelContainer/MarginContainer/VBoxContainer/GeneralMarginContainer" instance=ExtResource( 4 )]
+margin_left = 25.0
+margin_top = 10.0
+margin_right = 495.0
+margin_bottom = 76.0
+label = "Tutorial Tooltips"
+
+[node name="AppearanceLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+margin_top = 227.0
 margin_right = 520.0
-margin_bottom = 169.0
-text = "Graphics"
+margin_bottom = 265.0
+text = "Appearance"
 
 [node name="HSeparator2" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer"]
-margin_top = 179.0
+margin_top = 275.0
 margin_right = 520.0
-margin_bottom = 183.0
+margin_bottom = 279.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label2" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
-margin_top = 193.0
+[node name="AppearanceMarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+margin_top = 289.0
 margin_right = 520.0
-margin_bottom = 231.0
+margin_bottom = 443.0
+theme = SubResource( 9 )
+custom_constants/margin_right = 25
+custom_constants/margin_top = 10
+custom_constants/margin_left = 25
+custom_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/AppearanceMarginContainer"]
+margin_left = 25.0
+margin_top = 10.0
+margin_right = 495.0
+margin_bottom = 134.0
+custom_constants/separation = 10
+
+[node name="FullscreenCheckbox" parent="PanelContainer/MarginContainer/VBoxContainer/AppearanceMarginContainer/VBoxContainer" instance=ExtResource( 4 )]
+margin_right = 470.0
+label = "Fullscreen"
+
+[node name="CodeTextSlider" parent="PanelContainer/MarginContainer/VBoxContainer/AppearanceMarginContainer/VBoxContainer" instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 76.0
+margin_right = 470.0
+margin_bottom = 124.0
+label = "Code Text Size"
+slider_left_label = "Small"
+slider_right_label = "Large"
+
+[node name="AudioLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+margin_top = 453.0
+margin_right = 520.0
+margin_bottom = 491.0
 text = "Audio"
 
 [node name="HSeparator3" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer"]
-margin_top = 241.0
+margin_top = 501.0
 margin_right = 520.0
-margin_bottom = 245.0
+margin_bottom = 505.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="AudioMarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+margin_top = 515.0
+margin_right = 520.0
+margin_bottom = 651.0
+theme = SubResource( 9 )
+custom_constants/margin_right = 25
+custom_constants/margin_top = 10
+custom_constants/margin_left = 25
+custom_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/AudioMarginContainer"]
+margin_left = 25.0
+margin_top = 10.0
+margin_right = 495.0
+margin_bottom = 116.0
+custom_constants/separation = 10
+
+[node name="VolMasterSlider" parent="PanelContainer/MarginContainer/VBoxContainer/AudioMarginContainer/VBoxContainer" instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 470.0
+margin_bottom = 48.0
+label = "Master Volume"
+
+[node name="VolMusicSlider" parent="PanelContainer/MarginContainer/VBoxContainer/AudioMarginContainer/VBoxContainer" instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 58.0
+margin_right = 470.0
+margin_bottom = 106.0
+label = "Music Volume"
+
+[node name="FillerControl" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer"]
+margin_top = 661.0
+margin_right = 520.0
+margin_bottom = 717.0
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+margin_top = 727.0
+margin_right = 520.0
+margin_bottom = 785.0
+custom_constants/margin_right = 320
+custom_constants/margin_bottom = 20
+
+[node name="BackButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/MarginContainer"]
+margin_right = 200.0
+margin_bottom = 38.0
+text = "Back"
+[connection signal="toggled" from="PanelContainer/MarginContainer/VBoxContainer/GeneralMarginContainer/TooltipsCheckbox" to="." method="_on_TooltipsCheckbox_toggled"]
+[connection signal="slider_changed" from="PanelContainer/MarginContainer/VBoxContainer/AppearanceMarginContainer/VBoxContainer/CodeTextSlider" to="." method="_on_CodeTextSlider_slider_changed"]
+[connection signal="slider_changed" from="PanelContainer/MarginContainer/VBoxContainer/AudioMarginContainer/VBoxContainer/VolMusicSlider" to="." method="_on_VolMusicSlider_slider_changed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/MarginContainer/BackButton" to="." method="_on_BackButton_pressed"]

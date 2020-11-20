@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://assets/fonts/Inter-Medium-slnt=0.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://objects/MainMenu.gd" type="Script" id=2]
 [ext_resource path="res://objects/LevelSelectionMenu.gd" type="Script" id=3]
 [ext_resource path="res://assets/textures/menu-background.png" type="Texture" id=4]
+[ext_resource path="res://objects/SettingsMenu.tscn" type="PackedScene" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 size = 100
@@ -174,6 +175,10 @@ margin_bottom = 43.0
 text = "Select a Level"
 align = 1
 valign = 1
+
+[node name="SettingsMenu" parent="." instance=ExtResource( 5 )]
+visible = false
 [connection signal="pressed" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer/PlayButton" to="." method="_on_PlayButton_pressed"]
 [connection signal="pressed" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer2/SettingsButton" to="." method="_on_SettingsButton_pressed"]
 [connection signal="pressed" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer3/ExitButton" to="." method="_on_ExitButton_pressed"]
+[connection signal="close_settings_menu" from="SettingsMenu" to="." method="_on_SettingsMenu_close_settings_menu"]

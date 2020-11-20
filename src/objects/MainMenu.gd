@@ -10,6 +10,7 @@ func hide():
 	$TitleMenu.hide()
 	$LevelSelectionMenu.hide()
 	$BackgroundTexture.hide()
+	$SettingsMenu.hide()
 
 func show():
 	$TitleMenu.show()
@@ -22,7 +23,8 @@ func _on_PlayButton_pressed():
 	$LevelSelectionMenu.show()
 
 func _on_SettingsButton_pressed():
-	pass # Replace with function body.
+	$TitleMenu.hide()
+	$SettingsMenu.show()
 
 # Exit game
 func _on_ExitButton_pressed():
@@ -31,3 +33,7 @@ func _on_ExitButton_pressed():
 func _on_level_button_pressed(level_number):
 	emit_signal("start_level", level_number)
 	print("[Main Menu] Level %d selected" % level_number)
+
+func _on_SettingsMenu_close_settings_menu():
+	$TitleMenu.show()
+	$SettingsMenu.hide()

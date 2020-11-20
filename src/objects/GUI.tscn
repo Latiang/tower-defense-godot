@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://assets/GUITheme.tres" type="Theme" id=1]
 [ext_resource path="res://objects/CodeWindow.tscn" type="PackedScene" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://assets/textures/gui-background-1.png" type="Texture" id=7]
 [ext_resource path="res://objects/EscapeMenu.tscn" type="PackedScene" id=8]
 [ext_resource path="res://objects/TutorialPopup.tscn" type="PackedScene" id=9]
+[ext_resource path="res://objects/SettingsMenu.tscn" type="PackedScene" id=10]
 
 [sub_resource type="DynamicFont" id=1]
 size = 35
@@ -317,6 +318,9 @@ visible = false
 [node name="DebugLineCursorTimer" type="Timer" parent="."]
 wait_time = 0.05
 one_shot = true
+
+[node name="SettingsMenu" parent="." instance=ExtResource( 10 )]
+visible = false
 [connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/Speed3Button" to="." method="_on_Speed3Button_pressed"]
 [connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/Speed2Button" to="." method="_on_Speed2Button_pressed"]
 [connection signal="pressed" from="LevelControlsPanel/MarginContainer/HBoxContainer/Speed1Button" to="." method="_on_Speed1Button_pressed"]
@@ -331,3 +335,4 @@ one_shot = true
 [connection signal="resume" from="EscapeMenu" to="." method="_on_EscapeMenu_resume"]
 [connection signal="settings" from="EscapeMenu" to="." method="_on_EscapeMenu_settings"]
 [connection signal="timeout" from="DebugLineCursorTimer" to="." method="_on_DebugLineCursorTimer_timeout"]
+[connection signal="close_settings_menu" from="SettingsMenu" to="." method="_on_SettingsMenu_close_settings_menu"]

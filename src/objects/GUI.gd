@@ -200,7 +200,9 @@ func _on_EscapeMenu_resume():
 	toggle_escape_menu()
 
 func _on_EscapeMenu_settings():
-	pass # Replace with function body.
+	toggle_escape_menu()
+	$PopupGreyCover.show()
+	$SettingsMenu.show()
 
 func _on_turret_code_error(id, error_message, error_line):
 	$PopupGreyCover.visible = true
@@ -221,3 +223,7 @@ func _on_TutorialPopup_button_pressed():
 	else:
 		$TutorialPopup.hide()
 		$PopupGreyCover.hide()
+
+func _on_SettingsMenu_close_settings_menu():
+	toggle_escape_menu()
+	$SettingsMenu.hide()
