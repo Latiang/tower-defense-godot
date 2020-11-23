@@ -24,7 +24,7 @@ func _on_PlayButton_pressed():
 
 func _on_SettingsButton_pressed():
 	$TitleMenu.hide()
-	$SettingsMenu.show()
+	$SettingsMenu.display()
 
 # Exit game
 func _on_ExitButton_pressed():

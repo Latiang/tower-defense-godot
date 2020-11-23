@@ -4,6 +4,8 @@ export var debug_main_menu_override = false
 export var debug_tick_interpreter_once = false
 export var autosave_enabled = true
 
+var settings_state = load("res://objects/SettingsStateClass.gd").new()
+
 func _ready():
 	# Load main menu
 	$MainMenu/LevelSelectionMenu.populate_level_buttons($LevelManager.save_state)
@@ -13,6 +15,9 @@ func _ready():
 		_on_MainMenu_start_level(0)
 		if debug_tick_interpreter_once:
 			$LevelManager.current_level.debug_tick_interpreter_once()
+	settings_state.load_from_file()
+	$MainMenu/SettingsMenu.settings_state = settings_state
+	$LevelManager/GUI/SettingsMenu.settings_state = settings_state
 
 func _input(event):
 	if event.is_action_pressed("fullscreen_toggle") and !event.is_echo():

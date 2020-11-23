@@ -202,7 +202,7 @@ func _on_EscapeMenu_resume():
 func _on_EscapeMenu_settings():
 	toggle_escape_menu()
 	$PopupGreyCover.show()
-	$SettingsMenu.show()
+	$SettingsMenu.display()
 
 func _on_turret_code_error(id, error_message, error_line):
 	$PopupGreyCover.visible = true

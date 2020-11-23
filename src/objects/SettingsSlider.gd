@@ -13,6 +13,11 @@ signal slider_changed(value)
 func _ready():
 	update_children_properties()
 
+func set_state(state):
+	$HBoxContainer/CenterContainer/VBoxContainer/HSlider.value = state
+
+func get_state():
+	return $HBoxContainer/CenterContainer/VBoxContainer/HSlider.value
 
 func update_children_properties():
 	$HBoxContainer/Label.text = label

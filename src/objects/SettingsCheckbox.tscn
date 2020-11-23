@@ -1,9 +1,9 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/fonts/Inter-SemiBold-slnt=0.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://SettingsCheckbox.gd" type="Script" id=2]
+[ext_resource path="res://objects/SettingsCheckbox.gd" type="Script" id=2]
 
-[sub_resource type="StyleBoxFlat" id=4]
+[sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.172549, 0.203922, 0.247059, 1 )
 corner_radius_top_left = 10
 corner_radius_top_right = 10
@@ -11,11 +11,11 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 shadow_size = 3
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=2]
 use_filter = true
 font_data = ExtResource( 1 )
 
-[sub_resource type="StyleBoxFlat" id=6]
+[sub_resource type="StyleBoxFlat" id=3]
 content_margin_left = 5.0
 content_margin_right = 5.0
 content_margin_top = 5.0
@@ -27,7 +27,7 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 shadow_size = 3
 
-[sub_resource type="StyleBoxFlat" id=7]
+[sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0.470588, 0.533333, 0.627451, 1 )
 corner_radius_top_left = 1
 corner_radius_top_right = 1
@@ -35,12 +35,12 @@ corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 expand_margin_left = 1.0
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="DynamicFont" id=5]
 size = 22
 font_data = ExtResource( 1 )
 
-[sub_resource type="Theme" id=9]
-default_font = SubResource( 12 )
+[sub_resource type="Theme" id=6]
+default_font = SubResource( 5 )
 Label/colors/font_color = Color( 0.894118, 0.894118, 0.894118, 1 )
 Label/colors/font_color_shadow = Color( 0, 0, 0, 0 )
 Label/colors/font_outline_modulate = Color( 1, 1, 1, 1 )
@@ -50,16 +50,16 @@ Label/constants/shadow_offset_x = 1
 Label/constants/shadow_offset_y = 1
 Label/fonts/font = null
 Label/styles/normal = null
-Panel/styles/panel = SubResource( 4 )
-PanelContainer/styles/panel = SubResource( 4 )
+Panel/styles/panel = SubResource( 1 )
+PanelContainer/styles/panel = SubResource( 1 )
 TooltipLabel/colors/font_color = Color( 1, 1, 1, 1 )
 TooltipLabel/colors/font_color_shadow = Color( 0, 0, 0, 0.1 )
 TooltipLabel/constants/shadow_offset_x = 1
 TooltipLabel/constants/shadow_offset_y = 1
-TooltipLabel/fonts/font = SubResource( 5 )
-TooltipPanel/styles/panel = SubResource( 6 )
+TooltipLabel/fonts/font = SubResource( 2 )
+TooltipPanel/styles/panel = SubResource( 3 )
 VSeparator/constants/separation = 4
-VSeparator/styles/separator = SubResource( 7 )
+VSeparator/styles/separator = SubResource( 4 )
 
 [node name="SettingsCheckbox" type="Container"]
 margin_right = 278.0
@@ -73,7 +73,7 @@ __meta__ = {
 [node name="MarginContainer" type="MarginContainer" parent="."]
 margin_right = 278.0
 margin_bottom = 66.0
-theme = SubResource( 9 )
+theme = SubResource( 6 )
 custom_constants/margin_right = 0
 custom_constants/margin_top = 10
 custom_constants/margin_left = 0
