@@ -35,5 +35,8 @@ func _on_level_button_pressed(level_number):
 	print("[Main Menu] Level %d selected" % level_number)
 
 func _on_SettingsMenu_close_settings_menu():
+	# Propagate settings change
+	get_parent().propagate_settings_change()
 	$TitleMenu.show()
 	$SettingsMenu.hide()
+	

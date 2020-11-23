@@ -89,6 +89,7 @@ func reset():
 	for turret_button in turret_buttons:
 		turret_button.queue_free()
 	turret_buttons = []
+	current_turret_index = -1
 
 func _on_TurretButton1_turret_button_pressed(button):
 	open_code_window(int(button.text)-1)
@@ -137,3 +138,11 @@ func set_coding_mode():
 
 func update_terminal_text():
 	$VBoxContainer/MarginContainer/MarginContainer/ConsoleText.text = turret_output_logs[current_turret_index] + "\n>"
+
+func set_code_font_size(size):
+	var font = $VBoxContainer/MarginContainer/CodeEditor.get_font("font")
+	print(font.size)
+	font.size = size
+	$VBoxContainer/MarginContainer/CodeEditor.add_font_override("font", font)
+	if current_turret_index != -1:
+		open_code_window(current_turret_index, true)

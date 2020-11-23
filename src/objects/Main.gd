@@ -18,10 +18,12 @@ func _ready():
 	settings_state.load_from_file()
 	$MainMenu/SettingsMenu.settings_state = settings_state
 	$LevelManager/GUI/SettingsMenu.settings_state = settings_state
+	propagate_settings_change()
 
 func _input(event):
 	if event.is_action_pressed("fullscreen_toggle") and !event.is_echo():
-		OS.window_fullscreen = !OS.window_fullscreen
+		settings_state.set("fullscreen", !settings_state.get("fullscreen"))
+		propagate_settings_change()
 
 func _on_MainMenu_start_level(level_number):
 	show_level()
@@ -40,3 +42,8 @@ func show_level():
 
 func _on_GUI_return_to_main_menu():
 	show_MainMenu()
+	
+func propagate_settings_change():
+	$LevelManager/GUI.update_setting_effects(settings_state)
+	OS.window_fullscreen = settings_state.get("fullscreen")
+	settings_state.save_to_file()

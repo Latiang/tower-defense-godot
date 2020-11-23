@@ -219,12 +219,12 @@ custom_constants/margin_top = 10
 custom_constants/margin_left = 25
 custom_constants/margin_bottom = 20
 
-[node name="TooltipsCheckbox" parent="PanelContainer/MarginContainer/VBoxContainer/GeneralMarginContainer" instance=ExtResource( 4 )]
+[node name="TutPopupsCheckbox" parent="PanelContainer/MarginContainer/VBoxContainer/GeneralMarginContainer" instance=ExtResource( 4 )]
 margin_left = 25.0
 margin_top = 10.0
 margin_right = 495.0
 margin_bottom = 76.0
-label = "Tutorial Tooltips"
+label = "Tutorial Popups"
 
 [node name="AppearanceLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
 margin_top = 227.0
@@ -270,6 +270,9 @@ margin_bottom = 124.0
 label = "Code Text Size"
 slider_left_label = "Small"
 slider_right_label = "Large"
+slider_min = 16
+slider_max = 28
+slider_step = 4
 
 [node name="AudioLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
 margin_top = 453.0
@@ -334,7 +337,7 @@ custom_constants/margin_bottom = 20
 margin_right = 200.0
 margin_bottom = 38.0
 text = "Back"
-[connection signal="toggled" from="PanelContainer/MarginContainer/VBoxContainer/GeneralMarginContainer/TooltipsCheckbox" to="." method="_on_TooltipsCheckbox_toggled"]
+[connection signal="toggled" from="PanelContainer/MarginContainer/VBoxContainer/GeneralMarginContainer/TutPopupsCheckbox" to="." method="_on_TooltipsCheckbox_toggled"]
 [connection signal="toggled" from="PanelContainer/MarginContainer/VBoxContainer/AppearanceMarginContainer/VBoxContainer/FullscreenCheckbox" to="." method="_on_FullscreenCheckbox_toggled"]
 [connection signal="slider_changed" from="PanelContainer/MarginContainer/VBoxContainer/AppearanceMarginContainer/VBoxContainer/CodeTextSlider" to="." method="_on_CodeTextSlider_slider_changed"]
 [connection signal="slider_changed" from="PanelContainer/MarginContainer/VBoxContainer/AudioMarginContainer/VBoxContainer/VolMasterSlider" to="." method="_on_VolMasterSlider_slider_changed"]

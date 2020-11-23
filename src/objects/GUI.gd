@@ -18,6 +18,7 @@ var current_time_scale = 1
 var error_line = 0
 var force_debug_cursor_position = false
 
+var tutorial_popups_enabled = true
 var tutorial_popups = []
 var current_tutorial_popup_index = 0
 
@@ -41,7 +42,7 @@ func update_level_data(data):
 		
 func update_tutorial_popups(popups):
 	tutorial_popups = popups
-	if len(popups):
+	if tutorial_popups_enabled and len(popups):
 		show_next_tutorial_popup()
 		$PopupGreyCover.show()
 		
@@ -190,6 +191,7 @@ func _on_DebugPopup_button_pressed():
 func _on_EscapeMenu_exit():
 	toggle_escape_menu()
 	$CodeWindow.set_coding_mode()
+	reset()
 	emit_signal("return_to_main_menu")
 
 func _on_EscapeMenu_restart():
@@ -218,12 +220,19 @@ func _on_DebugLineCursorTimer_timeout():
 
 
 func _on_TutorialPopup_button_pressed():
-	if len(tutorial_popups) > current_tutorial_popup_index:
+	if tutorial_popups_enabled and len(tutorial_popups) > current_tutorial_popup_index:
 		show_next_tutorial_popup()
 	else:
 		$TutorialPopup.hide()
 		$PopupGreyCover.hide()
 
 func _on_SettingsMenu_close_settings_menu():
+	get_parent().get_parent().propagate_settings_change()
 	toggle_escape_menu()
 	$SettingsMenu.hide()
+
+func update_setting_effects(settings_state):
+	# Update font size of Code window
+	tutorial_popups_enabled = settings_state.get("tutorial_popups")
+	$CodeWindow.set_code_font_size(settings_state.get("code_font_size"))
+		
