@@ -57,6 +57,8 @@ func load_level(level_index):
 	if get_parent().autosave_enabled:
 		$AutoSaveTimer.start()
 
+	save_state.save_level_data(current_level, current_level_index, 2)
+
 # Start a level wave (start button pressed)
 func _on_GUI_start_wave():
 	if !current_level.wave_started:
