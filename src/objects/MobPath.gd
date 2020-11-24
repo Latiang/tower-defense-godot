@@ -4,6 +4,7 @@ export var BehaviourFile = ""
 
 var time_scale = 1
 var spawning_complete = false
+export var speed = 100
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -16,6 +17,7 @@ func start_spawning_time():
 func spawn():
 	var mob = preload("res://objects/GruntEnemy.tscn").instance()
 	mob.speed_multiplier = time_scale
+	mob.speed = speed
 	mob.connect("base_damage", get_parent().get_parent(), "_on_Level_base_damage")
 	add_child(mob)
 

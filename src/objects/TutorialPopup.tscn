@@ -26,7 +26,6 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-text = ""
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 margin_right = 300.0

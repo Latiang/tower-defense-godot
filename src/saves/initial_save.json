@@ -1,6 +1,50 @@
 {"levels":[
 
-{"description":"test","file":"TestLevel1","count": 1, "status":1,"turret_code":["#Code for level 1 turret 1"]},
+{"description":"Learning the Basics","file":"Level1","count": 1, "status":1,"turret_code":["# This is a comment!\n# Write your code here. Try fire()!"], 
+"tutorial_popups" : [
+[810, 440, "[center]Welcome to TurretIO, the tower defense game where you win by writing code[/center]"],
+[1350, 470, "[center]This is your code window, where you instruct your turrets on what to do.\nTry typing the function fire() and see what happens when you start the level![/center]"]
+]},
 
-{"description":"test2","file":"TestLevel2","count": 2, "status":0,"turret_code":["#Code for level 2 turret 1", "#Code for level 2 turret 2"], "tutorial_popups": [[10, 10, "hello"], [500, 50, "thx bye"]]}
+{"description":"Spinning, that's a good trick!","file":"Level2","count": 2, "status":1,"turret_code":["# Try the function rotate(90) to rotate your turret 90 degrees!\n"]},
+
+{"description":"Sensor Time","file":"Level3","count": 3, "status":1,"turret_code":["# selfsensor() will return true if there is an enemy infront of you. Try using it together with 'if'!"], 
+"tutorial_popups" : [
+[810, 440, "[center]In this level you have a limited amount of ammo. Choose your shots carefully![/center]"],
+[1580, 530, "[center]Your turrets have different abilities on different levels, which can be seen from these icons.\nHover over them to get more info![/center]"]
+]},
+
+{"description":"Learn the Basics","file":"Level4","count": 4, "status":1,"turret_code":["# This is a comment!\n# Write your code here"], 
+"tutorial_popups" : [
+[810, 440, "[center]Welcome to TurretIO, the tower defense game where you win by writing code[/center]"],
+[1350, 470, "[center]This is your code window, where you instruct your turrets on what to do.\nTry typing the function fire() and see what happens when you start the level![/center]"]
+]},
+
+{"description":"Learn the Basics","file":"Level5","count": 5, "status":1,"turret_code":["# This is a comment!\n# Write your code here"], 
+"tutorial_popups" : [
+[810, 440, "[center]Welcome to TurretIO, the tower defense game where you win by writing code[/center]"],
+[1350, 470, "[center]This is your code window, where you instruct your turrets on what to do.\nTry typing the function fire() and see what happens when you start the level![/center]"]
+]},
+
+{"description":"Learn the Basics","file":"Level6","count": 6, "status":1,"turret_code":["# This is a comment!\n# Write your code here"], 
+"tutorial_popups" : [
+[810, 440, "[center]Welcome to TurretIO, the tower defense game where you win by writing code[/center]"],
+[1350, 470, "[center]This is your code window, where you instruct your turrets on what to do.\nTry typing the function fire() and see what happens when you start the level![/center]"]
+]},
+
+{"description":"Learn the Basics","file":"Level7","count": 7, "status":1,"turret_code":["# This is a comment!\n# Write your code here"], 
+"tutorial_popups" : [
+[810, 440, "[center]Welcome to TurretIO, the tower defense game where you win by writing code[/center]"],
+[1350, 470, "[center]This is your code window, where you instruct your turrets on what to do.\nTry typing the function fire() and see what happens when you start the level![/center]"]
+]},
+
+{"description":"Learn the Basics","file":"Level8","count": 8, "status":1,"turret_code":["# This is a comment!\n# Write your code here"], 
+"tutorial_popups" : [
+[810, 440, "[center]Welcome to TurretIO, the tower defense game where you win by writing code[/center]"],
+[1350, 470, "[center]This is your code window, where you instruct your turrets on what to do.\nTry typing the function fire() and see what happens when you start the level![/center]"]
+]},
+
+{"description":"Test level 1","file":"TestLevel1","count": 9, "status":1,"turret_code":["#Code for level 1 turret 1"]},
+
+{"description":"Test level 2","file":"TestLevel2","count": 10, "status":0,"turret_code":["#Code for level 2 turret 1", "#Code for level 2 turret 2"], "tutorial_popups": [[10, 10, "hello"], [500, 50, "thx bye"]]}
 ]}

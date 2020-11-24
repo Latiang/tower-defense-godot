@@ -78,16 +78,19 @@ func _on_ProgrammableBehaviour_turret_position(out_dict):
 
 func _on_ProgrammableBehaviour_fire():
 	fire()
-	$ProgrammableBehaviour.lock_for_time(reload_time / time_scale)
+	if ammo_count > 0:
+		$ProgrammableBehaviour.lock_for_time(reload_time / time_scale)
 
 func _on_ProgrammableBehaviour_rotate(angle):
 	var move_angle = fmod(rotation + angle, 2*PI)
 	rotate(angle)
-	$ProgrammableBehaviour.lock_for_time(abs(move_angle) / (deg2rad(rotation_speed) * time_scale))
+	if can_rotate:
+		$ProgrammableBehaviour.lock_for_time(abs(move_angle) / (deg2rad(rotation_speed) * time_scale))
 	
 func _on_ProgrammableBehaviour_move(distance):
 	move(distance)
-	$ProgrammableBehaviour.lock_for_time(float(distance) / (time_scale * move_speed))
+	if can_move:
+		$ProgrammableBehaviour.lock_for_time(float(distance) / (time_scale * move_speed))
 
 func _on_ProgrammableBehaviour_sensor_detect(out_dict, id: int = -1):
 	if (id == -1): # Self sensor
