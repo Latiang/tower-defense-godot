@@ -563,7 +563,7 @@ class Evaluatable:
 			if self.source.is_valid_integer():
 				self.lhs = int(self.source)
 			elif self.source.is_valid_float():
-				self.lhs = int(self.source)
+				self.lhs = float(self.source)
 			elif self.source == "true":
 				self.lhs = true
 			elif self.source == "false":

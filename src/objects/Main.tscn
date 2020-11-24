@@ -7,7 +7,6 @@
 
 [node name="Main" type="Node"]
 script = ExtResource( 3 )
-debug_main_menu_override = true
 autosave_enabled = false
 
 [node name="LevelManager" type="Node" parent="."]
