@@ -22,7 +22,8 @@ var direction_right : bool = false
 var distance_to_rotate = 0
 
 func _ready():
-	pass
+	 $SensorLine.visible = integrated_sensor
+		
 
 func _process(delta):
 	if can_rotate and (distance_to_rotate > 0.01 or distance_to_rotate < -0.01):
@@ -68,7 +69,6 @@ func rotate(angle):
 
 func sensor_detect(out_dict):
 	if (integrated_sensor):
-		var dir = Vector2(cos(rotation + PI), sin(rotation + PI))
 		out_dict[0] = $SensorCast.is_colliding()
 	else:
 		out_dict[0] = false
