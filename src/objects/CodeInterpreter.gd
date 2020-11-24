@@ -132,6 +132,7 @@ func _sleep(inputs):
 		_error("The function length() only takes a number as argument", 0)
 		
 	get_parent().emit_signal("sleep", inputs[0])
+	self._stop = true
 	return 0
 
 func _rotate(inputs):
@@ -277,6 +278,8 @@ func is_valid_variable_name(name):
 					return false
 		else:
 			return false
+	else:
+		return false
 	return true
 
 class Statement:
@@ -602,7 +605,7 @@ class Evaluatable:
 		if self.lhs == null: 
 			#Unary operator
 			right = self.rhs.run(scope, parent)
-			while right is GDScriptFunctionState: #If it is invalide we have a problem
+			while right is GDScriptFunctionState: #If it is invalid we have a problem
 				yield()
 				right = right.resume()
 			return self.op.evaluate(right)
@@ -618,7 +621,7 @@ class Evaluatable:
 				if self.lhs[0] == '"':
 					if self.lhs[-1] != '"':
 						parent._error('String must end with "', self.original_line)
-						return 0
+						yield()
 					var ret = self.lhs.trim_prefix('"')
 					ret = ret.trim_suffix('"')
 					var ret_val = ""
@@ -640,7 +643,7 @@ class Evaluatable:
 							
 						if chr == '"' and old_char != "\\":
 							parent._error('Encountered an unexpected ", use \\ to escape "', self.original_line)
-							return 0
+							yield()
 						old_char = chr
 					return ret_val
 				elif "." in self.lhs:
@@ -663,6 +666,9 @@ class Evaluatable:
 							parent._error("The variable " + target_var + " has no member y", self.original_line)
 							yield()
 				else:
+					if not (parent.is_valid_variable_name(self.lhs)):
+						parent._error(self.lhs + " is an invalid variable name\nVariables may only contain alphanumeric characters or _ and must start with an alphabetic character", self.original_line)
+						yield()
 					if not (self.lhs in scope):
 						parent._error("No variable with the name " + self.lhs + " exists in the current scope", self.original_line)
 						yield()
@@ -934,6 +940,8 @@ func _statements_from_lines(lines, function=false):
 			lhs = lhs.strip_edges()
 			var rhs = line.right(assignment)
 			rhs = rhs.strip_edges()
+			if not self.is_valid_variable_name(lhs):
+				self._error(lhs + " is an invalid variable name\nVariables may only contain alphanumeric characters or _ and must start with an alphabetic character", index + 1)
 			statements.append(Assignment.new(lhs, rhs, line_index))
 			statements[-1].original_line = line_index
 		elif line.begins_with("while "):
