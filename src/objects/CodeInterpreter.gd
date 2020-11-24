@@ -28,17 +28,50 @@ var _error = false
 var _lines_left = 0
 export var OPS_PER_RUN = 50
 
+# Send error as a game popup
 func _error(message, line):
 	get_parent().emit_signal("code_error", message, line)
 	self._stop = true
 	self._error = true
 	return 0
 
+# Vector functions
 func _vector2(inputs):
 	if self._error:
 		return 0
 	return Vector2(inputs[0], inputs[1])
 
+# inputs : [vector2, vector2]
+func _dot(inputs):
+	if self._error:
+		return 0
+	return inputs[0].dot(inputs[1])
+	
+# inputs : [vector2, vector2]
+func _cross(inputs):
+	if self._error:
+		return 0
+	return inputs[0].cross(inputs[1])
+	
+# inputs: [vector2]
+func _angle(inputs):
+	if self._error:
+		return 0
+	return rad2deg(inputs[0].angle())
+	
+# inputs: [vector2]
+func _length(inputs):
+	if self._error:
+		return 0
+	return inputs[0].length()
+	
+# inputs: [float]
+func _sqrt(inputs):
+	if self._error:
+		return 0
+	return sqrt(inputs[0])
+
+# Functions for interacting with the game
 func _shoot(vector):
 	if self._error:
 		return 0
@@ -85,6 +118,8 @@ func _dist(value):
 		return 0
 	return 0
 
+
+# Standard number and boolean operators
 func _negate(value):
 	if self._error:
 		return 0
@@ -163,6 +198,7 @@ func _run_code():
 		while res is GDScriptFunctionState and res.is_valid():
 			yield()
 			res = res.resume()
+			
 func _print(val):
 	print(val[0])
 	console_output_buffer.append(str(val[0]))
@@ -1008,6 +1044,7 @@ func _ready():
 										-102,
 										true))
 	operators.sort_custom(self, "operator_cmp")
+	# Functions for interacting with the game
 	self._std_functions["print"] = funcref(self, "_print")
 	self._std_functions["fire"] = funcref(self, "_shoot")
 	self._std_functions["rotate"] = funcref(self, "_rotate")
@@ -1016,6 +1053,14 @@ func _ready():
 	self._std_functions["target"] = funcref(self, "_target")
 	self._std_functions["position"] = funcref(self, "_position")
 	self._std_functions["sleep"] = funcref(self, "_sleep")
+	
+	self._std_functions["sqrt"] = funcref(self, "_sqrt")
+	
+	# Vector functions
+	self._std_functions["length"] = funcref(self, "_length")
+	self._std_functions["angle"] = funcref(self, "_angle")
+	self._std_functions["dot"] = funcref(self, "_dot")
+	self._std_functions["cross"] = funcref(self, "_cross")
 	self._eval_object = null
 	
 # Run the code
