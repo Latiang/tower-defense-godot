@@ -389,8 +389,12 @@ class Function:
 	func _init(name_in, inputs_in, code_in):
 		self.name = name_in
 		self.inputs = inputs_in.split(",")
-		for i in range(len(self.inputs)):
-			self.inputs[i] = self.inputs[i].strip_edges()
+		if len(inputs) == 1 and inputs[0] == "":
+			self.inputs = []
+		else:
+			for i in range(len(self.inputs)):
+				if self.inputs[i] != "":
+					self.inputs[i] = self.inputs[i].strip_edges()
 		self.code = code_in
 	
 	func string(start_string=""):
@@ -404,7 +408,12 @@ class Function:
 		var scope = {}
 		scope["_if_state"] = 0
 		scope["_return"] = null
-		assert(len(args) == len(inputs))
+		if len(args) != len(inputs):
+			print(len(args))
+			print(inputs[0])
+			parent._error("Mismatch of function arguments", 0)
+			yield()
+			
 		for i in range(len(self.inputs)):
 			scope[self.inputs[i]] = args[i]
 		var exe
@@ -928,6 +937,7 @@ func _statements_from_lines(lines, function=false):
 			statements.append(Assignment.new(lhs, rhs, line_index))
 			statements[-1].original_line = line_index
 		elif line.begins_with("while "):
+			line = line.trim_suffix(":")
 			var condition = line.substr(6)
 			var next_index = len(lines)
 			for i in range(index + 1, len(lines)):
@@ -939,8 +949,10 @@ func _statements_from_lines(lines, function=false):
 			index = next_index - 1
 			statements.append(Loop.new(condition, code, line_index))
 		elif line.begins_with("for "):
+			line = line.trim_suffix(":")
 			self._error("for loops does not exist", line_index)
 		elif line.begins_with("if "):
+			line = line.trim_suffix(":")
 			var condition = line.substr(3)
 			var next_index = len(lines)
 			for i in range(index + 1, len(lines)):
@@ -952,6 +964,7 @@ func _statements_from_lines(lines, function=false):
 			index = next_index - 1
 			statements.append(Conditional.new(condition, code, line_index))
 		elif line.begins_with("else") and len(line) == 4:
+			line = line.trim_suffix(":")
 			if len(statements) == 0 or (not (statements[-1] is Conditional)):
 				self._error("else must follow a conditional", line_index)
 			var condition = "1"
@@ -966,6 +979,7 @@ func _statements_from_lines(lines, function=false):
 			statements.append(Conditional.new(condition, code, 0))
 			statements[-1].original_line = line_index
 		elif line.begins_with("elif "):
+			line = line.trim_suffix(":")
 			if len(statements) == 0 or (not (statements[-1] is Conditional)):
 				self._error("elif must follow a conditional", line_index)
 			var condition = line.substr(5)
@@ -990,6 +1004,7 @@ func _statements_from_lines(lines, function=false):
 				statements.append(Return.new(eval, line_index))
 		elif line.begins_with("def "): #Function
 			#Need to find function name
+			line = line.trim_suffix(":")
 			var name = ""
 			line = line.substr(4)
 			var j = 0
