@@ -68,7 +68,7 @@ func rotate(angle):
 
 func sensor_detect(out_dict):
 	if (integrated_sensor):
-		var dir = Vector2(cos(rotation + PI/2), sin(rotation + PI/2))
+		var dir = Vector2(cos(rotation + PI), sin(rotation + PI))
 		out_dict[0] = $SensorCast.is_colliding()
 	else:
 		out_dict[0] = false
