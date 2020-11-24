@@ -130,7 +130,7 @@ rotation = 3.14159
 position = Vector2( 1400, 527.801 )
 can_move = true
 
-[node name="MovablePath" parent="Turret" index="6"]
+[node name="MovablePath" parent="Turret" index="7"]
 curve = SubResource( 2 )
 
 [node name="PathFollow2D" parent="Turret/MovablePath" index="0"]

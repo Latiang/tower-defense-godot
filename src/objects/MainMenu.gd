@@ -39,4 +39,8 @@ func _on_SettingsMenu_close_settings_menu():
 	get_parent().propagate_settings_change()
 	$TitleMenu.show()
 	$SettingsMenu.hide()
-	
+
+# Return to main menu
+func _on_LevelSelectBackButton_pressed():
+	$TitleMenu.show()
+	$LevelSelectionMenu.hide()
