@@ -106,7 +106,6 @@ func _rotate(inputs):
 func _read(inputs):
 	if self._error:
 		return 0
-	self._stop = true
 	var result = {}
 	get_parent().emit_signal("sensor_detect", result, inputs[0])
 	if result[0]:
