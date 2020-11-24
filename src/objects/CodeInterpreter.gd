@@ -35,38 +35,68 @@ func _error(message, line):
 	self._error = true
 	return 0
 
+# String functions
+func _str(inputs):
+	if self._error:
+		return 0
+	return str(inputs[0])
+
 # Vector functions
 func _vector2(inputs):
+	if len(inputs) != 2:
+		_error("The function vector() takes two arguments", 0)
+	elif !(inputs[0] is float or inputs[0] is int) or !(inputs[1] is float or inputs[1] is int):
+		_error("The function vector() only takes numbers as arguments", 0)
 	if self._error:
 		return 0
 	return Vector2(inputs[0], inputs[1])
 
 # inputs : [vector2, vector2]
 func _dot(inputs):
+	if len(inputs) != 2:
+		_error("The function dot() takes two arguments", 0)
+	elif !(inputs[0] is Vector2) or !(inputs[1] is Vector2):
+		_error("The function dot() only takes vectors as arguments", 0)
 	if self._error:
 		return 0
 	return inputs[0].dot(inputs[1])
 	
 # inputs : [vector2, vector2]
 func _cross(inputs):
+	if len(inputs) != 2:
+		_error("The function cross() takes two arguments", 0)
+	elif !(inputs[0] is Vector2) or !(inputs[1] is Vector2):
+		_error("The function cross() only takes vectors as arguments", 0)
 	if self._error:
 		return 0
 	return inputs[0].cross(inputs[1])
 	
 # inputs: [vector2]
 func _angle(inputs):
+	if len(inputs) != 1:
+		_error("The function angle() takes one argument", 0)
+	elif !(inputs[0] is Vector2):
+		_error("The function angle() only takes a vector as argument", 0)
 	if self._error:
 		return 0
 	return rad2deg(inputs[0].angle())
 	
 # inputs: [vector2]
 func _length(inputs):
+	if len(inputs) != 1:
+		_error("The function length() takes one argument", 0)
+	elif !(inputs[0] is Vector2):
+		_error("The function length() only takes a vector as argument", 0)
 	if self._error:
 		return 0
 	return inputs[0].length()
 	
 # inputs: [float]
 func _sqrt(inputs):
+	if len(inputs) != 1:
+		_error("The function sqrt() takes one argument", 0)
+	elif !(inputs[0] is float or inputs[0] is int):
+		_error("The function sqrt() only takes a number as argument", 0)
 	if self._error:
 		return 0
 	return sqrt(inputs[0])
@@ -80,6 +110,10 @@ func _shoot(vector):
 	return 0
 	
 func _target(inputs):
+	if len(inputs) != 1:
+		_error("The function target() takes one argument", 0)
+	elif !(inputs[0] is Vector2):
+		_error("The function target() only takes a vector as argument", 0)
 	if self._error:
 		return 0
 	var self_pos = Vector2(0, 0)
@@ -92,11 +126,20 @@ func _position(inputs):
 	return result[0]
 
 func _sleep(inputs):
+	if len(inputs) != 1:
+		_error("The function sleep() takes one argument", 0)
+	elif !(inputs[0] is float or inputs[0] is int):
+		_error("The function length() only takes a number as argument", 0)
+		
 	get_parent().emit_signal("sleep", inputs[0])
 	self._stop = true
 	return 0
 
 func _rotate(inputs):
+	if len(inputs) != 1:
+		_error("The function rotate() takes one argument", 0)
+	elif !(inputs[0] is float or inputs[0] is int):
+		_error("The function rotate() only takes a number as argument", 0)
 	if self._error:
 		return 0
 	self._stop = true
@@ -104,6 +147,10 @@ func _rotate(inputs):
 	return 0
 	
 func _read(inputs):
+	if len(inputs) != 1:
+		_error("The function sensor() takes one argument", 0)
+	elif !(inputs[0] is float or inputs[0] is int):
+		_error("The function sensor() only takes a number as argument", 0)
 	if self._error:
 		return 0
 	var result = {}
@@ -112,11 +159,6 @@ func _read(inputs):
 		return result[0]
 	else:
 		return 0
-	
-func _dist(value):
-	if self._error:
-		return 0
-	return 0
 
 
 # Standard number and boolean operators
@@ -126,28 +168,43 @@ func _negate(value):
 	return -value
 
 func _power(lhs, rhs):
+	if lhs is String or rhs is String:
+		_error("Strings cannot be raised to a power",0)
 	if self._error:
 		return 0
 	return pow(lhs, rhs)
 
 func _multiply(lhs, rhs):
+	if lhs is String or rhs is String:
+		_error("Strings cannot be multiplied",0)
 	if self._error:
 		return 0
 	return lhs * rhs
 	
 func _divide(lhs, rhs):
+	if lhs is String or rhs is String:
+		_error("Strings cannot be divided",0)
 	if self._error:
 		return 0
-	return float(lhs) / rhs
+	if lhs is int:
+		return float(lhs) / rhs
+	else:
+		return lhs / rhs
 
 func _add(lhs, rhs):
 	if self._error:
 		return 0
+	if rhs is Vector2 and lhs is int and lhs == 0:
+		lhs = Vector2(0,0)
 	return lhs + rhs
 	
 func _sub(lhs, rhs):
+	if lhs is String or rhs is String:
+		_error("Strings cannot be subtracted",0)
 	if self._error:
 		return 0
+	if rhs is Vector2 and lhs is int and lhs == 0:
+		lhs = Vector2(0,0)
 	return lhs - rhs
 
 func _equals(lhs, rhs):
@@ -334,8 +391,12 @@ class Function:
 	func _init(name_in, inputs_in, code_in):
 		self.name = name_in
 		self.inputs = inputs_in.split(",")
-		for i in range(len(self.inputs)):
-			self.inputs[i] = self.inputs[i].strip_edges()
+		if len(inputs) == 1 and inputs[0] == "":
+			self.inputs = []
+		else:
+			for i in range(len(self.inputs)):
+				if self.inputs[i] != "":
+					self.inputs[i] = self.inputs[i].strip_edges()
 		self.code = code_in
 	
 	func string(start_string=""):
@@ -349,7 +410,12 @@ class Function:
 		var scope = {}
 		scope["_if_state"] = 0
 		scope["_return"] = null
-		assert(len(args) == len(inputs))
+		if len(args) != len(inputs):
+			print(len(args))
+			print(inputs[0])
+			parent._error("Mismatch of function arguments", 0)
+			yield()
+			
 		for i in range(len(self.inputs)):
 			scope[self.inputs[i]] = args[i]
 		var exe
@@ -878,6 +944,7 @@ func _statements_from_lines(lines, function=false):
 			statements.append(Assignment.new(lhs, rhs, line_index))
 			statements[-1].original_line = line_index
 		elif line.begins_with("while "):
+			line = line.trim_suffix(":")
 			var condition = line.substr(6)
 			var next_index = len(lines)
 			for i in range(index + 1, len(lines)):
@@ -889,8 +956,10 @@ func _statements_from_lines(lines, function=false):
 			index = next_index - 1
 			statements.append(Loop.new(condition, code, line_index))
 		elif line.begins_with("for "):
+			line = line.trim_suffix(":")
 			self._error("for loops does not exist", line_index)
 		elif line.begins_with("if "):
+			line = line.trim_suffix(":")
 			var condition = line.substr(3)
 			var next_index = len(lines)
 			for i in range(index + 1, len(lines)):
@@ -902,6 +971,7 @@ func _statements_from_lines(lines, function=false):
 			index = next_index - 1
 			statements.append(Conditional.new(condition, code, line_index))
 		elif line.begins_with("else") and len(line) == 4:
+			line = line.trim_suffix(":")
 			if len(statements) == 0 or (not (statements[-1] is Conditional)):
 				self._error("else must follow a conditional", line_index)
 			var condition = "1"
@@ -916,6 +986,7 @@ func _statements_from_lines(lines, function=false):
 			statements.append(Conditional.new(condition, code, 0))
 			statements[-1].original_line = line_index
 		elif line.begins_with("elif "):
+			line = line.trim_suffix(":")
 			if len(statements) == 0 or (not (statements[-1] is Conditional)):
 				self._error("elif must follow a conditional", line_index)
 			var condition = line.substr(5)
@@ -940,6 +1011,7 @@ func _statements_from_lines(lines, function=false):
 				statements.append(Return.new(eval, line_index))
 		elif line.begins_with("def "): #Function
 			#Need to find function name
+			line = line.trim_suffix(":")
 			var name = ""
 			line = line.substr(4)
 			var j = 0
@@ -1050,11 +1122,15 @@ func _ready():
 	self._std_functions["rotate"] = funcref(self, "_rotate")
 	self._std_functions["read_sensor"] = funcref(self, "_read")
 	self._std_functions["vector"] = funcref(self, "_vector2")
+	self._std_functions["vec"] = funcref(self, "_vector2")
 	self._std_functions["target"] = funcref(self, "_target")
 	self._std_functions["position"] = funcref(self, "_position")
 	self._std_functions["sleep"] = funcref(self, "_sleep")
 	
 	self._std_functions["sqrt"] = funcref(self, "_sqrt")
+	
+	# String functions
+	self._std_functions["str"] = funcref(self, "_str")
 	
 	# Vector functions
 	self._std_functions["length"] = funcref(self, "_length")

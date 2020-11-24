@@ -118,4 +118,4 @@ func _on_ProgrammableBehaviour_code_error(error_message, error_line):
 
 
 func _on_ProgrammableBehaviour_sleep(time):
-	$ProgrammableBehaviour.lock_for_time(time)
+	$ProgrammableBehaviour.lock_for_time(time / time_scale)
