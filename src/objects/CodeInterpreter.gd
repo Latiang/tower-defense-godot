@@ -93,6 +93,7 @@ func _position(inputs):
 
 func _sleep(inputs):
 	get_parent().emit_signal("sleep", inputs[0])
+	self._stop = true
 	return 0
 
 func _rotate(inputs):
