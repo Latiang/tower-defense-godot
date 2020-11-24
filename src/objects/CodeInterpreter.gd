@@ -208,6 +208,15 @@ func _sub(lhs, rhs):
 		lhs = Vector2(0,0)
 	return lhs - rhs
 
+func _mod(lhs, rhs):
+	if lhs is String or rhs is String:
+		_error("Modulo cannot be applied to strings",0)
+	if lhs is Vector2 or rhs is Vector2:
+		_error("Modulo cannot be applied to vectors",0)
+	if self._error:
+		return 0
+	return fmod(lhs, rhs)
+
 func _equals(lhs, rhs):
 	if self._error:
 		return 0
@@ -1083,6 +1092,9 @@ func _ready():
 	operators.push_back(BinaryOperator.new(funcref(self, "_divide"),
 										"/", 
 										20))
+	operators.push_back(BinaryOperator.new(funcref(self, "_mod"),
+										"%", 
+										20))
 	operators.push_back(BinaryOperator.new(funcref(self, "_add"),
 										"+", 
 										10,
@@ -1093,9 +1105,11 @@ func _ready():
 										10,
 										false,
 										0))
-	operators.push_back(BinaryOperator.new(funcref(self, "_equals"),
-										"==", 
-										-100))
+	operators.push_back(BinaryOperator.new(funcref(self, "_sub"),
+										"-", 
+										10,
+										false,
+										0))
 	operators.push_back(BinaryOperator.new(funcref(self, "_less_than"),
 										"<", 
 										-100))
