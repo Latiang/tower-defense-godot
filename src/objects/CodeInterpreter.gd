@@ -158,6 +158,24 @@ func _print(val):
 	console_output_buffer.append(str(val[0]))
 	return 0
 
+func is_char_alphabetical(c):
+	return (c >= 65 and c <= 90) or (c >= 97 and c <= 122)
+
+func is_char_numerical(c):
+	return (c >= 48 and c <= 57)
+
+func is_valid_variable_name(name):
+	if len(name) > 0:
+		var c = name.ord_at(0)
+		if is_char_alphabetical(c):
+			for i in range(len(name)-1):
+				c = name.ord_at(i+1)
+				if !is_char_alphabetical(c) and !is_char_numerical(c) and c != 95:
+					return false
+		else:
+			return false
+	return true
+
 class Statement:
 	"""Base class for code elements"""
 	var original_line
@@ -922,7 +940,6 @@ func _ready():
 	
 # Run the code
 func run():
-	print(code_source)
 	self._stop = false
 	self._lines_left = 50
 	self._error = false
@@ -931,7 +948,6 @@ func run():
 	else:
 		if self._eval_object is GDScriptFunctionState and self._eval_object.is_valid():
 			self._eval_object = self._eval_object.resume()
-	print("Done")
 	
 func ready_code():
 	self._eval_object = null
