@@ -153,7 +153,6 @@ func _read(inputs):
 		_error("The function sensor() only takes a number as argument", 0)
 	if self._error:
 		return 0
-	self._stop = true
 	var result = {}
 	get_parent().emit_signal("sensor_detect", result, inputs[0])
 	if result[0]:
@@ -573,7 +572,7 @@ class Evaluatable:
 			if self.source.is_valid_integer():
 				self.lhs = int(self.source)
 			elif self.source.is_valid_float():
-				self.lhs = int(self.source)
+				self.lhs = float(self.source)
 			elif self.source == "true":
 				self.lhs = true
 			elif self.source == "false":
