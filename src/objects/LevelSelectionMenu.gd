@@ -26,3 +26,5 @@ func populate_level_buttons(save_state):
 		new_level_panel.connect("pressed", get_parent(), "_on_level_button_pressed")
 		$MarginContainer/VBoxContainer.add_child(new_level_panel)
 		i += 1
+	# Set back button to last
+	$MarginContainer/VBoxContainer.move_child($MarginContainer/VBoxContainer/ButtonMarginContainer, i)

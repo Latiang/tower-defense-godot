@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://objects/SettingsMenu.gd" type="Script" id=1]
 [ext_resource path="res://assets/fonts/Inter-Medium-slnt=0.ttf" type="DynamicFontData" id=2]
@@ -147,6 +147,13 @@ TooltipLabel/fonts/font = SubResource( 10 )
 TooltipPanel/styles/panel = SubResource( 11 )
 VSeparator/constants/separation = 4
 VSeparator/styles/separator = SubResource( 12 )
+
+[sub_resource type="InputEventAction" id=20]
+action = "ui_cancel"
+pressed = true
+
+[sub_resource type="ShortCut" id=19]
+shortcut = SubResource( 20 )
 
 [node name="SettingsMenu" type="Control"]
 anchor_right = 1.0
@@ -336,6 +343,8 @@ custom_constants/margin_bottom = 20
 [node name="BackButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/MarginContainer"]
 margin_right = 200.0
 margin_bottom = 38.0
+shortcut_in_tooltip = false
+shortcut = SubResource( 19 )
 text = "Back"
 [connection signal="toggled" from="PanelContainer/MarginContainer/VBoxContainer/GeneralMarginContainer/TutPopupsCheckbox" to="." method="_on_TooltipsCheckbox_toggled"]
 [connection signal="toggled" from="PanelContainer/MarginContainer/VBoxContainer/AppearanceMarginContainer/VBoxContainer/FullscreenCheckbox" to="." method="_on_FullscreenCheckbox_toggled"]

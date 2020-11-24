@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://assets/fonts/Inter-Medium-slnt=0.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://objects/MainMenu.gd" type="Script" id=2]
@@ -7,7 +7,7 @@
 [ext_resource path="res://objects/SettingsMenu.tscn" type="PackedScene" id=5]
 
 [sub_resource type="DynamicFont" id=1]
-size = 100
+size = 30
 use_filter = true
 font_data = ExtResource( 1 )
 
@@ -40,6 +40,37 @@ Button/styles/focus = SubResource( 3 )
 Button/styles/hover = SubResource( 4 )
 Button/styles/normal = SubResource( 5 )
 Button/styles/pressed = SubResource( 6 )
+
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 0.215686, 0.243137, 0.286275, 1 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_size = 3
+anti_aliasing = false
+
+[sub_resource type="Theme" id=10]
+default_font = SubResource( 1 )
+Button/colors/font_color = Color( 1, 1, 1, 1 )
+Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
+Button/colors/font_color_hover = Color( 0.807843, 0.807843, 0.807843, 1 )
+Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+Button/constants/hseparation = 2
+Button/fonts/font = null
+Button/styles/disabled = SubResource( 9 )
+Button/styles/focus = SubResource( 9 )
+Button/styles/hover = SubResource( 9 )
+Button/styles/normal = SubResource( 9 )
+Button/styles/pressed = SubResource( 9 )
+PanelContainer/styles/panel = SubResource( 9 )
+
+[sub_resource type="InputEventAction" id=20]
+action = "ui_cancel"
+pressed = true
+
+[sub_resource type="ShortCut" id=19]
+shortcut = SubResource( 20 )
 
 [node name="MainMenu" type="CanvasLayer"]
 script = ExtResource( 2 )
@@ -74,9 +105,9 @@ __meta__ = {
 }
 
 [node name="TitleLabel" type="Label" parent="TitleMenu/MarginContainer2"]
-margin_top = 50.0
+margin_top = 92.0
 margin_right = 761.0
-margin_bottom = 172.0
+margin_bottom = 130.0
 custom_fonts/font = SubResource( 1 )
 text = "TurretIO"
 align = 1
@@ -139,7 +170,6 @@ text = "Exit"
 align = 0
 
 [node name="LevelSelectionMenu" type="Control" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 3 )
@@ -163,7 +193,7 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="LevelSelectionMenu/MarginContainer"]
 margin_right = 700.0
-margin_bottom = 49.0
+margin_bottom = 114.0
 theme = SubResource( 8 )
 custom_constants/separation = 15
 __meta__ = {
@@ -172,14 +202,29 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="LevelSelectionMenu/MarginContainer/VBoxContainer"]
 margin_right = 700.0
-margin_bottom = 43.0
+margin_bottom = 49.0
 text = "Select a Level"
 align = 1
 valign = 1
+
+[node name="ButtonMarginContainer" type="MarginContainer" parent="LevelSelectionMenu/MarginContainer/VBoxContainer"]
+margin_top = 64.0
+margin_right = 700.0
+margin_bottom = 114.0
+custom_constants/margin_right = 500
+
+[node name="LevelSelectBackButton" type="Button" parent="LevelSelectionMenu/MarginContainer/VBoxContainer/ButtonMarginContainer"]
+margin_right = 200.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 0, 50 )
+theme = SubResource( 10 )
+shortcut = SubResource( 19 )
+text = "Back"
 
 [node name="SettingsMenu" parent="." instance=ExtResource( 5 )]
 visible = false
 [connection signal="pressed" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer/PlayButton" to="." method="_on_PlayButton_pressed"]
 [connection signal="pressed" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer2/SettingsButton" to="." method="_on_SettingsButton_pressed"]
 [connection signal="pressed" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer3/ExitButton" to="." method="_on_ExitButton_pressed"]
+[connection signal="pressed" from="LevelSelectionMenu/MarginContainer/VBoxContainer/ButtonMarginContainer/LevelSelectBackButton" to="." method="_on_LevelSelectBackButton_pressed"]
 [connection signal="close_settings_menu" from="SettingsMenu" to="." method="_on_SettingsMenu_close_settings_menu"]
