@@ -124,7 +124,17 @@ func _greater_than(lhs, rhs):
 	if self._error:
 		return 0
 	return lhs > rhs
-	
+
+func _gte(lhs, rhs):
+	if self._error:
+		return 0
+	return lhs >= rhs
+
+func _lte(lhs, rhs):
+	if self._error:
+		return 0
+	return lhs <= rhs
+
 func _less_than(lhs, rhs):
 	if self._error:
 		return 0
@@ -214,7 +224,7 @@ class BinaryOperator:
 			
 	func evaluate(lhs, rhs):
 		if self.neutral_element != null:
-			if typeof(lhs) == TYPE_STRING:
+			if typeof(lhs) == TYPE_STRING and lhs == "":
 				lhs = neutral_element
 		return self.function.call_func(lhs, rhs)
 
@@ -395,17 +405,20 @@ class Evaluatable:
 		for index in range(len(operators) - 1, -1, -1):
 			var operator = operators[index]
 			var parenthasis_count = 0
+			var string_symbols = 0
 			for char_index in range(len(self.source)):
 				if self.source[char_index] == ")":
 					parenthasis_count -= 1
 				elif self.source[char_index] == "(":
 					parenthasis_count += 1
+				elif self.source[char_index] == '"':
+					string_symbols = (string_symbols + 1) % 2
 				if parenthasis_count != 0:
+					continue
+				elif string_symbols != 0:
 					continue
 				#We now want to find the first instance of the specific operator
 				var offset = operator.identify_operator(self.source, char_index)
-				if parenthasis_count != 0:
-					offset = 0
 				if offset:
 					#Operator found
 					self.op = operator #This is the operator we want to apply
@@ -433,6 +446,8 @@ class Evaluatable:
 				self.lhs = true
 			elif self.source == "false":
 				self.lhs = false
+			elif len(self.source) > 0 and self.source[0] == '"':
+				self.lhs = self.source
 			elif "(" in self.source:
 				var name = ""
 				var end_index = 0
@@ -480,7 +495,35 @@ class Evaluatable:
 		elif self.op == null:
 			#Expression contains a value
 			if typeof(self.lhs) == TYPE_STRING && self.lhs != "":
-				if "." in self.lhs:
+				if self.lhs[0] == '"':
+					if self.lhs[-1] != '"':
+						parent._error('String must end with "', self.original_line)
+						return 0
+					var ret = self.lhs.trim_prefix('"')
+					ret = ret.trim_suffix('"')
+					var ret_val = ""
+					var old_char = " "
+					for chr in ret:
+						if old_char == "\\":
+							if chr == '"' or chr == "\\":
+								ret_val = ret_val + chr
+							elif chr == "n":
+								ret_val = ret_val + "\n"
+							elif chr == "t":
+								ret_val = ret_val + "\t"
+							else:
+								ret_val = ret_val + chr
+							old_char = " "
+							continue
+						elif chr != '\\':
+							ret_val = ret_val + chr
+							
+						if chr == '"' and old_char != "\\":
+							parent._error('Encountered an unexpected ", use \\ to escape "', self.original_line)
+							return 0
+						old_char = chr
+					return ret_val
+				elif "." in self.lhs:
 					var index_dot = self.lhs.find(".")
 					var target_var = self.lhs.left(index_dot)
 					var target_member = self.lhs.right(index_dot + 1)
@@ -730,6 +773,32 @@ func _lines_from_source():
 		lines.append(CodeLine.new(text, leading_spaces, index + 1))
 	return lines
 
+func _determine_assignment(line):
+	var old_chr = " "
+	var index = -1
+	var parentheses = 0
+	var in_string = 0
+	for chr in line:
+		index = index + 1
+		if chr == "(":
+			parentheses = parentheses + 1
+		elif chr == ")":
+			parentheses = parentheses - 1
+		elif chr == '"':
+			in_string = (in_string + 1) % 2
+		if in_string == 0 and parentheses == 0:
+			if chr == "=" and old_chr in "<>":
+				old_chr = " "
+				continue
+			elif chr == "=" and old_chr == "=":
+				old_chr = " "
+				continue
+			elif chr == "=":
+				return index + 1
+		old_chr = chr
+	return - 1
+				
+
 func _statements_from_lines(lines, function=false):
 	var statements = []
 	# Statements need to cover loops as well in order to properly work
@@ -739,8 +808,15 @@ func _statements_from_lines(lines, function=false):
 		var indent = lines[index].indent_size
 		var line = lines[index].text
 		var line_index = lines[index].line
-		var splits = line.split("=")
-		if line.begins_with("while "):
+		var assignment = self._determine_assignment(line)
+		if assignment != -1:
+			var lhs = line.left(assignment - 1)
+			lhs = lhs.strip_edges()
+			var rhs = line.right(assignment)
+			rhs = rhs.strip_edges()
+			statements.append(Assignment.new(lhs, rhs, line_index))
+			statements[-1].original_line = line_index
+		elif line.begins_with("while "):
 			var condition = line.substr(6)
 			var next_index = len(lines)
 			for i in range(index + 1, len(lines)):
@@ -753,7 +829,6 @@ func _statements_from_lines(lines, function=false):
 			statements.append(Loop.new(condition, code, line_index))
 		elif line.begins_with("for "):
 			self._error("for loops does not exist", line_index)
-			pass
 		elif line.begins_with("if "):
 			var condition = line.substr(3)
 			var next_index = len(lines)
@@ -855,14 +930,6 @@ func _statements_from_lines(lines, function=false):
 			code = _statements_from_lines(code, true)
 			index = next_index - 1
 			self._functions[name] = Function.new(name, args, code)
-		elif len(splits) % 2 == 0: #Even number implies odd number of =, means assignment
-			var lhs = splits[0]
-			var rhs = ""
-			for split_index in range(1, len(splits)):
-				rhs += splits[split_index] + "="
-			rhs = rhs.substr(0, len(rhs) - 1)
-			statements.append(Assignment.new(lhs, rhs, line_index))
-			statements[-1].original_line = line_index
 		else:	#Raw expression
 			statements.append(Evaluatable.new(line, line_index))
 		index += 1
@@ -901,6 +968,12 @@ func _ready():
 	operators.push_back(BinaryOperator.new(funcref(self, "_greater_than"),
 										">", 
 										-100))
+	operators.push_back(BinaryOperator.new(funcref(self, "_gte"),
+										">=", 
+										-101))
+	operators.push_back(BinaryOperator.new(funcref(self, "_lte"),
+										"<=", 
+										-101))
 	operators.push_back(BinaryOperator.new(funcref(self, "_and"),
 										"and",
 										-101,
