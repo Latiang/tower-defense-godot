@@ -34,13 +34,14 @@ func _input(event):
 		_on_GUI_next_level()
 
 # Load a level by name. Connects the required signals and so on
-func load_level(level_index):
+func load_level(level_index, popups_enabled=true):
 	health = max_health
 	current_level_index = level_index
 	var level_name = save_state.get_level_data(level_index)["file"]
 	$GUI.reset()
 	$GUI.update_health(health)
 	$GUI.update_level_data(save_state.get_level_data(level_index))
+	$GUI.tutorial_popups_enabled = popups_enabled
 	$GUI.update_tutorial_popups(save_state.get_tutorial_popups(level_index))
 	print("[Level] Loading level: %s" % level_name)
 	if current_level:
@@ -88,7 +89,7 @@ func _on_Level_base_damage(damage):
 		$GUI.level_lost()
 
 func _on_GUI_restart_level():
-	load_level(current_level_index)
+	load_level(current_level_index, false)
 	
 func _on_GUI_next_level():
 	if current_level_index + 1 < save_state.level_count:
