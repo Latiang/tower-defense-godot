@@ -76,6 +76,7 @@ func hide():
 	$LevelNamePanel.hide()
 	$TutorialPopup.hide()
 	$PopupGreyCover.hide()
+	$RightPanelBackground.hide()
 
 func show():
 	$CodeWindow.show()
@@ -84,6 +85,7 @@ func show():
 	$CoordinateLabel.show()
 	$EscapeMenu.hide()
 	$LevelNamePanel.show()
+	$RightPanelBackground.show()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
