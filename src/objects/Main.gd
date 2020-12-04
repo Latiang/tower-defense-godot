@@ -46,4 +46,6 @@ func _on_GUI_return_to_main_menu():
 func propagate_settings_change():
 	$LevelManager/GUI.update_setting_effects(settings_state)
 	OS.window_fullscreen = settings_state.get("fullscreen")
-	settings_state.save_to_file()
+	var master_volume = settings_state.get("master_volume")/100
+	$MusicPlayer.volume_db = linear2db(settings_state.get("music_volume")/100 * 0.4 * master_volume)
+	$MusicPlayer.stream_paused = (settings_state.get("music_volume") == 0)

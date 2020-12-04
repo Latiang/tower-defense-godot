@@ -148,12 +148,12 @@ TooltipPanel/styles/panel = SubResource( 11 )
 VSeparator/constants/separation = 4
 VSeparator/styles/separator = SubResource( 12 )
 
-[sub_resource type="InputEventAction" id=20]
+[sub_resource type="InputEventAction" id=18]
 action = "ui_cancel"
 pressed = true
 
 [sub_resource type="ShortCut" id=19]
-shortcut = SubResource( 20 )
+shortcut = SubResource( 18 )
 
 [node name="SettingsMenu" type="Control"]
 anchor_right = 1.0

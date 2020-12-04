@@ -6,7 +6,7 @@
 [ext_resource path="res://assets/textures/menu-background.png" type="Texture" id=4]
 [ext_resource path="res://objects/SettingsMenu.tscn" type="PackedScene" id=5]
 
-[sub_resource type="DynamicFont" id=21]
+[sub_resource type="DynamicFont" id=1]
 size = 100
 use_filter = true
 font_data = ExtResource( 1 )
@@ -50,13 +50,13 @@ corner_radius_bottom_left = 8
 shadow_size = 3
 anti_aliasing = false
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=10]
 size = 30
 use_filter = true
 font_data = ExtResource( 1 )
 
-[sub_resource type="Theme" id=10]
-default_font = SubResource( 1 )
+[sub_resource type="Theme" id=11]
+default_font = SubResource( 10 )
 Button/colors/font_color = Color( 1, 1, 1, 1 )
 Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
 Button/colors/font_color_hover = Color( 0.807843, 0.807843, 0.807843, 1 )
@@ -70,12 +70,12 @@ Button/styles/normal = SubResource( 9 )
 Button/styles/pressed = SubResource( 9 )
 PanelContainer/styles/panel = SubResource( 9 )
 
-[sub_resource type="InputEventAction" id=20]
+[sub_resource type="InputEventAction" id=12]
 action = "ui_cancel"
 pressed = true
 
-[sub_resource type="ShortCut" id=19]
-shortcut = SubResource( 20 )
+[sub_resource type="ShortCut" id=13]
+shortcut = SubResource( 12 )
 
 [node name="MainMenu" type="CanvasLayer"]
 script = ExtResource( 2 )
@@ -113,7 +113,7 @@ __meta__ = {
 margin_top = 50.0
 margin_right = 761.0
 margin_bottom = 172.0
-custom_fonts/font = SubResource( 21 )
+custom_fonts/font = SubResource( 1 )
 text = "TurretIO"
 align = 1
 __meta__ = {
@@ -222,9 +222,9 @@ custom_constants/margin_right = 500
 margin_right = 200.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 0, 50 )
-theme = SubResource( 10 )
+theme = SubResource( 11 )
 shortcut_in_tooltip = false
-shortcut = SubResource( 19 )
+shortcut = SubResource( 13 )
 text = "Back"
 
 [node name="SettingsMenu" parent="." instance=ExtResource( 5 )]
@@ -234,3 +234,4 @@ visible = false
 [connection signal="pressed" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer3/ExitButton" to="." method="_on_ExitButton_pressed"]
 [connection signal="pressed" from="LevelSelectionMenu/MarginContainer/VBoxContainer/ButtonMarginContainer/LevelSelectBackButton" to="." method="_on_LevelSelectBackButton_pressed"]
 [connection signal="close_settings_menu" from="SettingsMenu" to="." method="_on_SettingsMenu_close_settings_menu"]
+[connection signal="update_setting_effects" from="SettingsMenu" to="." method="_on_SettingsMenu_update_setting_effects"]

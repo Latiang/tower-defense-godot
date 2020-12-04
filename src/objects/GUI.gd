@@ -227,9 +227,11 @@ func _on_TutorialPopup_button_pressed():
 		$PopupGreyCover.hide()
 
 func _on_SettingsMenu_close_settings_menu():
-	get_parent().get_parent().propagate_settings_change()
 	toggle_escape_menu()
 	$SettingsMenu.hide()
+
+func _on_SettingsMenu_update_setting_effects():
+	get_parent().get_parent().propagate_settings_change()
 
 func update_setting_effects(settings_state):
 	# Update font size of Code window

@@ -336,3 +336,4 @@ visible = false
 [connection signal="settings" from="EscapeMenu" to="." method="_on_EscapeMenu_settings"]
 [connection signal="timeout" from="DebugLineCursorTimer" to="." method="_on_DebugLineCursorTimer_timeout"]
 [connection signal="close_settings_menu" from="SettingsMenu" to="." method="_on_SettingsMenu_close_settings_menu"]
+[connection signal="update_setting_effects" from="SettingsMenu" to="." method="_on_SettingsMenu_update_setting_effects"]

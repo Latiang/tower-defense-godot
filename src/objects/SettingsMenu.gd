@@ -57,3 +57,4 @@ func _on_VolMusicSlider_slider_changed(value):
 func set_setting(name, value):
 	if settings_state != null:
 		settings_state.set(name, value)
+		emit_signal("update_setting_effects")
