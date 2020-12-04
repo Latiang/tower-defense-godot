@@ -96,7 +96,11 @@ func _on_ProgrammableBehaviour_sensor_detect(out_dict, id: int = -1):
 	if (id == -1): # Self sensor
 		sensor_detect(out_dict)
 	else: # Get sensor by index
-		out_dict[0] = get_parent().get_node("Sensor%d" % id).detect()
+		var sensor = get_parent().get_node("Sensor%d" % id)
+		if sensor == null:
+			out_dict[0] = null
+		else:
+			out_dict[0] = sensor.detect()
 
 # Pressing on turret opens code window
 func _on_Turret_input_event(viewport, event, shape_idx):

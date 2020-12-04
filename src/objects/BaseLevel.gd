@@ -18,7 +18,6 @@ func close():
 func _process(delta):
 	if wave_started:
 		check_for_win()
-		offset.x -= 1
 
 func set_time_scale(new_time_scale, continue_interpreting):
 	time_scale = new_time_scale

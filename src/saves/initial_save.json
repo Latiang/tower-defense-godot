@@ -16,7 +16,7 @@
 
 {"description":"More Sensing","file":"Level4","count": 4, "status":1,"turret_code":["# Sensors can be separate from your turret! Hover over a sensor to see its number and then use sensor with sensor(<number>)!\n\n# Another tip: You can use target(vec(100,200)) to rotate your turret towards the point (100,200)!"]},
 
-{"description":"Distance is Key","file":"Level5","count": 5, "status":1,"turret_code":["# This is a comment!\n# Write your code here"]},
+{"description":"Distance is Key","file":"Level5","count": 5, "status":1,"turret_code":["# Tip: sensor(1) returns the distance to the target. Can you use this information somehow?"]},
 
 {"description":"Scanning for Hostiles","file":"Level6","count": 6, "status":1,"turret_code":["# This is a comment!\n# Write your code here"]},
 

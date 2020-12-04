@@ -110,6 +110,9 @@ func _shoot(vector):
 	return 0
 	
 func _target(inputs):
+	if len(inputs) == 2: # Overloading for coordinate without vector
+		if (inputs[0] is float or inputs[0] is int) and (inputs[1] is float or inputs[1] is int):
+			inputs = [Vector2(inputs[0], inputs[1])]
 	if len(inputs) != 1:
 		_error("The function target() takes one argument", 0)
 	elif !(inputs[0] is Vector2):
@@ -157,6 +160,22 @@ func _sensor(inputs):
 		return 0
 	var result = {}
 	get_parent().emit_signal("sensor_detect", result, inputs[0])
+	if result[0] == null:
+		_error("The function sensor() recieved an non-existing Sensor %d!" % inputs[0], 0)
+	if self._error:
+		return 0
+	if result[0]:
+		return result[0]
+	else:
+		return 0
+
+func _selfsensor(inputs):
+	if len(inputs) != 0:
+		_error("The function selfsensor() takes no arguments", 0)
+	if self._error:
+		return 0
+	var result = {}
+	get_parent().emit_signal("sensor_detect", result, -1)
 	if result[0]:
 		return result[0]
 	else:
@@ -1134,9 +1153,11 @@ func _ready():
 	operators.sort_custom(self, "operator_cmp")
 	# Functions for interacting with the game
 	self._std_functions["print"] = funcref(self, "_print")
+	self._std_functions["shoot"] = funcref(self, "_shoot")
 	self._std_functions["fire"] = funcref(self, "_shoot")
 	self._std_functions["rotate"] = funcref(self, "_rotate")
 	self._std_functions["sensor"] = funcref(self, "_sensor")
+	self._std_functions["selfsensor"] = funcref(self, "_selfsensor")
 	self._std_functions["vector"] = funcref(self, "_vector2")
 	self._std_functions["vec"] = funcref(self, "_vector2")
 	self._std_functions["target"] = funcref(self, "_target")
