@@ -116,7 +116,9 @@ func _target(inputs):
 		_error("The function target() only takes a vector as argument", 0)
 	if self._error:
 		return 0
-	var self_pos = Vector2(0, 0)
+	var result = {}
+	get_parent().emit_signal("turret_position", result)
+	var self_pos = result[0]
 	var diff = inputs[0] - self_pos
 	return self._rotate([diff.angle() * 180.0 / PI])
 	
@@ -146,7 +148,7 @@ func _rotate(inputs):
 	get_parent().emit_signal("rotate", (inputs[0]) / 180.0 * PI)
 	return 0
 	
-func _read(inputs):
+func _sensor(inputs):
 	if len(inputs) != 1:
 		_error("The function sensor() takes one argument", 0)
 	elif !(inputs[0] is float or inputs[0] is int):
@@ -1134,7 +1136,7 @@ func _ready():
 	self._std_functions["print"] = funcref(self, "_print")
 	self._std_functions["fire"] = funcref(self, "_shoot")
 	self._std_functions["rotate"] = funcref(self, "_rotate")
-	self._std_functions["read_sensor"] = funcref(self, "_read")
+	self._std_functions["sensor"] = funcref(self, "_sensor")
 	self._std_functions["vector"] = funcref(self, "_vector2")
 	self._std_functions["vec"] = funcref(self, "_vector2")
 	self._std_functions["target"] = funcref(self, "_target")

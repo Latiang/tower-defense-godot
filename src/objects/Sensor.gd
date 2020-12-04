@@ -1,8 +1,9 @@
 extends Area2D
 
+export var id = 1
+
 func _ready():
-	pass
-	
+	$HintControl.hint_tooltip = "%d" % id
 
 # Returns true or false depending on if an enemy is colliding with SensorCast
 func detect():
