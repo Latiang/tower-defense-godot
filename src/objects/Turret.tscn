@@ -30,9 +30,8 @@ radius = 95.063
 height = 0.0265656
 
 [sub_resource type="Curve2D" id=4]
-resource_local_to_scene = true
 _data = {
-"points": PoolVector2Array(  )
+"points": PoolVector2Array( 0, 0, 0, 0, 11.1991, 139.394, 0, 0, 0, 0, 7.41933, 7.73185 )
 }
 
 [node name="Turret" type="Area2D" groups=[
@@ -80,7 +79,7 @@ shape = SubResource( 3 )
 curve = SubResource( 4 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="MovablePath"]
-position = Vector2( 0.0648804, 2.3519 )
+position = Vector2( 11.1991, 139.394 )
 rotation = 0.852863
 rotate = false
 loop = false

@@ -53,9 +53,8 @@ func _process(delta):
 		position = position + $MovablePath/PathFollow2D.position
 
 func move(distance):
-	if (can_move):
-		distance_to_move = abs(distance)
-		direction_right = (distance > 0)
+	distance_to_move = abs(distance)
+	direction_right = (distance > 0)
 			
 func fire():
 	if unlimited_ammo or ammo_count > 0:
@@ -88,8 +87,8 @@ func _on_ProgrammableBehaviour_rotate(angle):
 		$ProgrammableBehaviour.lock_for_time(abs(move_angle) / (deg2rad(rotation_speed) * time_scale))
 	
 func _on_ProgrammableBehaviour_move(distance):
-	move(distance)
 	if can_move:
+		move(distance)
 		$ProgrammableBehaviour.lock_for_time(float(distance) / (time_scale * move_speed))
 
 func _on_ProgrammableBehaviour_sensor_detect(out_dict, id: int = -1):

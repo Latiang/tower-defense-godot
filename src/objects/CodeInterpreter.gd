@@ -180,6 +180,15 @@ func _selfsensor(inputs):
 		return result[0]
 	else:
 		return 0
+		
+func _move(inputs):
+	if len(inputs) != 1:
+		_error("The function move() takes one argument", 0)
+	if self._error:
+		return 0
+	get_parent().emit_signal("move", inputs[0])
+	self._stop = true
+	return 0
 
 
 # Standard number and boolean operators
@@ -1163,6 +1172,7 @@ func _ready():
 	self._std_functions["target"] = funcref(self, "_target")
 	self._std_functions["position"] = funcref(self, "_position")
 	self._std_functions["sleep"] = funcref(self, "_sleep")
+	self._std_functions["move"] = funcref(self, "_move")
 	
 	self._std_functions["sqrt"] = funcref(self, "_sqrt")
 	
