@@ -19,6 +19,8 @@ func _ready():
 	$MainMenu/SettingsMenu.settings_state = settings_state
 	$LevelManager/GUI/SettingsMenu.settings_state = settings_state
 	propagate_settings_change()
+	$SoundManager.connect_button_sound_signals()
+	$SoundManager.start_music()
 
 func _input(event):
 	if event.is_action_pressed("fullscreen_toggle") and !event.is_echo():
@@ -55,6 +57,4 @@ func _on_GUI_return_to_main_menu():
 func propagate_settings_change():
 	$LevelManager/GUI.update_setting_effects(settings_state)
 	OS.window_fullscreen = settings_state.get("fullscreen")
-	var master_volume = settings_state.get("master_volume")/100
-	$MusicPlayer.volume_db = linear2db(settings_state.get("music_volume")/100 * 0.4 * master_volume)
-	$MusicPlayer.stream_paused = (settings_state.get("music_volume") == 0)
+	$SoundManager.update_sound_settings(settings_state)

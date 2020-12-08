@@ -13,17 +13,17 @@ animations = [ {
 
 [sub_resource type="CapsuleShape2D" id=2]
 radius = 73.4149
-height = 91.2301
+height = 98.5423
 
 [node name="GruntEnemy" instance=ExtResource( 1 )]
 scale = Vector2( 0.3, 0.3 )
 slime_animation = true
 
 [node name="EnemySprite" parent="Area2D" index="0"]
-position = Vector2( 0.700734, 0.700747 )
+position = Vector2( -0.702337, -2.5731 )
 frames = SubResource( 1 )
 
 [node name="EnemyCollisionShape" parent="Area2D" index="1"]
-position = Vector2( -5.98632, -14.918 )
+position = Vector2( 0.561378, 6.12817 )
 rotation = 1.5708
 shape = SubResource( 2 )

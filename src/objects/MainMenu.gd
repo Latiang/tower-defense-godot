@@ -26,8 +26,8 @@ func _on_SettingsButton_pressed():
 	$TitleMenu.hide()
 	$SettingsMenu.display()
 
-# Exit game
-func _on_ExitButton_pressed():
+# Exit game, use button down to stop glitchy button press sound
+func _on_ExitButton_button_down():
 	get_tree().quit()
 	
 func _on_level_button_pressed(level_number):
@@ -46,4 +46,3 @@ func _on_SettingsMenu_update_setting_effects():
 func _on_LevelSelectBackButton_pressed():
 	$TitleMenu.show()
 	$LevelSelectionMenu.hide()
-

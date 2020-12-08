@@ -1,6 +1,8 @@
 tool
 extends PanelContainer
 
+class_name LevelSelectNode
+
 signal pressed(level_number)
 
 export var level_number = 1

@@ -36,8 +36,8 @@ func _process(delta):
 
 func animate_slime():
 	var sin_input = time*speed_multiplier*3+random_offset
-	scale.x = original_x_scale + sin(sin_input)*original_x_scale*0.2
-	scale.y = original_x_scale - sin(sin_input)*original_x_scale*0.1
+	scale.x = original_x_scale + sin(sin_input)*original_x_scale*0.15
+	scale.y = original_x_scale - sin(sin_input)*original_x_scale*0.06
 	slime_movement_multiplier = 1 + sin(sin_input) * 0.3
 
 func update_speed_multiplier(new_multiplier):

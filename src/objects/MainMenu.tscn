@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://assets/fonts/Inter-Medium-slnt=0.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://objects/MainMenu.gd" type="Script" id=2]
@@ -76,6 +76,10 @@ pressed = true
 
 [sub_resource type="ShortCut" id=13]
 shortcut = SubResource( 12 )
+
+[sub_resource type="DynamicFont" id=14]
+size = 20
+font_data = ExtResource( 1 )
 
 [node name="MainMenu" type="CanvasLayer"]
 script = ExtResource( 2 )
@@ -229,9 +233,32 @@ text = "Back"
 
 [node name="SettingsMenu" parent="." instance=ExtResource( 5 )]
 visible = false
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -228.0
+margin_top = -55.0
+custom_constants/margin_right = 40
+custom_constants/margin_bottom = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MusicLabel" type="Label" parent="MarginContainer"]
+margin_top = 5.0
+margin_right = 188.0
+margin_bottom = 30.0
+custom_fonts/font = SubResource( 14 )
+text = "Music by Kai Engel"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="pressed" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer/PlayButton" to="." method="_on_PlayButton_pressed"]
 [connection signal="pressed" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer2/SettingsButton" to="." method="_on_SettingsButton_pressed"]
-[connection signal="pressed" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer3/ExitButton" to="." method="_on_ExitButton_pressed"]
+[connection signal="button_down" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer3/ExitButton" to="." method="_on_ExitButton_button_down"]
 [connection signal="pressed" from="LevelSelectionMenu/MarginContainer/VBoxContainer/ButtonMarginContainer/LevelSelectBackButton" to="." method="_on_LevelSelectBackButton_pressed"]
 [connection signal="close_settings_menu" from="SettingsMenu" to="." method="_on_SettingsMenu_close_settings_menu"]
 [connection signal="update_setting_effects" from="SettingsMenu" to="." method="_on_SettingsMenu_update_setting_effects"]
