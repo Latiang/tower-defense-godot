@@ -15,7 +15,7 @@ func spawn_bullet(position, direction, speed_multiplier=1):
 	var bullet = Bullet.instance()
 	bullet.position = position
 	bullet.rotation = direction.angle()
-	bullet.z_index = 10
+	#bullet.z_index = 10
 	bullet.velocity = -direction*bullet.speed*speed_multiplier
 	add_child(bullet)
 	

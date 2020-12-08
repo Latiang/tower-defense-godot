@@ -8,7 +8,7 @@
 
 {"description":"Spinning, that's a good trick!","file":"Level2","count": 2, "status":1,"turret_code":["# Try the function rotate(90) to rotate your turret 90 degrees!\n"]},
 
-{"description":"Sensor Time","file":"Level3","count": 3, "status":1,"turret_code":["# selfsensor() will return true if there is an enemy infront of you. Try using it together with 'if'!\nAnother useful function is print(<output>), which will make the turret print information to you!"], 
+{"description":"Sensor Time","file":"Level3","count": 3, "status":1,"turret_code":["# selfsensor() will return true if there is an enemy infront of you. Try using it together with 'if'!\n# Another useful function is print(<output>), which will make the turret print information to you!"], 
 "tutorial_popups" : [
 [810, 440, "[center]In this level you have a limited amount of ammo. Choose your shots carefully![/center]"],
 [1580, 530, "[center]Your turrets have different abilities on different levels, which can be seen from these icons.\nHover over them to get more info![/center]"]
@@ -18,7 +18,7 @@
 
 {"description":"Distance is Key","file":"Level5","count": 5, "status":1,"turret_code":["# Tip: sensor(1) returns the distance to the target. Can you use this information somehow?"]},
 
-{"description":"Scanning for Hostiles","file":"Level6","count": 6, "status":1,"turret_code":["# This is a comment!\n# Write your code here"]},
+{"description":"Scanning for Hostiles","file":"Level6","count": 6, "status":1,"turret_code":["# Tip: You can use a while loop to rotate small distances at a time!"]},
 
 {"description":"I Like To Move It Move It","file":"Level7","count": 7, "status":1,"turret_code":["# This is a comment!\n# Write your code here"]},
 

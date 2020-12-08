@@ -24,6 +24,15 @@ func _input(event):
 	if event.is_action_pressed("fullscreen_toggle") and !event.is_echo():
 		settings_state.set("fullscreen", !settings_state.get("fullscreen"))
 		propagate_settings_change()
+	elif event.is_action_pressed("screenshot") and !event.is_echo():
+		var image = get_viewport().get_texture().get_data()
+		image.flip_y()
+		# Date format ISO 2020-12-08T20:36:30
+		var date_dict = OS.get_datetime()
+		for item in date_dict: # Pad the numbers correctly, ex 7 -> 07
+			date_dict[item] = "%02d" % int(date_dict[item])
+		var date_str = "{year}-{month}-{day}T{hour}:{minute}:{second}".format(date_dict)
+		image.save_png("screenshots/screenshot%s" % date_str)
 
 func _on_MainMenu_start_level(level_number):
 	show_level()

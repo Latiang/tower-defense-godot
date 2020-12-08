@@ -45,12 +45,6 @@ script = ExtResource( 3 )
 Bullet = ExtResource( 2 )
 can_move = false
 
-[node name="SensorLine" type="Line2D" parent="."]
-points = PoolVector2Array( 160, 0, 8000, 0 )
-width = 5.0
-default_color = Color( 0.627451, 0.152941, 0.152941, 0.705882 )
-antialiased = true
-
 [node name="SensorCast" type="RayCast2D" parent="."]
 enabled = true
 cast_to = Vector2( 8000, 0 )
@@ -58,10 +52,20 @@ collision_mask = 2048
 collide_with_areas = true
 collide_with_bodies = false
 
+[node name="SensorLine" type="Line2D" parent="."]
+points = PoolVector2Array( 160, 0, 8000, 0 )
+width = 5.0
+default_color = Color( 0.627451, 0.152941, 0.152941, 0.705882 )
+antialiased = true
+
 [node name="TurretBase" type="Sprite" parent="."]
 visible = false
 position = Vector2( 0, 70 )
 texture = ExtResource( 7 )
+
+[node name="Gun" parent="." instance=ExtResource( 6 )]
+
+[node name="ProgrammableBehaviour" parent="." instance=ExtResource( 4 )]
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 35.5975, -0.843132 )
@@ -71,10 +75,6 @@ frames = SubResource( 2 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( -0.594574, 0 )
 shape = SubResource( 3 )
-
-[node name="Gun" parent="." instance=ExtResource( 6 )]
-
-[node name="ProgrammableBehaviour" parent="." instance=ExtResource( 4 )]
 
 [node name="MovablePath" type="Path2D" parent="."]
 curve = SubResource( 4 )
