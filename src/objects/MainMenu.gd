@@ -11,11 +11,13 @@ func hide():
 	$LevelSelectionMenu.hide()
 	$BackgroundTexture.hide()
 	$SettingsMenu.hide()
+	$MarginContainer/MusicLabel.hide()
 
 func show():
 	$TitleMenu.show()
 	$LevelSelectionMenu.show()
 	$BackgroundTexture.show()
+	$MarginContainer/MusicLabel.show()
 
 # Open level selection menu
 func _on_PlayButton_pressed():
