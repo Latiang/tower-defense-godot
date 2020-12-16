@@ -178,7 +178,6 @@ text = "Exit"
 align = 0
 
 [node name="LevelSelectionMenu" type="Control" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 3 )
@@ -220,16 +219,38 @@ valign = 1
 margin_top = 64.0
 margin_right = 700.0
 margin_bottom = 114.0
-custom_constants/margin_right = 500
+rect_min_size = Vector2( 500, 0 )
+custom_constants/margin_right = 0
 
-[node name="LevelSelectBackButton" type="Button" parent="LevelSelectionMenu/MarginContainer/VBoxContainer/ButtonMarginContainer"]
-margin_right = 200.0
+[node name="HBoxContainer" type="HBoxContainer" parent="LevelSelectionMenu/MarginContainer/VBoxContainer/ButtonMarginContainer"]
+margin_right = 700.0
 margin_bottom = 50.0
-rect_min_size = Vector2( 0, 50 )
+
+[node name="LevelSelectBackButton" type="Button" parent="LevelSelectionMenu/MarginContainer/VBoxContainer/ButtonMarginContainer/HBoxContainer"]
+margin_right = 130.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 130, 50 )
 theme = SubResource( 11 )
 shortcut_in_tooltip = false
 shortcut = SubResource( 13 )
 text = "Back"
+
+[node name="MarginContainer" type="MarginContainer" parent="LevelSelectionMenu/MarginContainer/VBoxContainer/ButtonMarginContainer/HBoxContainer"]
+margin_left = 134.0
+margin_right = 486.0
+margin_bottom = 50.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LevelSelectResetButton" type="Button" parent="LevelSelectionMenu/MarginContainer/VBoxContainer/ButtonMarginContainer/HBoxContainer"]
+margin_left = 490.0
+margin_right = 700.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 210, 50 )
+theme = SubResource( 11 )
+shortcut_in_tooltip = false
+shortcut = SubResource( 13 )
+text = "Reset Save"
 
 [node name="SettingsMenu" parent="." instance=ExtResource( 5 )]
 visible = false
@@ -260,6 +281,7 @@ __meta__ = {
 [connection signal="pressed" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer/PlayButton" to="." method="_on_PlayButton_pressed"]
 [connection signal="pressed" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer2/SettingsButton" to="." method="_on_SettingsButton_pressed"]
 [connection signal="button_down" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer3/ExitButton" to="." method="_on_ExitButton_button_down"]
-[connection signal="pressed" from="LevelSelectionMenu/MarginContainer/VBoxContainer/ButtonMarginContainer/LevelSelectBackButton" to="." method="_on_LevelSelectBackButton_pressed"]
+[connection signal="pressed" from="LevelSelectionMenu/MarginContainer/VBoxContainer/ButtonMarginContainer/HBoxContainer/LevelSelectBackButton" to="." method="_on_LevelSelectBackButton_pressed"]
+[connection signal="pressed" from="LevelSelectionMenu/MarginContainer/VBoxContainer/ButtonMarginContainer/HBoxContainer/LevelSelectResetButton" to="." method="_on_LevelSelectResetButton_pressed"]
 [connection signal="close_settings_menu" from="SettingsMenu" to="." method="_on_SettingsMenu_close_settings_menu"]
 [connection signal="update_setting_effects" from="SettingsMenu" to="." method="_on_SettingsMenu_update_setting_effects"]

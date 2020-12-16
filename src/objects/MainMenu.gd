@@ -48,3 +48,7 @@ func _on_SettingsMenu_update_setting_effects():
 func _on_LevelSelectBackButton_pressed():
 	$TitleMenu.show()
 	$LevelSelectionMenu.hide()
+
+
+func _on_LevelSelectResetButton_pressed():
+	get_parent().reset_save()

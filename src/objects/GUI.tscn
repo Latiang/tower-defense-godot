@@ -65,6 +65,7 @@ margin_left = -360.0
 margin_top = -250.0
 margin_right = 0.0
 margin_bottom = 250.0
+keywords = "if while for def switch return and or xor not else elif"
 
 [node name="LevelControlsPanel" type="PanelContainer" parent="."]
 anchor_left = 1.0

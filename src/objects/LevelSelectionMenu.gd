@@ -5,6 +5,9 @@ extends Node
 # var a = 2
 # var b = "text"
 
+var i = 0
+var first_run = true
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -27,4 +30,14 @@ func populate_level_buttons(save_state):
 		$MarginContainer/VBoxContainer.add_child(new_level_panel)
 		i += 1
 	# Set back button to last
-	$MarginContainer/VBoxContainer.move_child($MarginContainer/VBoxContainer/ButtonMarginContainer, i)
+	if first_run:
+		$MarginContainer/VBoxContainer.move_child($MarginContainer/VBoxContainer/ButtonMarginContainer, i)
+		first_run = false
+	else:
+		$MarginContainer/VBoxContainer.move_child($MarginContainer/VBoxContainer/ButtonMarginContainer, i*2)
+	
+
+func depopulate_level_buttons():
+	for child in $MarginContainer/VBoxContainer.get_children():
+		if child is LevelSelectNode:
+			child.queue_free()

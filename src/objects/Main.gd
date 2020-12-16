@@ -58,3 +58,9 @@ func propagate_settings_change():
 	$LevelManager/GUI.update_setting_effects(settings_state)
 	OS.window_fullscreen = settings_state.get("fullscreen")
 	$SoundManager.update_sound_settings(settings_state)
+	
+func reset_save():
+	$LevelManager.save_state.reset_save()
+	$MainMenu/LevelSelectionMenu.depopulate_level_buttons()
+	$MainMenu/LevelSelectionMenu.populate_level_buttons($LevelManager.save_state)
+	
