@@ -191,6 +191,7 @@ func _move(inputs):
 	return 0
 
 
+
 # Standard number and boolean operators
 func _negate(value):
 	if self._error:
@@ -281,6 +282,21 @@ func _or(lhs, rhs):
 		return 0
 	return lhs or rhs
 
+func _xor(lhs, rhs):
+	if (lhs is int) and (rhs is int):
+		return lhs ^ rhs
+	if self._error:
+		return 0
+	if lhs:
+		lhs = 1
+	else:
+		lhs = 0
+	if rhs:
+		rhs = 1
+	else:
+		rhs = 0
+	return lhs ^ rhs
+
 func _run_code():
 	var lines = _lines_from_source()
 	var statements = _statements_from_lines(lines)
@@ -319,6 +335,9 @@ func is_valid_variable_name(name):
 	else:
 		return false
 	return true
+
+func _not(rhs):
+	return (not rhs)
 
 class Statement:
 	"""Base class for code elements"""
@@ -544,14 +563,25 @@ class Evaluatable:
 		self.source = text
 		self.compiled = false
 		self.original_line = line
-		
+	
 	func _compile(operators, parent):
 		self.compiled = true
 		self.source = self.source.strip_edges()
-		while self.source != "" and self.source[0] == "(" and self.source[-1] == ")":
-			self.source = self.source.right(1)
-			self.source = self.source.left(len(self.source) - 1)
-			self.source = self.source.strip_edges()
+		var par_rem_working = true
+		while self.source != "" and self.source[0] == "(" and self.source[-1] == ")" and par_rem_working:
+			var par_cnt = 1
+			for i in range(1, len(self.source) - 1):
+				if self.source[i] == "(":
+					par_cnt = par_cnt + 1
+				elif self.source[i] == ")":
+					par_cnt = par_cnt - 1
+				if par_cnt == 0:
+					par_rem_working = false
+					break
+			if par_rem_working:
+				self.source = self.source.right(1)
+				self.source = self.source.left(len(self.source) - 1)
+				self.source = self.source.strip_edges()
 		#TODO:
 		#	Determine if the source is surrounded by ()
 		self.lhs = null
@@ -1155,6 +1185,11 @@ func _ready():
 										"and",
 										-101,
 										true))
+	operators.push_back(BinaryOperator.new(funcref(self, "_xor"),
+										"not",
+										-101,
+										true,
+										1))
 	operators.push_back(BinaryOperator.new(funcref(self, "_or"),
 										"or",
 										-102,
