@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://objects/BaseLevel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/textures/blue-tile.png" type="Texture" id=5]
@@ -99,11 +99,6 @@
 
 [sub_resource type="Curve2D" id=2]
 _data = {
-"points": PoolVector2Array( 0, 0, 0, 0, -2.25146, -257.622, 0, 0, 0, 0, -2.25244, 204.876 )
-}
-
-[sub_resource type="Curve2D" id=4]
-_data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 10.7957, 347.06, 0, 0, 0, 0, 1202.82, 347.06, 0, 0, 0, 0, 1202.82, 90.4816, 0, 0, 0, 0, 1956.52, 92.2634 )
 }
 
@@ -126,22 +121,15 @@ position = Vector2( 1422.72, 549.735 )
 rotation = 3.14159
 can_rotate = false
 can_move = true
+max_move_height = 705
+min_move_height = 370
 unlimited_ammo = false
 ammo_count = 25
 reload_time = 1.1
 
-[node name="CollisionShape2D" parent="Turret" index="6"]
-position = Vector2( 0.0367737, 0.0700684 )
-
-[node name="MovablePath" parent="Turret" index="7"]
-curve = SubResource( 2 )
-
-[node name="PathFollow2D" parent="Turret/MovablePath" index="0"]
-position = Vector2( -3.50977, -406.705 )
-
 [node name="MobPath1" parent="." index="2" instance=ExtResource( 6 )]
 position = Vector2( -24.8768, 38.7081 )
-curve = SubResource( 4 )
+curve = SubResource( 2 )
 BehaviourFile = "sblevel7_1"
 speed = 70
 
@@ -168,5 +156,3 @@ position = Vector2( 179.959, 261.955 )
 scale = Vector2( 0.599096, 0.599096 )
 texture = ExtResource( 13 )
 offset = Vector2( 0, -83.242 )
-
-[editable path="Turret"]

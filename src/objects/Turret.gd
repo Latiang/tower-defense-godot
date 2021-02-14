@@ -10,6 +10,8 @@ export var can_rotate = true
 export var rotation_speed = 260 # Degrees/s
 export var integrated_sensor = true
 export var can_move = true
+export var max_move_height = 100
+export var min_move_height = 100
 export var move_speed = 100 # Pixels/s 
 export var unlimited_ammo = true
 export var ammo_count = 50
@@ -43,14 +45,22 @@ func _process(delta):
 				distance_to_rotate -= dist
 		rotation += dist
 			
-	elif can_move and distance_to_move > 0 and $MovablePath/PathFollow2D.unit_offset < 1:
-		 # Ugly fix, translate position temporarily so that this acts in world space
-		position = position - $MovablePath/PathFollow2D.position
-		var offset = move_speed * delta * time_scale
-		offset = distance_to_move if ((distance_to_move - offset) < 0) else offset
-		distance_to_move -= offset
-		$MovablePath/PathFollow2D.offset += offset if direction_right else -offset
-		position = position + $MovablePath/PathFollow2D.position
+	elif can_move and distance_to_move > 0:
+		if not direction_right and position.y < max_move_height:
+			var offset = move_speed * delta * time_scale
+			if distance_to_move - offset < 0:
+				offset = distance_to_move
+			position.y += offset
+			distance_to_move -= offset
+			position.y = min(max_move_height, position.y)
+		elif direction_right and position.y > min_move_height:
+			var offset = move_speed * delta * time_scale
+			if distance_to_move - offset < 0:
+				offset = distance_to_move
+			position.y -= offset
+			distance_to_move -= offset
+			position.y = max(min_move_height, position.y)
+			
 
 func move(distance):
 	distance_to_move = abs(distance)
@@ -89,7 +99,7 @@ func _on_ProgrammableBehaviour_rotate(angle):
 func _on_ProgrammableBehaviour_move(distance):
 	if can_move:
 		move(distance)
-		$ProgrammableBehaviour.lock_for_time(float(distance) / (time_scale * move_speed))
+		$ProgrammableBehaviour.lock_for_time(abs(float(distance)) / (time_scale * move_speed))
 
 func _on_ProgrammableBehaviour_sensor_detect(out_dict, id: int = -1):
 	if (id == -1): # Self sensor

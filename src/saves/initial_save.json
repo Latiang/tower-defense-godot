@@ -22,11 +22,6 @@
 
 {"description":"I Like To Move It Move It","file":"Level7","count": 7, "status":1,"turret_code":["# This turret can move with the function move(distance)!"]},
 
-{"description":"Side to Side","file":"Level8","count": 8, "status":1,"turret_code":["# This is a comment!\n# Write your code here"]},
-
-{"description":"Lead the Way","file":"Level9","count": 9, "status":1,"turret_code":["# This is a comment!\n# Write your code here"]},
-
-{"description":"The Test of a True Hacker","file":"Level10","count": 10, "status":1,"turret_code":["# This is a comment!\n# Write your code here"]}
+{"description":"Fibonacci Menace","file":"Level8","count": 8, "status":1,"turret_code":[
+    "# In this level the enemies arrive every half second in the pattern of Fibonnaci. Can you figure out how to predict their arrival? f(n) = f(n-1)+f(n-2). (Tip: Use sleep(x) to wait)"]}
 ]}
-
-
