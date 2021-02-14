@@ -1,9 +1,8 @@
 {
     "behaviour": [
-        [7,"ENEMY",6], 
-        [1, "NONE", 24],
-        [3, "ENEMY", 6],
-        [1, "NONE", 15],
-        [5, "ENEMY", 5]
+        [1,"NONE",3], 
+        [1,"ENEMY",1], 
+        [1,"NONE",18], 
+        [8,"ENEMY",1]
     ]
 }

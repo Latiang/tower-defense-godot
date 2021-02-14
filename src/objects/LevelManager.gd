@@ -3,7 +3,7 @@ extends Node
 var current_level = false
 var current_level_index = 0
 
-export var max_health = 10
+export var max_health = 5
 var health = max_health
 
 var save_state = load("res://objects/SaveStateClass.gd").new()
