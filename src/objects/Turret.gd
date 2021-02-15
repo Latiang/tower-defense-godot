@@ -60,6 +60,12 @@ func _process(delta):
 			position.y -= offset
 			distance_to_move -= offset
 			position.y = max(min_move_height, position.y)
+		if position.y >= max_move_height:
+			distance_to_move = 0
+			$ProgrammableBehaviour.stop_lock_timer()
+		if position.y <= min_move_height:
+			distance_to_move = 0
+			$ProgrammableBehaviour.stop_lock_timer()
 			
 
 func move(distance):

@@ -98,26 +98,26 @@
 5/shapes = [  ]
 5/z_index = 0
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=2]
 size = 45
 font_data = ExtResource( 2 )
 
-[sub_resource type="Curve2D" id=4]
+[sub_resource type="Curve2D" id=3]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, -19.0479, 601.93, 0, 0, 0, 0, 1958.66, 594.235 )
 }
 
-[sub_resource type="Curve2D" id=5]
+[sub_resource type="Curve2D" id=4]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, -19.0479, 601.93, 0, 0, 0, 0, 1943.08, 601.93 )
 }
 
-[sub_resource type="Curve2D" id=6]
+[sub_resource type="Curve2D" id=5]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, -34.3044, 602.848, 0, 0, 0, 0, 1957.75, 604.63 )
 }
 
-[sub_resource type="Curve2D" id=7]
+[sub_resource type="Curve2D" id=6]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, -11.4294, 1267.32, 0, 0, 0, 0, 1987.75, 1272.67 )
 }
@@ -136,7 +136,7 @@ margin_left = 66.5334
 margin_top = 164.011
 margin_right = 140.533
 margin_bottom = 219.011
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "1, 5"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -147,7 +147,7 @@ margin_left = 70.7713
 margin_top = 386.498
 margin_right = 145.771
 margin_bottom = 499.498
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "1, 8
 "
 __meta__ = {
@@ -159,7 +159,7 @@ margin_left = 70.7713
 margin_top = 611.104
 margin_right = 173.771
 margin_bottom = 666.104
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "2, ?"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -170,7 +170,7 @@ margin_left = 75.0091
 margin_top = 836.14
 margin_right = 178.009
 margin_bottom = 949.14
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "3, ?
 "
 __meta__ = {
@@ -185,29 +185,29 @@ integrated_sensor = false
 can_move = true
 max_move_height = 860
 min_move_height = 190
-move_speed = 200
+move_speed = 130
 unlimited_ammo = false
 ammo_count = 54
-reload_time = 0.5
+reload_time = 1.0
 
 [node name="MobPath" parent="." index="6" instance=ExtResource( 6 )]
 position = Vector2( -22.4207, -413.056 )
-curve = SubResource( 4 )
+curve = SubResource( 3 )
 BehaviourFile = "sblevel8_1"
 
 [node name="MobPath2" parent="." index="7" instance=ExtResource( 6 )]
 position = Vector2( -13.2708, -188.45 )
-curve = SubResource( 5 )
+curve = SubResource( 4 )
 BehaviourFile = "sblevel8_2"
 
 [node name="MobPath3" parent="." index="8" instance=ExtResource( 6 )]
 position = Vector2( -3.6875, 34.4703 )
-curve = SubResource( 6 )
+curve = SubResource( 5 )
 BehaviourFile = "sblevel8_3"
 
 [node name="MobPath4" parent="." index="9" instance=ExtResource( 6 )]
 position = Vector2( -35.4714, -412.623 )
-curve = SubResource( 7 )
+curve = SubResource( 6 )
 BehaviourFile = "sblevel8_4"
 
 [node name="BackgroundCactus" type="Sprite" parent="." index="10"]

@@ -45,6 +45,10 @@ func _on_LockTimer_timeout():
 	if allow_interpreting:
 		locked = false
 	
+func stop_lock_timer():
+	_on_LockTimer_timeout()
+	$LockTimer.stop()
+	
 func lock():
 	$LockTimer.stop()
 	locked = true

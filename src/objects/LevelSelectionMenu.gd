@@ -34,6 +34,8 @@ func populate_level_buttons(save_state):
 		$MarginContainer/VBoxContainer.move_child($MarginContainer/VBoxContainer/ButtonMarginContainer, i)
 		first_run = false
 	else:
+		# Reconnect sound signals
+		get_parent().get_parent().get_node("SoundManager").connect_button_sound_signals()
 		$MarginContainer/VBoxContainer.move_child($MarginContainer/VBoxContainer/ButtonMarginContainer, i*2)
 	
 

@@ -124,8 +124,8 @@ can_move = true
 max_move_height = 705
 min_move_height = 370
 unlimited_ammo = false
-ammo_count = 25
-reload_time = 1.1
+ammo_count = 30
+reload_time = 1.0
 
 [node name="MobPath1" parent="." index="2" instance=ExtResource( 6 )]
 position = Vector2( -24.8768, 38.7081 )

@@ -2,13 +2,14 @@ extends Node
 
 export var debug_main_menu_override = false
 export var debug_tick_interpreter_once = false
+export var debug_unlocked_save = false
 export var autosave_enabled = true
 
 var settings_state = load("res://objects/SettingsStateClass.gd").new()
 
 func _ready():
 	# Load main menu
-	$MainMenu/LevelSelectionMenu.populate_level_buttons($LevelManager.save_state)
+	# Debug settings
 	if !debug_main_menu_override:
 		show_MainMenu()
 	else: # Load first level for debugging
@@ -16,6 +17,10 @@ func _ready():
 		if debug_tick_interpreter_once:
 			$LevelManager.current_level.debug_tick_interpreter_once()
 	settings_state.load_from_file()
+	if debug_unlocked_save:
+		$LevelManager.save_state.load_from_file("unlocked_save")
+		
+	$MainMenu/LevelSelectionMenu.populate_level_buttons($LevelManager.save_state)
 	$MainMenu/SettingsMenu.settings_state = settings_state
 	$LevelManager/GUI/SettingsMenu.settings_state = settings_state
 	propagate_settings_change()
@@ -52,6 +57,8 @@ func show_level():
 	$LevelManager/GUI.show()
 
 func _on_GUI_return_to_main_menu():
+	$MainMenu/LevelSelectionMenu.depopulate_level_buttons()
+	$MainMenu/LevelSelectionMenu.populate_level_buttons($LevelManager.save_state)
 	show_MainMenu()
 	
 func propagate_settings_change():

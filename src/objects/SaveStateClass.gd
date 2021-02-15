@@ -41,7 +41,7 @@ func save_level_data(level, level_id, status = LEVEL_STATUS.STARTED):
 		if child.is_in_group("Turret"):
 			turret_codes[child.id] = child.get_code_source()
 	var updated = raw_json["levels"][level_id]
-	updated["status"] = status
+	updated["status"] = max(status, updated["status"])
 	updated["turret_code"] = turret_codes
 	#raw_json["levels"][level_name] = {"status": status, "turret_code" : turret_codes}
 	
@@ -50,6 +50,10 @@ func load_level_data(level, level_id):
 		if child.is_in_group("Turret"):
 			var code_text = raw_json["levels"][level_id]["turret_code"][child.id]
 			child.update_source(code_text)
+	
+func unlock_level(level_id):
+	raw_json["levels"][level_id]["status"] = LEVEL_STATUS.UNLOCKED
+	save_to_file()
 	
 # Used for the main menu
 func get_level_states():

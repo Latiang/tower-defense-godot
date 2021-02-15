@@ -17,7 +17,7 @@ func show():
 	$TitleMenu.show()
 	$LevelSelectionMenu.show()
 	$BackgroundTexture.show()
-	$MusicMarginContainer/MusicLabel.visible = false
+	$MusicMarginContainer/MusicLabel.show()
 
 # Open level selection menu
 func _on_PlayButton_pressed():
@@ -51,4 +51,16 @@ func _on_LevelSelectBackButton_pressed():
 
 
 func _on_LevelSelectResetButton_pressed():
+	$PopupGreyCover.show()
+	$PopupDialogResetSave.show()
+	
+
+func _on_PopupDialogResetSave_button1_pressed():
+	print("[Main Menu] Save file reset")
+	$PopupGreyCover.hide()
+	get_parent().reset_save()
+
+
+func _on_PopupDialogResetSave_button2_pressed():
+	$PopupGreyCover.hide()
 	get_parent().reset_save()

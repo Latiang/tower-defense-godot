@@ -79,6 +79,7 @@ func hide():
 	$RightPanelBackground.hide()
 
 func show():
+	print(tutorial_popups_enabled)
 	$CodeWindow.show()
 	$LevelControlsPanel.show()
 	$HealthPanel.show()
@@ -102,6 +103,7 @@ func _on_StartButton_pressed():
 # Reset the gui
 func reset():
 	$CodeWindow.reset()
+	print(tutorial_popups_enabled)
 	current_tutorial_popup_index = 0
 	wave_started = false
 	disable_speed_buttons()
@@ -191,12 +193,14 @@ func _on_DebugPopup_button_pressed():
 
 # Return to Main Menu
 func _on_EscapeMenu_exit():
+	get_parent().save_level()
 	toggle_escape_menu()
 	$CodeWindow.set_coding_mode()
 	reset()
 	emit_signal("return_to_main_menu")
 
 func _on_EscapeMenu_restart():
+	get_parent().save_level()
 	toggle_escape_menu()
 	emit_signal("restart_level")
 
@@ -222,6 +226,7 @@ func _on_DebugLineCursorTimer_timeout():
 
 
 func _on_TutorialPopup_button_pressed():
+	print(tutorial_popups_enabled)
 	if tutorial_popups_enabled and len(tutorial_popups) > current_tutorial_popup_index:
 		show_next_tutorial_popup()
 	else:

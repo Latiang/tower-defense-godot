@@ -1,10 +1,11 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://assets/fonts/Inter-Medium-slnt=0.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://objects/MainMenu.gd" type="Script" id=2]
 [ext_resource path="res://objects/LevelSelectionMenu.gd" type="Script" id=3]
 [ext_resource path="res://assets/textures/menu-background.png" type="Texture" id=4]
 [ext_resource path="res://objects/SettingsMenu.tscn" type="PackedScene" id=5]
+[ext_resource path="res://objects/PopupDialogTwoChoices.tscn" type="PackedScene" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 size = 100
@@ -278,6 +279,21 @@ text = "Music by Kai Engel"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="PopupGreyCover" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.337255 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PopupDialogResetSave" parent="." instance=ExtResource( 6 )]
+visible = false
+text = "Are you sure you want to reset your save?"
+button1_text = "Yes"
+button2_text = "No"
 [connection signal="pressed" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer/PlayButton" to="." method="_on_PlayButton_pressed"]
 [connection signal="pressed" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer2/SettingsButton" to="." method="_on_SettingsButton_pressed"]
 [connection signal="button_down" from="TitleMenu/MarginContainer/MainOptionsContainer/MarginContainer3/ExitButton" to="." method="_on_ExitButton_button_down"]
@@ -285,3 +301,5 @@ __meta__ = {
 [connection signal="pressed" from="LevelSelectionMenu/MarginContainer/VBoxContainer/ButtonMarginContainer/HBoxContainer/LevelSelectResetButton" to="." method="_on_LevelSelectResetButton_pressed"]
 [connection signal="close_settings_menu" from="SettingsMenu" to="." method="_on_SettingsMenu_close_settings_menu"]
 [connection signal="update_setting_effects" from="SettingsMenu" to="." method="_on_SettingsMenu_update_setting_effects"]
+[connection signal="button1_pressed" from="PopupDialogResetSave" to="." method="_on_PopupDialogResetSave_button1_pressed"]
+[connection signal="button2_pressed" from="PopupDialogResetSave" to="." method="_on_PopupDialogResetSave_button2_pressed"]

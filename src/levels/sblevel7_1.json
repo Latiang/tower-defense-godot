@@ -2,8 +2,6 @@
     "behaviour": [
         [7,"ENEMY",6], 
         [1, "NONE", 24],
-        [3, "ENEMY", 6],
-        [1, "NONE", 15],
-        [5, "ENEMY", 5]
+        [3, "ENEMY", 6]
     ]
 }

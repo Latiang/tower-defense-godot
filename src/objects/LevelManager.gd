@@ -10,7 +10,6 @@ var save_state = load("res://objects/SaveStateClass.gd").new()
 
 func _ready():
 	pass
-	#load_level(0)
 
 func _on_AutoSaveTimer_timeout():
 	if current_level && !current_level.wave_started:
@@ -35,13 +34,15 @@ func _input(event):
 
 # Load a level by name. Connects the required signals and so on
 func load_level(level_index, popups_enabled=true):
+	get_parent().propagate_settings_change()
 	health = max_health
 	current_level_index = level_index
 	var level_name = save_state.get_level_data(level_index)["file"]
 	$GUI.reset()
 	$GUI.update_health(health)
 	$GUI.update_level_data(save_state.get_level_data(level_index))
-	$GUI.tutorial_popups_enabled = popups_enabled
+	if $GUI.tutorial_popups_enabled:
+		$GUI.tutorial_popups_enabled = popups_enabled
 	$GUI.update_tutorial_popups(save_state.get_tutorial_popups(level_index))
 	print("[Level] Loading level: %s" % level_name)
 	if current_level:
@@ -73,6 +74,9 @@ func _on_Level_open_code_window(turret_id):
 
 func _on_Level_level_complete():
 	if health > 0:
+		# Unlock next level
+		if current_level_index + 1 < save_state.level_count:
+			save_state.unlock_level(current_level_index+1)
 		$GUI.level_won()
 		$AutoSaveTimer.stop()
 		save_state.save_level_data(current_level, current_level_index, 3)
@@ -99,3 +103,4 @@ func _on_GUI_next_level():
 	
 func debug_tick_interpreter_once():
 	current_level.tick_once
+	

@@ -141,7 +141,7 @@ func update_terminal_text():
 
 func set_code_font_size(size):
 	var font = $VBoxContainer/MarginContainer/CodeEditor.get_font("font")
-	print(font.size)
+	print("[GUI] Code font size set at %d" % font.size)
 	font.size = size
 	$VBoxContainer/MarginContainer/CodeEditor.add_font_override("font", font)
 	if current_turret_index != -1:

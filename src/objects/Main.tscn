@@ -10,7 +10,6 @@
 
 [node name="Main" type="Node"]
 script = ExtResource( 3 )
-autosave_enabled = false
 
 [node name="LevelManager" type="Node" parent="."]
 script = ExtResource( 2 )

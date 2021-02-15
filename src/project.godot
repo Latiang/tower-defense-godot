@@ -20,7 +20,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="tower-defense-godot"
+config/name="TurretIO"
 run/main_scene="res://objects/Main.tscn"
 config/icon="res://icon.png"
 
