@@ -6,15 +6,22 @@ var file = File.new()
 enum LEVEL_STATUS {LOCKED, UNLOCKED, STARTED, COMPLETED}
 
 func _init():
+	validate_folder_structure()
 	reset_save()
 	load_from_file()
 		
+func validate_folder_structure():
+	var dir = Directory.new();
+	if not dir.dir_exists("user://saves"):
+		print("[Save State] Save folder missing, creating...")
+		dir.make_dir("user://saves")
+
 # Setup initial state
 func reset_save():
-	load_from_file("initial_save")
+	load_from_file("res://assets/initial_save")
 	
-func load_from_file(save_name = "save1"):
-	var filename = "saves/%s.json" % save_name
+func load_from_file(save_name = "user://saves/save1"):
+	var filename = "%s.json" % save_name
 	if file.file_exists(filename):
 		print("[Save State] Loading save '%s' from file" % save_name)
 		file.open(filename, File.READ)
@@ -26,7 +33,7 @@ func load_from_file(save_name = "save1"):
 		print("[Save State] No save file found, using initial save")
 	
 func save_to_file(save_name = "save1"):
-	var filename = "saves/%s.json" % save_name
+	var filename = "user://saves/%s.json" % save_name
 	print("[Save State] Saving save to file")
 	file.open(filename, File.WRITE)
 	file.store_line(to_json(raw_json))

@@ -18,7 +18,7 @@ func _ready():
 			$LevelManager.current_level.debug_tick_interpreter_once()
 	settings_state.load_from_file()
 	if debug_unlocked_save:
-		$LevelManager.save_state.load_from_file("unlocked_save")
+		$LevelManager.save_state.load_from_file("res://assets/unlocked_save")
 		
 	$MainMenu/LevelSelectionMenu.populate_level_buttons($LevelManager.save_state)
 	$MainMenu/SettingsMenu.settings_state = settings_state
