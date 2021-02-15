@@ -39,7 +39,7 @@ func _input(event):
 		for item in date_dict: # Pad the numbers correctly, ex 7 -> 07
 			date_dict[item] = "%02d" % int(date_dict[item])
 		var date_str = "{year}-{month}-{day}T{hour}:{minute}:{second}".format(date_dict)
-		image.save_png("screenshots/screenshot%s" % date_str)
+		image.save_png("user://screenshots/screenshot%s.png" % date_str)
 
 func _on_MainMenu_start_level(level_number):
 	show_level()

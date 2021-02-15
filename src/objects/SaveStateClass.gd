@@ -15,6 +15,9 @@ func validate_folder_structure():
 	if not dir.dir_exists("user://saves"):
 		print("[Save State] Save folder missing, creating...")
 		dir.make_dir("user://saves")
+	if not dir.dir_exists("user://screenshots"):
+		print("[Save State] Save folder missing, creating...")
+		dir.make_dir("user://screenshots")
 
 # Setup initial state
 func reset_save():

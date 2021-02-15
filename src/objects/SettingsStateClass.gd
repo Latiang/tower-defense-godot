@@ -16,9 +16,12 @@ func load_from_file():
 		file.close()
 	else:
 		print("[Settings State] No settings.json file found, creating new")
+		print(file.file_exists("res://assets/initial_settings.json"))
 		file.open("res://assets/initial_settings.json", File.READ)
 		var text = file.get_as_text()
 		raw_json = parse_json(text)
+		print("Raw json")
+		print(raw_json)
 		file.close()
 	
 func save_to_file():
