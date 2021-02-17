@@ -144,7 +144,5 @@ func set_code_font_size(size):
 	print("[GUI] Code font size set at %d" % font.size)
 	font.size = size
 	$VBoxContainer/MarginContainer/CodeEditor.add_font_override("font", font)
-	print(current_turret_index)
 	if current_turret_index != -1:
 		open_code_window(current_turret_index, true)
-	print("End")

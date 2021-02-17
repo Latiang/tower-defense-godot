@@ -41,7 +41,7 @@ func load_level(level_index, popups_enabled=true):
 	$GUI.reset()
 	$GUI.update_health(health)
 	$GUI.update_level_data(save_state.get_level_data(level_index))
-	if $GUI.tutorial_popups_enabled:
+	if $GUI.tutorial_popups_enabled: 
 		$GUI.tutorial_popups_enabled = popups_enabled
 	$GUI.update_tutorial_popups(save_state.get_tutorial_popups(level_index))
 	print("[Level] Loading level: %s" % level_name)
