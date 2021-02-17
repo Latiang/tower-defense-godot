@@ -47,6 +47,7 @@ func load_level(level_index, popups_enabled=true):
 	print("[Level] Loading level: %s" % level_name)
 	if current_level:
 		current_level.close()
+		current_level = null
 	current_level = load("res://levels/%s.tscn" % level_name).instance()
 	add_child(current_level)
 	# Connect the signals needed
@@ -82,7 +83,7 @@ func _on_Level_level_complete():
 		save_state.save_level_data(current_level, current_level_index, 3)
 		save_state.save_to_file()
 
-func _on_GUI_update_time_scale(new_time_scale, continue_interpreting):
+func _on_GUI_update_time_scale(new_time_scale, continue_interpreting=true):
 	current_level.set_time_scale(new_time_scale, continue_interpreting)
 	
 func _on_Level_base_damage(damage):

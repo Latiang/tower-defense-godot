@@ -28,8 +28,10 @@ func save_to_file():
 	var filename = "user://settings.json"
 	print("[Settings State] Saving settings to file")
 	file.open(filename, File.WRITE)
+	print("Opened file")
 	file.store_line(to_json(raw_json))
 	file.close()
+	print("Closed file")
 	
 func set(name, value):
 	raw_json[name] = value

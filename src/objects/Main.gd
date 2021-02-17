@@ -51,6 +51,7 @@ func show_MainMenu():
 	$LevelManager/GUI.hide()
 	if $LevelManager.current_level:
 		$LevelManager.current_level.queue_free()
+		$LevelManager.current_level = null
 	
 func show_level():
 	$MainMenu.hide()

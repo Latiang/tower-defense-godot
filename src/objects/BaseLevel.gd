@@ -13,6 +13,8 @@ func _ready():
 
 # Close the level and unload everything
 func close():
+	for child in get_children():
+		child = null
 	queue_free() 
 
 func _process(delta):
